@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "households": {
+      ".read": false,
+      ".write": false,
+      "$h": {
+        ".read": "auth != null && $h.length >= 22",
+        ".write": "auth != null && $h.length >= 22"
+      }
+    }
+  }
+}
