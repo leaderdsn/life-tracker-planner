@@ -1,0 +1,33 @@
+@use "@/shared/styles" as ds
+
+.notification-settings
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: ds.$space-3
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__quiet
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: ds.$space-3
+
+  &__status
+    display: flex
+    gap: ds.$space-2
+    margin: 0
+    padding: ds.$space-3
+    border-radius: ds.$radius-md
+    background: var(--app-surface-muted)
+    font-size: ds.$font-size-sm
+
+  &__hint
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
