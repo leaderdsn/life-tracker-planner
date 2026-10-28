@@ -1,0 +1,28 @@
+@use "@/shared/styles" as ds
+
+.edit-event
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__review
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: ds.$space-3
+    padding: ds.$space-3
+    border: 1px solid #b38600
+    border-radius: ds.$radius-md
+    background: #fff3bf
+    color: #5c4400
+    font-size: ds.$font-size-sm
+
+    p
+      flex: 1
+      min-width: 12rem
+      margin: 0
+
+  &__note
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm

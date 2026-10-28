@@ -6,18 +6,15 @@ import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 
-type PackageJson = {
-  version: string
-  dependencies?: Record<string, string>
-  devDependencies?: Record<string, string>
-}
+type PackageJson = { version: string }
 
 const pkg = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf-8'),
 ) as PackageJson
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === 'build' || isPreview ? '/life-tracker-planner/' : '/',
   plugins: [
     vue(),
     // Auto-imports PrimeVue components only. Our own components are imported explicitly
@@ -33,13 +30,16 @@ export default defineConfig({
     // they get optimized on the fly and force a reload with two Vue copies in memory.
     // Keep this list in sync with the PrimeVue components used in the app (see components.d.ts).
     include: [
+      'primevue/autocomplete',
       'primevue/button',
-      'primevue/card',
-      'primevue/chip',
-      'primevue/message',
+      'primevue/confirmdialog',
+      'primevue/datepicker',
+      'primevue/dialog',
+      'primevue/inputtext',
+      'primevue/select',
       'primevue/selectbutton',
-      'primevue/skeleton',
-      'primevue/tag',
+      'primevue/toast',
+      'primevue/toggleswitch',
     ],
   },
   resolve: {
@@ -49,7 +49,6 @@ export default defineConfig({
   },
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
-    __DEPENDENCIES__: JSON.stringify({ ...pkg.dependencies, ...pkg.devDependencies }),
   },
   css: {
     preprocessorOptions: {
@@ -60,4 +59,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

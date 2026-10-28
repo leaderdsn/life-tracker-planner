@@ -1,0 +1,82 @@
+@use "@/shared/styles" as ds
+
+.schedule-month
+  padding: ds.$space-2
+  border: 1px solid var(--app-border)
+  border-radius: ds.$radius-lg
+  background: var(--app-surface)
+  box-shadow: var(--app-shadow)
+
+  &__weekdays,
+  &__grid
+    display: grid
+    grid-template-columns: repeat(7, minmax(0, 1fr))
+    gap: ds.$space-1
+
+  &__weekdays
+    padding-bottom: ds.$space-2
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-xs
+    font-weight: 700
+    text-align: center
+
+  &__cell
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: 2px
+    min-height: 4.25rem
+    padding: ds.$space-1
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-md
+    background: var(--app-surface)
+    color: var(--app-ink)
+    font: inherit
+    text-align: left
+    cursor: pointer
+
+    +ds.media(md)
+      min-height: 5.5rem
+      padding: ds.$space-2
+
+    &:hover
+      background: var(--app-surface-muted)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &.is-outside
+      opacity: 0.5
+
+    &.is-today
+      border: 2px solid var(--app-accent)
+      background: var(--app-today)
+
+  &__number
+    font-size: ds.$font-size-sm
+    font-weight: 700
+
+  &__bar
+    height: 6px
+    overflow: hidden
+    border-radius: ds.$radius-full
+    background: var(--app-surface-muted)
+    box-shadow: inset 0 0 0 1px var(--app-border)
+
+  &__fill
+    display: block
+    height: 100%
+    background: var(--app-done)
+
+  &__count
+    display: none
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-xs
+
+    +ds.media(md)
+      display: block
+
+  &__dots
+    display: flex
+    flex-wrap: wrap
+    gap: 3px

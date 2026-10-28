@@ -1,5 +1,6 @@
 export const ROUTE_NAMES = {
-  home: 'home',
+  all: 'all',
+  participant: 'participant',
   notFound: 'not-found',
 } as const
 

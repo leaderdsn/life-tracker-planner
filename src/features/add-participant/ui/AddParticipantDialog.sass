@@ -1,0 +1,86 @@
+@use "@/shared/styles" as ds
+
+.add-participant
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__field
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+
+  &__label
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__error
+    margin: 0
+    color: var(--app-conflict)
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__hint
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+
+  &__preview
+    display: flex
+    justify-content: center
+    padding: ds.$space-4
+    border-radius: ds.$radius-md
+    background: var(--app-surface-muted)
+
+  &__chip
+    display: inline-flex
+    align-items: center
+    gap: ds.$space-2
+    padding: ds.$space-2 ds.$space-4
+    border: 1px solid color-mix(in srgb, var(--app-chip-ink) 18%, transparent)
+    border-radius: ds.$radius-full
+    color: var(--app-chip-ink)
+    font-weight: 600
+
+  &__initial
+    display: grid
+    place-items: center
+    width: 1.5rem
+    height: 1.5rem
+    border-radius: ds.$radius-full
+    background: rgb(255 255 255 / 65%)
+    font-size: ds.$font-size-xs
+    font-weight: 700
+
+  &__list
+    padding: ds.$space-3
+    border-radius: ds.$radius-md
+    background: var(--app-surface-muted)
+
+    ul
+      display: flex
+      flex-direction: column
+      gap: ds.$space-1
+      margin: 0
+      padding: 0
+      list-style: none
+
+    li
+      display: flex
+      align-items: center
+      gap: ds.$space-2
+
+  &__list-title
+    margin: 0 0 ds.$space-2
+    font-size: ds.$font-size-sm
+
+  &__list-title-text
+    flex: 1
+    min-width: 0
+    font-weight: 600
+    overflow-wrap: anywhere
+
+  &__list-meta
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+    white-space: nowrap

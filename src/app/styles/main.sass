@@ -24,10 +24,43 @@
 
 @layer app
   :root
-    --app-background: var(--p-surface-50)
+    --app-background: #f6f4fb
+    --app-surface: #ffffff
+    --app-surface-muted: #efecf8
+    --app-border: #e1ddef
+    --app-ink: #2a2840
+    --app-ink-muted: #5e5a78
+    --app-accent: #6657cc
+    --app-accent-soft: #e9e6fb
+    --app-today: #f0eeff
+    --app-now: #b4234a
+    --app-conflict: #b4234a
+    --app-conflict-soft: #fde7ec
+    --app-done: #1f7a4d
+    --app-chip-ink: #24223a
+    --app-past-ink: #24223a
+    --app-past-opacity: 0.55
+    --app-shadow: 0 1px 2px rgb(42 40 64 / 6%), 0 6px 18px rgb(42 40 64 / 7%)
+    --app-glow: 0 0 0 3px rgb(102 87 204 / 24%)
 
   :root.app-dark
-    --app-background: var(--p-surface-950)
+    --app-background: #17161f
+    --app-surface: #201f2b
+    --app-surface-muted: #2a2938
+    --app-border: #3a3850
+    --app-ink: #ece9f7
+    --app-ink-muted: #b0abc8
+    --app-accent: #b3a9f0
+    --app-accent-soft: #332f55
+    --app-today: #26243a
+    --app-now: #ff8fa3
+    --app-conflict: #ff8fa3
+    --app-conflict-soft: #402733
+    --app-done: #7fdca8
+    --app-past-ink: #ece9f7
+    --app-past-opacity: 0.35
+    --app-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 18px rgb(0 0 0 / 28%)
+    --app-glow: 0 0 0 3px rgb(179 169 240 / 32%)
 
   html
     color-scheme: light
@@ -38,7 +71,7 @@
   body
     min-height: 100dvh
     background: var(--app-background)
-    color: var(--p-text-color)
+    color: var(--app-ink)
     font-family: ds.$font-family
     font-size: ds.$font-size-md
     line-height: ds.$line-height-normal
@@ -49,6 +82,9 @@
     display: flex
     flex-direction: column
     min-height: 100dvh
+
+  .p-toast
+    max-width: calc(100vw - 2rem)
 
   code
     font-family: ds.$font-family-mono
