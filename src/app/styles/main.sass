@@ -1,0 +1,58 @@
+// Global styles. Unlayered styles (scoped component styles) always win over layered ones.
+@layer reset, primevue, app
+
+@layer reset
+  *,
+  *::before,
+  *::after
+    box-sizing: border-box
+
+  html
+    -webkit-text-size-adjust: 100%
+    scroll-behavior: smooth
+
+    @media (prefers-reduced-motion: reduce)
+      scroll-behavior: auto
+
+  body
+    margin: 0
+
+  img,
+  svg
+    display: block
+    max-width: 100%
+
+@layer app
+  :root
+    --app-background: var(--p-surface-50)
+
+  :root.app-dark
+    --app-background: var(--p-surface-950)
+
+  html
+    color-scheme: light
+
+    &.app-dark
+      color-scheme: dark
+
+  body
+    min-height: 100dvh
+    background: var(--app-background)
+    color: var(--p-text-color)
+    font-family: ds.$font-family
+    font-size: ds.$font-size-md
+    line-height: ds.$line-height-normal
+    -webkit-font-smoothing: antialiased
+    transition: background ds.$transition-base
+
+  #app
+    display: flex
+    flex-direction: column
+    min-height: 100dvh
+
+  code
+    font-family: ds.$font-family-mono
+
+  // PrimeVue buttons rendered as links (as="a")
+  a.p-button
+    text-decoration: none

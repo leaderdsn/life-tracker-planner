@@ -1,0 +1,45 @@
+@use "@/shared/styles" as ds
+
+.home-page
+  &__hero
+    +ds.container
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    gap: ds.$space-6
+    padding-block: ds.$space-16 ds.$space-8
+
+    +ds.media(md)
+      padding-block: ds.$space-20 ds.$space-12
+
+  &__title
+    margin: 0
+    max-width: 56rem
+    font-size: ds.$font-size-3xl
+    line-height: ds.$line-height-tight
+    letter-spacing: -0.02em
+    color: var(--p-text-color)
+
+  &__accent
+    display: block
+    color: var(--p-primary-color)
+
+  &__lead
+    margin: 0
+    max-width: 44rem
+    font-size: ds.$font-size-lg
+    line-height: ds.$line-height-normal
+    color: var(--p-text-muted-color)
+
+  &__actions
+    display: flex
+    flex-wrap: wrap
+    gap: ds.$space-3
+
+  &__highlights
+    display: flex
+    flex-wrap: wrap
+    gap: ds.$space-2
+    margin: 0
+    padding: 0
+    list-style: none

@@ -1,0 +1,73 @@
+@use "@/shared/styles" as ds
+
+.app-header
+  position: sticky
+  top: 0
+  z-index: 10
+  height: ds.$header-height
+  border-bottom: 1px solid var(--p-content-border-color)
+  background: color-mix(in srgb, var(--app-background) 80%, transparent)
+  backdrop-filter: blur(12px)
+
+  &__inner
+    +ds.container
+    display: flex
+    align-items: center
+    gap: ds.$space-2
+    height: 100%
+
+    +ds.media(md)
+      gap: ds.$space-4
+
+  &__logo
+    display: inline-flex
+    align-items: center
+    gap: ds.$space-2
+    min-width: 0
+    color: var(--p-text-color)
+    font-weight: 700
+    text-decoration: none
+
+    img
+      flex-shrink: 0
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__title
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+
+  &__nav
+    display: none
+    gap: ds.$space-1
+    margin-inline: auto
+
+    +ds.media(md)
+      display: flex
+
+  &__link
+    padding: ds.$space-2 ds.$space-3
+    border-radius: ds.$radius-sm
+    color: var(--p-text-muted-color)
+    font-size: ds.$font-size-sm
+    text-decoration: none
+    transition: color ds.$transition-fast, background ds.$transition-fast
+
+    &:hover
+      color: var(--p-text-color)
+      background: var(--p-content-hover-background)
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__actions
+    display: flex
+    flex-shrink: 0
+    align-items: center
+    gap: ds.$space-1
+    margin-left: auto
+
+    +ds.media(md)
+      margin-left: 0
