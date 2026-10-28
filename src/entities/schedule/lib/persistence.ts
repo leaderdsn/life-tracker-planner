@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, SCHEMA_VERSION, STORAGE_KEY } from '../config'
+import { ALARM_SOUNDS, DEFAULT_SETTINGS, SCHEMA_VERSION, STORAGE_KEY } from '../config'
 
 import { normalizeEvent } from './validation'
 
@@ -57,6 +57,9 @@ function parseCompletions(raw: unknown): Completion[] {
   )
 }
 
+const num = (v: unknown, fallback: number, min: number) =>
+  typeof v === 'number' && Number.isFinite(v) && v >= min ? v : fallback
+
 function parseSettings(raw: unknown): Settings {
   const s = isObj(raw) ? raw : {}
   const q = s.quietHours
@@ -72,6 +75,12 @@ function parseSettings(raw: unknown): Settings {
         : isObj(q) && typeof q.from === 'string' && typeof q.to === 'string'
           ? { from: q.from, to: q.to }
           : DEFAULT_SETTINGS.quietHours && { ...DEFAULT_SETTINGS.quietHours },
+    guestAlarmLead: num(s.guestAlarmLead, DEFAULT_SETTINGS.guestAlarmLead, 0),
+    guestIdleReturn: num(s.guestIdleReturn, DEFAULT_SETTINGS.guestIdleReturn, 1),
+    alarmSound: ALARM_SOUNDS.find((x) => x === s.alarmSound) ?? DEFAULT_SETTINGS.alarmSound,
+    alarmVolume: Math.min(1, num(s.alarmVolume, DEFAULT_SETTINGS.alarmVolume, 0)),
+    autoComplete: typeof s.autoComplete === 'boolean' ? s.autoComplete : DEFAULT_SETTINGS.autoComplete,
+    adminPinHash: typeof s.adminPinHash === 'string' && s.adminPinHash ? s.adminPinHash : null,
   }
 }
 

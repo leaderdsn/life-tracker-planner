@@ -238,3 +238,21 @@ describe('settings and persistence', () => {
     expect(JSON.parse(localStorage.getItem(STORAGE_KEY) as string).settings.defaultRemindBefore).toBe(30)
   })
 })
+
+describe('toggleCompletion cycle', () => {
+  const DATE = '2020-01-06' // a Monday in the past: auto rules apply to everything
+
+  it.each<[string, boolean, string[]]>([
+    ['manual mode', false, ['done', 'none', 'done']],
+    ['auto mode', true, ['skipped', 'none', 'skipped']],
+  ])('%s', (_name, autoComplete, expected) => {
+    const store = makeStore()
+    store.updateSettings({ autoComplete })
+    const id = store.events.find((e) => e.day === 'mon')!.id
+    const states = [0, 1, 2].map(() => {
+      store.toggleCompletion(id, DATE)
+      return store.completionFor(id, DATE)?.status ?? 'none'
+    })
+    expect(states).toEqual(expected)
+  })
+})

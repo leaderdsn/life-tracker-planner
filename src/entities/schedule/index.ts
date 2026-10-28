@@ -1,7 +1,13 @@
+export type { EffectiveCompletion } from './lib'
 export type {
+  AlarmAck,
+  AlarmKey,
+  AlarmSound,
   Completion,
   CompletionStatus,
   Conflict,
+  DeviceConfig,
+  DeviceRole,
   EventCategory,
   EventStatus,
   Grid,
@@ -12,28 +18,44 @@ export type {
   Progress,
   ProgressCounter,
   ProgressPeriod,
+  RingingInfo,
   ScheduleEvent,
   ScheduleSnapshot,
   Settings,
+  SharedSchedule,
+  SyncStatus,
+  SyncTransport,
   Time,
+  Unsubscribe,
   Weekday,
 } from './model/types'
 export * from './config'
 export {
+  activeAlarms,
+  alarmKey,
   buildGrid,
   eventsForWeek,
+  effectiveCompletion,
+  effectiveCompletionFor,
   eventStatus,
   findConflicts,
+  generateHouseholdId,
+  hashPin,
+  isDoneState,
   migrate,
   normalizeEvent,
   occurrences,
   parseSnapshot,
   periodRange,
   progress,
+  pruneAcks,
   ValidationError,
+  verifyPin,
 } from './lib'
 export type { ValidationField } from './lib'
+export { useDeviceStore } from './model/deviceStore'
 export { useScheduleStore } from './model/scheduleStore'
+export { useSyncStore } from './model/syncStore'
 
 export {
   chipBackground,
