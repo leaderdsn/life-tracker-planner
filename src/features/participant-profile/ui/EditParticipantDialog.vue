@@ -23,7 +23,7 @@ const { copied, copy } = useClipboard()
 
 const participant = computed(() => (props.participantId ? store.participantById(props.participantId) : undefined))
 const hasPin = computed(() => Boolean(participant.value?.pinHash))
-const inviteLink = computed(() => sync.guestLink.replace('#/guest?', '#/join?'))
+const inviteLink = computed(() => sync.inviteLink)
 
 const pinFormOpen = ref(false)
 const pin = ref('')

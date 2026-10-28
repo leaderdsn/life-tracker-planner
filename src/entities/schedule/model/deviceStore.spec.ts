@@ -56,6 +56,15 @@ describe('device config migration', () => {
   })
 })
 
+describe('login without a household', () => {
+  it('admin login is open while no PIN is set, and participants come from local data', async () => {
+    const d = useDeviceStore()
+    expect(await d.loginParticipant('ratmir', '')).toBe(true)
+    d.logout()
+    expect(await d.loginAdmin('')).toBe(true)
+  })
+})
+
 describe('login and logout', () => {
   afterEach(() => useSyncStore().stop())
 
@@ -95,13 +104,17 @@ describe('login and logout', () => {
     expect([d.role, d.participantId, d.needsLogin]).toEqual(['participant', null, true])
   })
 
-  it('admin login honours the admin PIN, and is open while none is set', async () => {
-    const { d, schedule } = await setup()
+  it('admin login is refused while no admin PIN exists on a household', async () => {
+    const { d } = await setup()
     d.logout()
     await nextTick()
-    expect(await d.loginAdmin('whatever')).toBe(true)
-    expect(d.role).toBe('admin')
-    await nextTick()
+    expect(await d.loginAdmin('whatever')).toBe(false)
+    expect(await d.loginAdmin('')).toBe(false)
+    expect(d.needsLogin).toBe(true)
+  })
+
+  it('admin login honours the admin PIN', async () => {
+    const { d, schedule } = await setup()
     schedule.updateSettings({ adminPinHash: await hashPin('9999') })
     await vi.waitFor(() => expect(useSyncStore().remoteSchedule?.settings.adminPinHash).toBeTruthy(), { timeout: 3000 })
     d.logout()

@@ -38,6 +38,8 @@ export const useSyncStore = defineStore('sync', () => {
   const acks = ref<Record<AlarmKey, AlarmAck>>({})
   /** bumps after every successful connect() so the admin can publish right away */
   const connectCount = ref(0)
+  /** true once the remote schedule (null for a fresh household included) arrived since the last connect */
+  const remoteReceived = ref(false)
 
   let transport: SyncTransport | null = null
   let connectedTo: string | null = null
@@ -55,9 +57,11 @@ export const useSyncStore = defineStore('sync', () => {
 
   const guestLink = computed(() =>
     device.householdId
-      ? `${appBaseUrl()}#/guest?h=${device.householdId}`
+      ? `${appBaseUrl()}?guest=${device.householdId}`
       : '',
   )
+
+  const inviteLink = computed(() => (device.householdId ? `${appBaseUrl()}?join=${device.householdId}` : ''))
 
   function start() {
     const id = device.householdId
@@ -66,9 +70,13 @@ export const useSyncStore = defineStore('sync', () => {
     const t = createTransport()
     transport = t
     connectedTo = id
+    remoteReceived.value = false
     unsubs = [
       t.onStatus((s) => (status.value = s)),
-      t.onSchedule((s) => (remoteSchedule.value = s)),
+      t.onSchedule((s) => {
+        remoteSchedule.value = s
+        remoteReceived.value = true
+      }),
       t.onProfiles((p) => (remoteProfiles.value = p)),
       t.onCompletions((c) => (remoteCompletions.value = c)),
       t.onRinging((r) => (rawRinging.value = r)),
@@ -85,6 +93,7 @@ export const useSyncStore = defineStore('sync', () => {
     transport?.disconnect()
     transport = null
     connectedTo = null
+    remoteReceived.value = false
     status.value = 'off'
   }
 
@@ -143,9 +152,11 @@ export const useSyncStore = defineStore('sync', () => {
     remoteCompletions,
     remoteParticipants,
     connectCount,
+    remoteReceived,
     ringing,
     acks,
     guestLink,
+    inviteLink,
     start,
     stop,
     enableSync,

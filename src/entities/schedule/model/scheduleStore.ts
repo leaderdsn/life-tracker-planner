@@ -176,7 +176,7 @@ export const useScheduleStore = defineStore('schedule', () => {
   )
 
   function pushNow() {
-    if (isAdmin.value) void sync.pushSchedule(clone(toShared(snapshot())))
+    if (isAdmin.value && sync.remoteReceived) void sync.pushSchedule(clone(toShared(snapshot())))
   }
 
   // Admin publishes changes (last write wins); profiles and completions travel separately.
@@ -194,6 +194,21 @@ export const useScheduleStore = defineStore('schedule', () => {
     (status) => status === 'online' && pushNow(),
   )
   watch(() => sync.connectCount, pushNow)
+
+  /** An admin device never writes before it has seen the remote copy; a non-empty remote wins over local data. */
+  function adoptRemoteAsAdmin() {
+    if (!isAdmin.value || !device.householdId || !sync.remoteReceived) return
+    const remote = sync.remoteSchedule
+    if (!remote) {
+      pushNow()
+      return
+    }
+    clearTimeout(pushTimer)
+    participants.value = mergeProfiles(clone(remote.participants), sync.remoteProfiles)
+    events.value = clone(remote.events)
+    settings.value = clone(remote.settings)
+  }
+  watch(() => sync.remoteReceived, adoptRemoteAsAdmin)
 
   // Guest and participant mirror the remote copy and keep the last one for offline boots.
   const cachedProfiles = loadRemoteCache()?.profiles ?? {}
@@ -288,6 +303,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     } else if (!device.householdId || !participants.value.length) {
       restore(load() ?? createSeedSnapshot())
     }
+    adoptRemoteAsAdmin()
   })
 
   // Without Firebase an admin tab in the same browser is the only source; follow its saves.

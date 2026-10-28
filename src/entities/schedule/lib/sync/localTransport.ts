@@ -28,9 +28,13 @@ type Message =
   | { t: 'profile'; id: string; profile: ParticipantProfile }
   | { t: 'completion'; key: string; value: SyncedCompletion | null }
 
+/** How long a fresh tab waits for another tab to answer before treating the household as empty. */
+const HELLO_WAIT_MS = 150
+
 /** Same-browser transport over BroadcastChannel: for development, tests and when Firebase is not configured. */
 export class LocalTransport implements SyncTransport {
   private channel: BroadcastChannel | null = null
+  private helloTimer: ReturnType<typeof setTimeout> | undefined
   private status: SyncStatus = 'off'
   private schedule: SharedSchedule | null = null
   private ringing: Record<AlarmKey, RingingInfo> = {}
@@ -95,7 +99,9 @@ export class LocalTransport implements SyncTransport {
         completions: this.completions,
       })
     } else if (m.t === 'state') {
+      clearTimeout(this.helloTimer)
       if (m.schedule) this.applySchedule(m.schedule)
+      else this.scheduleEmitter.emit(null)
       this.ringing = { ...this.ringing, ...m.ringing }
       this.acks = { ...this.acks, ...m.acks }
       this.ringingEmitter.emit(this.ringing)
@@ -128,10 +134,12 @@ export class LocalTransport implements SyncTransport {
     this.channel = channel
     this.setStatus('online')
     this.post({ t: 'hello' })
+    this.helloTimer = setTimeout(() => this.scheduleEmitter.emit(this.schedule), HELLO_WAIT_MS)
     return Promise.resolve()
   }
 
   disconnect(): void {
+    clearTimeout(this.helloTimer)
     this.channel?.close()
     this.channel = null
     this.setStatus('off')

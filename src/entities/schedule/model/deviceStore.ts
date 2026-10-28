@@ -66,8 +66,8 @@ export const useDeviceStore = defineStore('device', () => {
   /** Resolves false for an unknown participant or a wrong PIN. */
   async function loginParticipant(pid: string, pin: string): Promise<boolean> {
     const sync = useSyncStore()
-    const schedule = useScheduleStore()
-    const person = sync.remoteParticipants.find((p) => p.id === pid) ?? schedule.participants.find((p) => p.id === pid)
+    const known = householdId.value ? sync.remoteParticipants : useScheduleStore().participants
+    const person = known.find((p) => p.id === pid)
     if (!person || !(await verifyParticipantPin(pin, pid, householdId.value, person.pinHash))) return false
     role.value = 'participant'
     participantId.value = pid
@@ -76,7 +76,10 @@ export const useDeviceStore = defineStore('device', () => {
 
   async function loginAdmin(pin: string): Promise<boolean> {
     const sync = useSyncStore()
-    const hash = sync.remoteSchedule?.settings.adminPinHash ?? useScheduleStore().settings.adminPinHash
+    const hash = householdId.value
+      ? (sync.remoteSchedule?.settings.adminPinHash ?? null)
+      : useScheduleStore().settings.adminPinHash
+    if (hash === null && householdId.value) return false
     if (!(await verifyAdminPin(pin, hash))) return false
     role.value = 'admin'
     participantId.value = null
