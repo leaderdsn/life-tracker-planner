@@ -16,7 +16,7 @@ const PERIODS: { value: ProgressPeriod; label: string }[] = [
 ]
 
 const store = useScheduleStore()
-const { todayIso } = useChipState()
+const { now, todayIso } = useChipState()
 
 const participants = computed(() =>
   props.participantId === 'all'
@@ -28,7 +28,10 @@ const sections = computed(() => {
   const ids = participants.value.map((p) => p.id)
   return PERIODS.map(({ value, label }) => {
     const { from, to } = periodRange(value, parseIsoDate(todayIso.value))
-    const result = progress(store.completions, occurrences(store.events, from, to), ids)
+    const result = progress(store.completions, occurrences(store.events, from, to), ids, {
+      autoComplete: store.settings.autoComplete,
+      now: now.value,
+    })
     return {
       value,
       label,

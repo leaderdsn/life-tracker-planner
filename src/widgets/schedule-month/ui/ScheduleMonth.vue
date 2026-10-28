@@ -25,7 +25,7 @@ const emit = defineEmits<{
 }>()
 
 const store = useScheduleStore()
-const { todayIso } = useChipState()
+const { now, todayIso } = useChipState()
 
 const fullDate = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' })
 
@@ -49,7 +49,7 @@ const cells = computed<DayCell[]>(() => {
   for (let d = from; d <= to; d = addDays(d, 1)) {
     const date = toIsoDate(d)
     const occs = byDate.get(date) ?? []
-    const counters = Object.values(progress(store.completions, occs, ids))
+    const counters = Object.values(progress(store.completions, occs, ids, { autoComplete: store.settings.autoComplete, now: now.value }))
     const present = new Set(occs.flatMap((o) => o.event.participantIds))
     result.push({
       date,
