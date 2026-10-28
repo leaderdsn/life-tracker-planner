@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { generateHouseholdId } from './householdId'
-import { hashPin, verifyPin } from './pin'
+import { hashParticipantPin, hashPin, verifyAdminPin, verifyParticipantPin, verifyPin } from './pin'
 
 describe('hashPin', () => {
   it('returns SHA-256 hex', async () => {
@@ -28,5 +28,46 @@ describe('generateHouseholdId', () => {
     const a = generateHouseholdId()
     expect(a).toMatch(/^[0-9A-Za-z]{24}$/)
     expect(generateHouseholdId()).not.toBe(a)
+  })
+})
+
+describe('participant PIN salt', () => {
+  const hash = (pin: string, pid: string, h: string | null) => hashParticipantPin(pin, pid, h)
+
+  it('differs per participant and household', async () => {
+    const base = await hash('1234', 'a', 'hh')
+    expect(base).not.toBe(await hash('1234', 'b', 'hh'))
+    expect(base).not.toBe(await hash('1234', 'a', 'other'))
+    expect(base).not.toBe(await hashPin('1234'))
+  })
+
+  it('is SHA-256 of household:participant:pin', async () => {
+    expect(await hash('1234', 'a', 'hh')).toBe(await hashPin('hh:a:1234'))
+    expect(await hash('1234', 'a', null)).toBe(await hashPin('local:a:1234'))
+  })
+
+  it.each<[string, string, string | null, boolean]>([
+    ['right pin', '1234', 'hh', true],
+    ['wrong pin', '1111', 'hh', false],
+    ['other household', '1234', 'hh2', false],
+  ])('verifyParticipantPin: %s', async (_n, pin, household, expected) => {
+    expect(await verifyParticipantPin(pin, 'a', household, await hash('1234', 'a', 'hh'))).toBe(expected)
+  })
+
+  it('accepts a PIN set while the device was local', async () => {
+    expect(await verifyParticipantPin('1234', 'a', 'hh', await hash('1234', 'a', null))).toBe(true)
+  })
+
+  it('passes without a hash and rejects another participant', async () => {
+    expect(await verifyParticipantPin('', 'a', 'hh', null)).toBe(true)
+    expect(await verifyParticipantPin('1234', 'b', 'hh', await hash('1234', 'a', 'hh'))).toBe(false)
+  })
+})
+
+describe('verifyAdminPin', () => {
+  it('checks the plain hash and allows an unset PIN', async () => {
+    expect(await verifyAdminPin('1234', await hashPin('1234'))).toBe(true)
+    expect(await verifyAdminPin('0000', await hashPin('1234'))).toBe(false)
+    expect(await verifyAdminPin('', null)).toBe(true)
   })
 })

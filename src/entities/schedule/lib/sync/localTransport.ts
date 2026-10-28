@@ -4,9 +4,11 @@ import type {
   AlarmAck,
   AlarmKey,
   DeviceRole,
+  ParticipantProfile,
   RingingInfo,
   SharedSchedule,
   SyncStatus,
+  SyncedCompletion,
   SyncTransport,
 } from '../../model/types'
 
@@ -17,10 +19,14 @@ type Message =
       schedule: SharedSchedule | null
       ringing: Record<AlarmKey, RingingInfo>
       acks: Record<AlarmKey, AlarmAck>
+      profiles: Record<string, ParticipantProfile>
+      completions: Record<string, SyncedCompletion>
     }
   | { t: 'schedule'; schedule: SharedSchedule }
   | { t: 'ringing'; key: AlarmKey; info: RingingInfo | null }
   | { t: 'ack'; key: AlarmKey; ack: AlarmAck }
+  | { t: 'profile'; id: string; profile: ParticipantProfile }
+  | { t: 'completion'; key: string; value: SyncedCompletion | null }
 
 /** Same-browser transport over BroadcastChannel: for development, tests and when Firebase is not configured. */
 export class LocalTransport implements SyncTransport {
@@ -29,6 +35,10 @@ export class LocalTransport implements SyncTransport {
   private schedule: SharedSchedule | null = null
   private ringing: Record<AlarmKey, RingingInfo> = {}
   private acks: Record<AlarmKey, AlarmAck> = {}
+  private profiles: Record<string, ParticipantProfile> = {}
+  private completions: Record<string, SyncedCompletion> = {}
+  private profilesEmitter = createEmitter<Record<string, ParticipantProfile>>()
+  private completionsEmitter = createEmitter<Record<string, SyncedCompletion>>()
   private statusEmitter = createEmitter<SyncStatus>()
   private scheduleEmitter = createEmitter<SharedSchedule | null>()
   private ringingEmitter = createEmitter<Record<AlarmKey, RingingInfo>>()
@@ -61,15 +71,43 @@ export class LocalTransport implements SyncTransport {
     this.acksEmitter.emit(this.acks)
   }
 
+  private applyProfile(id: string, profile: ParticipantProfile) {
+    this.profiles = { ...this.profiles, [id]: profile }
+    this.profilesEmitter.emit(this.profiles)
+  }
+
+  private applyCompletion(key: string, value: SyncedCompletion | null) {
+    const next = { ...this.completions }
+    if (value) next[key] = value
+    else delete next[key]
+    this.completions = next
+    this.completionsEmitter.emit(next)
+  }
+
   private receive(m: Message) {
     if (m.t === 'hello') {
-      this.post({ t: 'state', schedule: this.schedule, ringing: this.ringing, acks: this.acks })
+      this.post({
+        t: 'state',
+        schedule: this.schedule,
+        ringing: this.ringing,
+        acks: this.acks,
+        profiles: this.profiles,
+        completions: this.completions,
+      })
     } else if (m.t === 'state') {
       if (m.schedule) this.applySchedule(m.schedule)
       this.ringing = { ...this.ringing, ...m.ringing }
       this.acks = { ...this.acks, ...m.acks }
       this.ringingEmitter.emit(this.ringing)
       this.acksEmitter.emit(this.acks)
+      this.profiles = { ...this.profiles, ...m.profiles }
+      this.completions = { ...this.completions, ...m.completions }
+      this.profilesEmitter.emit(this.profiles)
+      this.completionsEmitter.emit(this.completions)
+    } else if (m.t === 'profile') {
+      this.applyProfile(m.id, m.profile)
+    } else if (m.t === 'completion') {
+      this.applyCompletion(m.key, m.value)
     } else if (m.t === 'schedule') {
       this.applySchedule(m.schedule)
     } else if (m.t === 'ringing') {
@@ -104,6 +142,22 @@ export class LocalTransport implements SyncTransport {
   onSchedule = (cb: (schedule: SharedSchedule | null) => void) => this.scheduleEmitter.on(cb)
   onRinging = (cb: (ringing: Record<AlarmKey, RingingInfo>) => void) => this.ringingEmitter.on(cb)
   onAcks = (cb: (acks: Record<AlarmKey, AlarmAck>) => void) => this.acksEmitter.on(cb)
+
+  onProfiles = (cb: (profiles: Record<string, ParticipantProfile>) => void) => this.profilesEmitter.on(cb)
+  onCompletions = (cb: (completions: Record<string, SyncedCompletion>) => void) => this.completionsEmitter.on(cb)
+
+  pushProfile(participantId: string, profile: ParticipantProfile): Promise<void> {
+    const copy = JSON.parse(JSON.stringify(profile)) as ParticipantProfile
+    this.applyProfile(participantId, copy)
+    this.post({ t: 'profile', id: participantId, profile: copy })
+    return Promise.resolve()
+  }
+
+  setCompletion(key: string, value: SyncedCompletion | null): Promise<void> {
+    this.applyCompletion(key, value)
+    this.post({ t: 'completion', key, value })
+    return Promise.resolve()
+  }
 
   pushSchedule(schedule: SharedSchedule): Promise<void> {
     const copy = JSON.parse(JSON.stringify(schedule)) as SharedSchedule

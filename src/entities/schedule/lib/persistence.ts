@@ -2,7 +2,7 @@ import { ALARM_SOUNDS, DEFAULT_SETTINGS, SCHEMA_VERSION, STORAGE_KEY } from '../
 
 import { normalizeEvent } from './validation'
 
-import type { Completion, Participant, ScheduleEvent, ScheduleSnapshot, Settings } from '../model/types'
+import type { AlarmSound, Completion, Participant, ScheduleEvent, ScheduleSnapshot, Settings } from '../model/types'
 
 type Obj = Record<string, unknown>
 
@@ -23,6 +23,9 @@ function parseParticipants(raw: unknown): Participant[] {
       name: p.name.trim(),
       color: typeof p.color === 'string' ? p.color : '#E4D9F5',
       order: typeof p.order === 'number' ? p.order : order,
+      ...(typeof p.pinHash === 'string' && p.pinHash ? { pinHash: p.pinHash } : {}),
+      ...(typeof p.avatar === 'string' && p.avatar.startsWith('data:image/') ? { avatar: p.avatar } : {}),
+      ...(ALARM_SOUNDS.find((x) => x === p.alarmSound) ? { alarmSound: p.alarmSound as AlarmSound } : {}),
     }
   })
 }

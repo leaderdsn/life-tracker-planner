@@ -16,6 +16,8 @@ const props = defineProps<{
   conflict?: boolean
   showTime?: boolean
   canToggle?: boolean
+  /** Participants view only: the card is not a button and never opens the editor. */
+  readonly?: boolean
   labels?: Record<string, string>
 }>()
 
@@ -58,7 +60,7 @@ const ariaLabel = computed(() => {
   const who = props.participants.map((p) => p.name).join(', ')
   const place = props.event.place ? `, ${props.event.place}` : ''
   const notes = stateNotes.value.length ? `, ${stateNotes.value.join(', ')}` : ''
-  return `${props.event.title}, ${who}, ${timeLabel.value}${place}${notes}. Открыть`
+  return `${props.event.title}, ${who}, ${timeLabel.value}${place}${notes}${props.readonly ? '' : '. Открыть'}`
 })
 </script>
 
@@ -78,14 +80,22 @@ const ariaLabel = computed(() => {
     }"
     :style="{ '--chip-bg': background }"
   >
-    <button type="button" class="event-chip__main" :aria-label="ariaLabel" @click="emit('open')">
+    <component
+      :is="readonly ? 'div' : 'button'"
+      class="event-chip__main"
+      :class="{ 'is-readonly': readonly }"
+      :type="readonly ? undefined : 'button'"
+      :role="readonly ? 'group' : undefined"
+      :aria-label="ariaLabel"
+      @click="readonly ? undefined : emit('open')"
+    >
       <span class="event-chip__initials" aria-hidden="true">{{ initials }}</span>
       <span class="event-chip__body">
         <span class="event-chip__title">{{ event.title }}</span>
         <span v-if="showTime" class="event-chip__meta">{{ timeLabel }}</span>
         <span v-if="event.place" class="event-chip__meta">{{ event.place }}</span>
       </span>
-    </button>
+    </component>
     <span v-if="conflict" class="event-chip__badge event-chip__badge--conflict" title="Пересекается с другим занятием">
       <i class="pi pi-exclamation-triangle" aria-hidden="true" />
     </span>

@@ -89,3 +89,15 @@ describe('EventChip', () => {
     expect(mountChip({ status: 'current' }).get('button').attributes('aria-label')).toContain('идёт сейчас')
   })
 })
+
+describe('EventChip readonly', () => {
+  it('не превращается в кнопку и не открывает редактор', async () => {
+    const wrapper = mountChip({ canToggle: true })
+    await wrapper.setProps({ readonly: true })
+    expect(wrapper.find('button.event-chip__main').exists()).toBe(false)
+    await wrapper.get('.event-chip__main').trigger('click')
+    expect(wrapper.emitted('open')).toBeUndefined()
+    expect(wrapper.get('.event-chip__main').attributes('aria-label')).not.toContain('Открыть')
+    expect(wrapper.find('.event-chip__check').exists()).toBe(true)
+  })
+})

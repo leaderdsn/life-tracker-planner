@@ -5,7 +5,26 @@ import { env } from '@/shared/config'
 import { parseIsoDate } from '@/shared/lib'
 
 import { createSeedSnapshot, DEFAULT_SETTINGS, GUEST_CACHE_KEY, PUSH_DELAY_MS, SCHEMA_VERSION, STORAGE_KEY, UNDO_TIMEOUT_MS } from '../config'
-import { effectiveCompletionFor, findConflicts, load, normalizeEvent, occurrences, parseShared, parseSnapshot, save, toShared } from '../lib'
+import {
+  canEdit,
+  canToggle,
+  completionKey,
+  effectiveCompletionFor,
+  findConflicts,
+  hashParticipantPin,
+  load,
+  mergeCompletions,
+  mergeProfiles,
+  normalizeEvent,
+  occurrences,
+  parseShared,
+  parseSnapshot,
+  progress,
+  save,
+  toProfile,
+  toShared,
+} from '../lib'
+import type { CompletionSyncState } from '../lib'
 
 import { useDeviceStore } from './deviceStore'
 import { useSyncStore } from './syncStore'
@@ -14,6 +33,8 @@ import type {
   Completion,
   IsoDate,
   Participant,
+  ParticipantProfile,
+  ProgressCounter,
   ScheduleEvent,
   ScheduleSnapshot,
   Settings,
@@ -52,17 +73,23 @@ function randomId(taken: Set<string>): string {
   return id
 }
 
-function loadGuestCache(): SharedSchedule | null {
+type RemoteCache = { schedule: SharedSchedule; profiles: Record<string, ParticipantProfile> }
+
+function loadRemoteCache(): RemoteCache | null {
   try {
-    return parseShared(JSON.parse(localStorage.getItem(GUEST_CACHE_KEY) ?? 'null'))
+    const raw = JSON.parse(localStorage.getItem(GUEST_CACHE_KEY) ?? 'null') as { profiles?: unknown } | null
+    const schedule = parseShared(raw)
+    if (!schedule) return null
+    const profiles = typeof raw?.profiles === 'object' && raw.profiles !== null ? raw.profiles : {}
+    return { schedule, profiles: profiles as Record<string, ParticipantProfile> }
   } catch {
     return null
   }
 }
 
-function saveGuestCache(schedule: SharedSchedule) {
+function saveRemoteCache(cache: RemoteCache) {
   try {
-    localStorage.setItem(GUEST_CACHE_KEY, JSON.stringify(schedule))
+    localStorage.setItem(GUEST_CACHE_KEY, JSON.stringify({ ...cache.schedule, profiles: cache.profiles }))
   } catch {
     // The cache only helps offline boots.
   }
@@ -80,23 +107,40 @@ const fromShared = (shared: SharedSchedule): ScheduleSnapshot => ({ ...shared, c
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 
+const NO_PROGRESS: ProgressCounter = { done: 0, total: 0 }
+
 export const useScheduleStore = defineStore('schedule', () => {
   const device = useDeviceStore()
   const sync = useSyncStore()
   const isGuest = computed(() => device.role === 'guest')
+  const isParticipant = computed(() => device.role === 'participant')
+  const isAdmin = computed(() => device.role === 'admin')
+  /** guest and participant devices mirror the shared copy instead of owning data */
+  const isRemote = computed(() => !isAdmin.value)
 
-  const initialGuest = () => {
+  const initialRemote = (): ScheduleSnapshot => {
     // Same-device guest: no remote copy yet, fall back to the admin's local data (read-only).
-    const cached = loadGuestCache()
-    if (cached) return fromShared(cached)
+    const cached = loadRemoteCache()
+    if (cached) {
+      const data = fromShared(cached.schedule)
+      return { ...data, participants: mergeProfiles(data.participants, cached.profiles) }
+    }
     const local = load()
-    return local ? fromShared(toShared(local)) : emptySnapshot()
+    return local ? { ...local, completions: [] } : emptySnapshot()
   }
-  const initial = isGuest.value ? initialGuest() : (load() ?? createSeedSnapshot())
+  const initial = isRemote.value ? initialRemote() : (load() ?? createSeedSnapshot())
   const participants = ref<Participant[]>(initial.participants)
   const events = ref<ScheduleEvent[]>(initial.events)
   const completions = ref<Completion[]>(initial.completions)
   const settings = ref<Settings>(initial.settings)
+
+  const ownParticipant = computed(() =>
+    isParticipant.value ? participants.value.find((p) => p.id === device.participantId) : undefined,
+  )
+  const ownEvents = computed(() => {
+    const id = device.participantId
+    return isParticipant.value && id ? events.value.filter((e) => e.participantIds.includes(id)) : []
+  })
 
   const sortedParticipants = computed(() => [...participants.value].sort((a, b) => a.order - b.order))
   const participantById = computed(() => (id: string) => participants.value.find((p) => p.id === id))
@@ -124,7 +168,7 @@ export const useScheduleStore = defineStore('schedule', () => {
   watch(
     [participants, events, completions, settings],
     () => {
-      if (isGuest.value) return
+      if (!isAdmin.value) return
       clearTimeout(saveTimer)
       saveTimer = setTimeout(() => save(clone(snapshot())), SAVE_DELAY_MS)
     },
@@ -132,14 +176,14 @@ export const useScheduleStore = defineStore('schedule', () => {
   )
 
   function pushNow() {
-    if (!isGuest.value) void sync.pushSchedule(clone(toShared(snapshot())))
+    if (isAdmin.value) void sync.pushSchedule(clone(toShared(snapshot())))
   }
 
-  // Admin publishes changes (last write wins); everything except completions is shared.
+  // Admin publishes changes (last write wins); profiles and completions travel separately.
   watch(
     [participants, events, settings],
     () => {
-      if (isGuest.value) return
+      if (!isAdmin.value) return
       clearTimeout(pushTimer)
       pushTimer = setTimeout(pushNow, PUSH_DELAY_MS)
     },
@@ -151,36 +195,105 @@ export const useScheduleStore = defineStore('schedule', () => {
   )
   watch(() => sync.connectCount, pushNow)
 
-  // Guest mirrors the remote copy and keeps the last one for offline boots.
-  watch(
-    () => sync.remoteSchedule,
-    (remote) => {
-      if (!isGuest.value || !remote) return
-      participants.value = remote.participants
+  // Guest and participant mirror the remote copy and keep the last one for offline boots.
+  const cachedProfiles = loadRemoteCache()?.profiles ?? {}
+
+  function applyRemote() {
+    const profiles = { ...cachedProfiles, ...sync.remoteProfiles }
+    const remote = sync.remoteSchedule
+    if (remote) {
+      participants.value = mergeProfiles(remote.participants, profiles)
       events.value = remote.events
       settings.value = remote.settings
-      saveGuestCache(clone(remote))
+      saveRemoteCache({ schedule: clone(remote), profiles: clone(profiles) })
+    } else {
+      participants.value = mergeProfiles(participants.value, profiles)
+    }
+  }
+
+  watch(
+    [() => sync.remoteSchedule, () => sync.remoteProfiles],
+    () => {
+      if (isRemote.value) applyRemote()
     },
     { immediate: true },
   )
 
+  // Admin takes profile changes made by participants; local ones are published once connected.
+  let seedProfiles = false
+  watch(
+    () => sync.remoteProfiles,
+    (remote) => {
+      if (!isAdmin.value) return
+      participants.value = mergeProfiles(participants.value, remote)
+      if (!seedProfiles) return
+      seedProfiles = false
+      for (const p of participants.value) {
+        const profile = toProfile(p)
+        if (!(p.id in remote) && Object.keys(profile).length) void sync.pushProfile(p.id, profile)
+      }
+    },
+  )
+
+  // Completions: per-key last write wins on every device; the local copy is kept.
+  const syncState: CompletionSyncState = { stamps: {}, known: new Set() }
+  let seedCompletions = false
+  watch(
+    () => sync.remoteCompletions,
+    (remote) => {
+      completions.value = mergeCompletions(completions.value, remote, syncState)
+      syncState.known = new Set(Object.keys(remote))
+      if (!seedCompletions || !isAdmin.value) return
+      seedCompletions = false
+      for (const c of completions.value) {
+        const key = completionKey(c.eventId, c.date)
+        if (!(key in remote)) void sync.setCompletion(key, { status: c.status, by: 'admin', at: Date.now() })
+      }
+    },
+  )
+  watch(
+    () => sync.connectCount,
+    () => {
+      seedProfiles = true
+      seedCompletions = true
+      syncState.known = new Set()
+    },
+  )
+
+  /** Applies a local change to the marks and publishes the difference. */
+  function commitCompletions(next: Completion[]) {
+    const before = new Map(completions.value.map((c) => [completionKey(c.eventId, c.date), c]))
+    const after = new Map(next.map((c) => [completionKey(c.eventId, c.date), c]))
+    const at = Date.now()
+    for (const [key, c] of after) {
+      if (before.get(key)?.status === c.status) continue
+      syncState.stamps[key] = at
+      void sync.setCompletion(key, { status: c.status, by: device.role, at })
+    }
+    for (const key of before.keys()) {
+      if (after.has(key)) continue
+      syncState.stamps[key] = at
+      void sync.setCompletion(key, null)
+    }
+    completions.value = next
+  }
+
   // Switching role on this device swaps the data set.
-  watch(isGuest, (guest) => {
+  watch(isRemote, (remote) => {
     clearTimeout(saveTimer)
     clearTimeout(pushTimer)
-    restore(guest ? initialGuest() : (load() ?? createSeedSnapshot()))
-    if (guest && sync.remoteSchedule) {
-      const { remoteSchedule: remote } = sync
-      participants.value = remote.participants
-      events.value = remote.events
-      settings.value = remote.settings
+    if (remote) {
+      restore(initialRemote())
+      applyRemote()
+    } else if (!device.householdId || !participants.value.length) {
+      restore(load() ?? createSeedSnapshot())
     }
   })
 
   // Without Firebase an admin tab in the same browser is the only source; follow its saves.
   if (!env.firebase && typeof window !== 'undefined') {
     window.addEventListener('storage', (e) => {
-      if (e.key !== STORAGE_KEY || !isGuest.value) return
+      if (e.key !== STORAGE_KEY || !isRemote.value) return
       const local = load()
       if (!local) return
       participants.value = local.participants
@@ -190,7 +303,10 @@ export const useScheduleStore = defineStore('schedule', () => {
   }
 
   function assertEditable() {
-    if (isGuest.value) throw new Error('На гостевом экране расписание нельзя менять')
+    if (canEdit(device.role)) return
+    throw new Error(
+      isGuest.value ? 'На гостевом экране расписание нельзя менять' : 'Расписание может менять только администратор',
+    )
   }
 
   if (device.householdId) sync.start()
@@ -208,7 +324,8 @@ export const useScheduleStore = defineStore('schedule', () => {
   function restore(data: ScheduleSnapshot) {
     participants.value = data.participants
     events.value = data.events
-    completions.value = data.completions
+    if (isAdmin.value) commitCompletions(data.completions)
+    else completions.value = data.completions
     settings.value = data.settings
   }
 
@@ -240,7 +357,40 @@ export const useScheduleStore = defineStore('schedule', () => {
     if (!p) return
     if (patch.name !== undefined && !patch.name.trim()) throw new Error('Введите имя')
     Object.assign(p, patch, patch.name !== undefined ? { name: patch.name.trim() } : {})
+    if ('avatar' in patch || 'alarmSound' in patch) void sync.pushProfile(id, toProfile(p))
   }
+
+  /** Sets or clears a participant's PIN, salted with the household and participant. */
+  function setParticipantPin(id: string, pin: string | null): Promise<void> {
+    assertEditable()
+    const household = device.householdId
+    return (pin ? hashParticipantPin(pin, id, household) : Promise.resolve(null)).then((pinHash) =>
+      updateParticipant(id, { pinHash }),
+    )
+  }
+
+  function updateProfile(id: string, patch: ParticipantProfile) {
+    if (!isAdmin.value && !(isParticipant.value && device.participantId === id)) {
+      throw new Error('Можно менять только свой профиль')
+    }
+    const i = participants.value.findIndex((x) => x.id === id)
+    const current = participants.value[i]
+    if (!current) return
+    const next: Participant = { ...current }
+    if ('avatar' in patch) {
+      if (patch.avatar) next.avatar = patch.avatar
+      else delete next.avatar
+    }
+    if ('alarmSound' in patch) {
+      if (patch.alarmSound) next.alarmSound = patch.alarmSound
+      else delete next.alarmSound
+    }
+    participants.value[i] = next
+    void sync.pushProfile(id, toProfile(next))
+  }
+
+  /** Same permissions as updateProfile: a participant device may only touch its own participant. */
+  const updateOwnProfile = updateProfile
 
   function removeParticipant(id: string) {
     assertEditable()
@@ -256,7 +406,7 @@ export const useScheduleStore = defineStore('schedule', () => {
       }
       return [{ ...e, participantIds: rest }]
     })
-    completions.value = completions.value.filter((c) => !gone.has(c.eventId))
+    commitCompletions(completions.value.filter((c) => !gone.has(c.eventId)))
   }
 
   function addEvents(list: NewEvent[]): ScheduleEvent[] {
@@ -293,18 +443,25 @@ export const useScheduleStore = defineStore('schedule', () => {
     assertEditable()
     rememberForUndo()
     events.value = events.value.filter((e) => e.id !== id)
-    completions.value = completions.value.filter((c) => c.eventId !== id)
+    commitCompletions(completions.value.filter((c) => c.eventId !== id))
   }
 
   function completionFor(eventId: string, date: IsoDate): Completion | undefined {
     return completions.value.find((c) => c.eventId === eventId && c.date === date)
   }
 
-  /** Cycle: auto -> skipped, skipped -> cleared, none -> done, done -> none. */
+  /** Cycle: auto -> skipped, skipped -> cleared, none -> done, done -> none. A participant may only mark own events. */
   function toggleCompletion(eventId: string, date: IsoDate, participantId?: string) {
-    assertEditable()
     const event = events.value.find((e) => e.id === eventId)
-    const pid = participantId ?? event?.participantIds[0]
+    if (!isAdmin.value) {
+      const own = device.participantId
+      if (!canToggle(device.role, own, event) || (participantId !== undefined && participantId !== own)) {
+        throw new Error(
+          isGuest.value ? 'На гостевом экране расписание нельзя менять' : 'Можно отмечать только свои занятия',
+        )
+      }
+    }
+    const pid = participantId ?? (isParticipant.value ? (device.participantId ?? undefined) : event?.participantIds[0])
     const day = parseIsoDate(date)
     const dayOccs = occurrences(events.value, day, day)
     const occ = dayOccs.find((o) => o.event.id === eventId)
@@ -312,9 +469,21 @@ export const useScheduleStore = defineStore('schedule', () => {
       occ && pid
         ? effectiveCompletionFor(occ, pid, dayOccs, completions.value, settings.value.autoComplete, Date.now())
         : completionFor(eventId, date)?.status ?? null
-    completions.value = completions.value.filter((c) => !(c.eventId === eventId && c.date === date))
-    if (state === 'auto') completions.value.push({ eventId, date, status: 'skipped' })
-    else if (state === null) completions.value.push({ eventId, date, status: 'done' })
+    const next = completions.value.filter((c) => !(c.eventId === eventId && c.date === date))
+    if (state === 'auto') next.push({ eventId, date, status: 'skipped' })
+    else if (state === null) next.push({ eventId, date, status: 'done' })
+    commitCompletions(next)
+  }
+
+  function ownOccurrences(from: Date, to: Date) {
+    return occurrences(ownEvents.value, from, to)
+  }
+
+  function ownProgress(from: Date, to: Date, now = Date.now()): ProgressCounter {
+    const id = device.participantId
+    if (!id) return NO_PROGRESS
+    const options = { autoComplete: settings.value.autoComplete, now }
+    return progress(completions.value, ownOccurrences(from, to), [id], options)[id] ?? NO_PROGRESS
   }
 
   function updateSettings(patch: Partial<Settings>) {
@@ -341,6 +510,12 @@ export const useScheduleStore = defineStore('schedule', () => {
 
   return {
     isGuest,
+    isParticipant,
+    isAdmin,
+    ownParticipant,
+    ownEvents,
+    ownOccurrences,
+    ownProgress,
     participants,
     events,
     completions,
@@ -353,6 +528,9 @@ export const useScheduleStore = defineStore('schedule', () => {
     canUndo,
     addParticipant,
     updateParticipant,
+    setParticipantPin,
+    updateProfile,
+    updateOwnProfile,
     removeParticipant,
     addEvent,
     addEvents,
