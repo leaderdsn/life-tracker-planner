@@ -5,7 +5,7 @@ export function initialOf(name: string): string {
 }
 
 export function initialsOf(participants: Participant[]): string {
-  return participants.map((p) => initialOf(p.name)).join('')
+  return participants.map((p) => initialOf(p.name)).join('·')
 }
 
 export function chipBackground(participants: Participant[]): string {

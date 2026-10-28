@@ -1,6 +1,5 @@
-import { toIsoDate } from '@/shared/lib'
-
 import { useScheduleStore } from '@/entities/schedule'
+import { toIsoDate } from '@/shared/lib'
 
 export function useToggleDone() {
   const store = useScheduleStore()
@@ -9,8 +8,8 @@ export function useToggleDone() {
     return date <= toIsoDate(new Date())
   }
 
-  function toggle(eventId: string, date: string) {
-    if (canToggle(date)) store.toggleCompletion(eventId, date)
+  function toggle(eventId: string, date: string, participantId?: string) {
+    if (canToggle(date)) store.toggleCompletion(eventId, date, participantId)
   }
 
   return { canToggle, toggle }

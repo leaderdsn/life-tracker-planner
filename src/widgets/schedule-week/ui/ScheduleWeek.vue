@@ -31,6 +31,8 @@ const { canToggle, toggle } = useToggleDone()
 
 const dayNumber = new Intl.DateTimeFormat('ru-RU', { day: 'numeric' })
 
+const pidFor = (event: ScheduleEvent) => (props.participantId === 'all' ? event.participantIds[0] : props.participantId)
+
 const weekStart = computed(() => startOfWeek(parseIsoDate(props.anchor)))
 
 const grid = computed(() => {
@@ -94,12 +96,13 @@ function eventsAt(rowIndex: number, day: Weekday): ScheduleEvent[] {
                   :event="event"
                   :participants="participantsOf(event)"
                   :labels="labels"
-                  :status="stateFor(event, col.date).status"
-                  :done="stateFor(event, col.date).done"
-                  :conflict="stateFor(event, col.date).conflict"
+                  :status="stateFor(event, col.date, pidFor(event)).status"
+                  :done="stateFor(event, col.date, pidFor(event)).done"
+                  :completion="stateFor(event, col.date, pidFor(event)).completion"
+                  :conflict="stateFor(event, col.date, pidFor(event)).conflict"
                   :can-toggle="canToggle(col.date)"
                   @open="emit('open-event', event.id)"
-                  @toggle="toggle(event.id, col.date)"
+                  @toggle="toggle(event.id, col.date, pidFor(event))"
                 />
               </li>
             </ul>
