@@ -1,0 +1,64 @@
+@use "@/shared/styles" as ds
+
+.guest-page
+  flex: none
+  height: 100dvh
+  min-height: 0
+  overflow: hidden
+  background: var(--app-background)
+  overscroll-behavior: none
+  touch-action: manipulation
+  user-select: none
+  -webkit-user-select: none
+  -webkit-tap-highlight-color: transparent
+
+  &__fullscreen
+    display: grid
+    place-items: center
+    width: 3.5rem
+    height: 3.5rem
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-full
+    background: var(--app-surface)
+    color: var(--app-ink-muted)
+    font-size: 1.25rem
+    cursor: pointer
+    touch-action: manipulation
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__start
+    position: fixed
+    inset: 0
+    z-index: 20
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: 1rem
+    padding: ds.$space-8
+    border: 0
+    background: linear-gradient(145deg, var(--app-accent-soft), var(--app-background) 70%)
+    color: var(--app-ink)
+    font: inherit
+    text-align: center
+    cursor: pointer
+    touch-action: manipulation
+
+    &:focus-visible
+      outline-offset: -8px
+      +ds.focus-ring
+
+  &__start-icon
+    color: var(--app-accent)
+    font-size: clamp(5rem, 14vmin, 10rem)
+
+  &__start-title
+    font-size: clamp(2.25rem, 7vmin, 5rem)
+    font-weight: 800
+    line-height: ds.$line-height-tight
+
+  &__start-hint
+    color: var(--app-ink-muted)
+    font-size: clamp(1.125rem, 2.6vmin, 2rem)

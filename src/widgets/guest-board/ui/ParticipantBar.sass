@@ -1,0 +1,50 @@
+@use "@/shared/styles" as ds
+
+.participant-bar
+  display: flex
+  flex-wrap: wrap
+  gap: 0.6em
+
+  &__pill
+    display: inline-flex
+    align-items: center
+    gap: 0.6em
+    min-width: 4.5em
+    min-height: 3.5rem
+    padding: 0.4em 1.1em 0.4em 0.5em
+    border: 2px solid var(--app-border)
+    border-radius: ds.$radius-full
+    background: var(--app-surface)
+    color: var(--app-ink)
+    font: inherit
+    font-size: 1.2em
+    font-weight: 700
+    cursor: pointer
+    touch-action: manipulation
+    user-select: none
+    -webkit-tap-highlight-color: transparent
+
+    &:first-child
+      padding-left: 1.3em
+      justify-content: center
+
+    &:active
+      background: var(--app-accent-soft)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &.is-active
+      border-color: var(--app-accent)
+      background: var(--app-accent-soft)
+      box-shadow: var(--app-glow)
+
+  &__badge
+    display: grid
+    place-items: center
+    width: 2em
+    height: 2em
+    border-radius: ds.$radius-full
+    color: var(--app-chip-ink)
+    font-size: 0.9em
+    font-weight: 800

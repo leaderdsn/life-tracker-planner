@@ -1,0 +1,65 @@
+@use "@/shared/styles" as ds
+
+.guest-column
+  display: flex
+  flex-direction: column
+  min-width: 0
+  min-height: 0
+  padding: 0.8em
+  border: 1px solid var(--app-border)
+  border-radius: 1.1em
+  background: var(--app-surface)
+  box-shadow: var(--app-shadow)
+
+  &__head
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 0.2em 0.6em
+    padding-bottom: 0.6em
+
+  &__dot
+    width: 1.1em
+    height: 1.1em
+
+  &__name
+    margin: 0
+    font-size: 1.5em
+    font-weight: 800
+    line-height: ds.$line-height-tight
+
+  &__count
+    margin-left: auto
+    color: var(--app-ink-muted)
+    font-size: 0.95em
+    font-weight: 600
+
+  &__empty
+    margin: 1em 0
+    color: var(--app-ink-muted)
+    font-size: 1.15em
+    text-align: center
+
+  &__list
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: 0.9em
+    min-height: 0
+    margin: 0
+    padding: 0.9em 1em 0.6em
+    overflow-y: auto
+    list-style: none
+    overscroll-behavior: contain
+    scrollbar-width: none
+    position: relative
+    mask-image: linear-gradient(to bottom, transparent, #000 0.9em, #000 calc(100% - 0.9em), transparent)
+
+  &__item
+    flex-shrink: 0
+
+  &.is-wide
+    flex: 1
+    width: min(100%, 60em)
+    margin-inline: auto
+    font-size: 1.25em
