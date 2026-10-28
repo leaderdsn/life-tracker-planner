@@ -1,0 +1,81 @@
+@use "@/shared/styles" as ds
+
+.event-form
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__field
+    display: flex
+    flex-direction: column
+    gap: ds.$space-1
+    min-width: 0
+
+  &__fieldset
+    margin: 0
+    padding: 0
+    border: 0
+
+  &__label
+    padding: 0
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__days
+    display: grid
+    grid-template-columns: repeat(7, 1fr)
+    gap: ds.$space-1
+
+  &__day,
+  &__quick-btn
+    min-height: 2.75rem
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-md
+    background: var(--app-surface)
+    color: var(--app-ink)
+    font: inherit
+    font-size: ds.$font-size-sm
+    font-weight: 600
+    cursor: pointer
+    transition: background ds.$transition-fast, border-color ds.$transition-fast
+
+    &:hover
+      background: var(--app-surface-muted)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &.is-on,
+    &[aria-pressed="true"]
+      border-color: var(--app-accent)
+      background: var(--app-accent-soft)
+
+  &__quick
+    display: flex
+    gap: ds.$space-2
+
+  &__quick-btn
+    padding-inline: ds.$space-4
+
+  &__oneoff
+    display: flex
+    align-items: center
+    gap: ds.$space-3
+    font-size: ds.$font-size-sm
+
+  &__times
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: ds.$space-3
+
+  &__error
+    display: flex
+    align-items: center
+    gap: ds.$space-2
+    margin: 0
+    padding: ds.$space-2 ds.$space-3
+    border-radius: ds.$radius-md
+    background: var(--app-conflict-soft)
+    color: var(--app-conflict)
+    font-size: ds.$font-size-sm
+    font-weight: 600

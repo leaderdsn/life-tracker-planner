@@ -1,0 +1,153 @@
+@use "@/shared/styles" as ds
+
+.event-chip
+  position: relative
+  display: flex
+  align-items: stretch
+  width: 100%
+  min-width: 0
+  border: 1px solid color-mix(in srgb, var(--app-chip-ink) 18%, transparent)
+  border-radius: ds.$radius-md
+  isolation: isolate
+  color: var(--app-chip-ink)
+  font-size: ds.$font-size-sm
+  line-height: ds.$line-height-tight
+  transition: box-shadow ds.$transition-fast, opacity ds.$transition-fast
+
+  &::before
+    content: ""
+    position: absolute
+    inset: 0
+    z-index: -1
+    border-radius: inherit
+    background: var(--chip-bg)
+    transition: opacity ds.$transition-fast
+
+  &__main
+    display: flex
+    flex: 1
+    align-items: flex-start
+    gap: ds.$space-1
+    min-width: 0
+    min-height: 2.75rem
+    padding: ds.$space-2 ds.$space-1 ds.$space-2 ds.$space-2
+    border: 0
+    border-radius: inherit
+    background: transparent
+    color: inherit
+    font: inherit
+    text-align: left
+    cursor: pointer
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__initials
+    flex-shrink: 0
+    padding: 0.1rem 0.35rem
+    border-radius: ds.$radius-full
+    background: rgb(255 255 255 / 65%)
+    font-size: ds.$font-size-xs
+    font-weight: 700
+
+  &__body
+    display: flex
+    flex-direction: column
+    gap: 2px
+    min-width: 0
+
+  &__title
+    font-weight: 600
+    overflow-wrap: break-word
+    word-break: normal
+
+  &__meta
+    font-size: ds.$font-size-xs
+    opacity: 0.85
+
+  &__check
+    position: absolute
+    top: 2px
+    right: 2px
+    display: grid
+    place-items: center
+    width: 1.4rem
+    height: 1.4rem
+    padding: 0
+    border: 0
+    border-radius: ds.$radius-full
+    background: transparent
+    color: inherit
+    font-size: 1rem
+    cursor: pointer
+
+    &::after
+      content: ""
+      position: absolute
+      inset: -0.4rem
+
+    &:hover
+      background: rgb(255 255 255 / 45%)
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &.has-check &__main
+    padding-right: 1.75rem
+
+  &__badge
+    position: absolute
+    bottom: -6px
+    right: -4px
+    display: grid
+    place-items: center
+    width: 1.25rem
+    height: 1.25rem
+    border-radius: ds.$radius-full
+    font-size: ds.$font-size-xs
+    font-weight: 800
+
+    &--conflict
+      background: var(--app-conflict-soft)
+      color: var(--app-conflict)
+      border: 1px solid var(--app-conflict)
+
+    &--review
+      top: -6px
+      bottom: auto
+      right: auto
+      left: -4px
+      background: #fff3bf
+      color: #5c4400
+      border: 1px solid #b38600
+
+  &.is-current
+    border-width: 2px
+    border-color: var(--app-accent)
+    box-shadow: var(--app-glow), var(--app-shadow)
+
+  &.is-next
+    border-style: dashed
+    border-width: 2px
+    border-color: var(--app-accent)
+
+  &.is-past
+    color: var(--app-past-ink)
+
+    &::before
+      opacity: var(--app-past-opacity)
+
+    .event-chip__initials
+      color: var(--app-chip-ink)
+
+  &.is-done
+    .event-chip__title
+      text-decoration: line-through
+      text-decoration-thickness: 1px
+    .event-chip__main
+      opacity: 0.75
+
+  &.has-conflict
+    border-width: 2px
+    border-color: var(--app-conflict)
+    outline: 2px solid var(--app-conflict-soft)

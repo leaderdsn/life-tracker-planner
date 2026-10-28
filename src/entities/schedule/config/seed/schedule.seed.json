@@ -1,0 +1,2236 @@
+{
+ "version": 1,
+ "participants": [
+  {
+   "id": "ruslan",
+   "name": "Руслан",
+   "color": "#FCE8B2"
+  },
+  {
+   "id": "ratmir",
+   "name": "Ратмир",
+   "color": "#CFE2FF"
+  },
+  {
+   "id": "vasilisa",
+   "name": "Василиса",
+   "color": "#CDEFD6"
+  },
+  {
+   "id": "me",
+   "name": "Я",
+   "color": "#E4D9F5"
+  }
+ ],
+ "events": [
+  {
+   "id": "e1",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e55",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e110",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e166",
+   "participantIds": [
+    "me"
+   ],
+   "day": "mon",
+   "start": "08:30",
+   "end": null,
+   "title": "Моя работа",
+   "place": null,
+   "category": "work"
+  },
+  {
+   "id": "e61",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "09:00",
+   "end": null,
+   "title": "Шахматы (компьютер)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e116",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "09:00",
+   "end": null,
+   "title": "Свободное время",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e11",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "10:00",
+   "end": null,
+   "title": "Собираться в ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e121",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "10:00",
+   "end": "10:40",
+   "title": "Алгебра",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e15",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "10:40",
+   "end": "11:25",
+   "title": "Английский",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e70",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "10:45",
+   "end": null,
+   "title": "Баян",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e126",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "11:00",
+   "end": "11:25",
+   "title": "Геометрия",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e17",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Баян",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e74",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "11:30",
+   "end": null,
+   "title": "Баян",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e132",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e19",
+   "participantIds": [
+    "ruslan",
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "12:00",
+   "end": null,
+   "title": "Мальчики едут сами до родителей",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e77",
+   "participantIds": [
+    "ruslan",
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "12:00",
+   "end": null,
+   "title": "Мальчики едут сами до родителей",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e137",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "12:15",
+   "end": "12:55",
+   "title": "Физика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e24",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "14:00",
+   "end": "15:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e80",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "14:00",
+   "end": "15:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e144",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "15:00",
+   "end": null,
+   "title": "Английский — домашка",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e171",
+   "participantIds": [
+    "me"
+   ],
+   "day": "mon",
+   "start": "15:30",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Коловрат"
+  },
+  {
+   "id": "e85",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "16:30",
+   "end": null,
+   "title": "Математика (новая тема + задачи)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e32",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "17:00",
+   "end": "17:45",
+   "title": "Математика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e90",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "17:15",
+   "end": null,
+   "title": "Биология (новая тема + тест)",
+   "place": null,
+   "category": "study",
+   "needsReview": "в таблице не было времени, подставлено 17:15"
+  },
+  {
+   "id": "e37",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "17:45",
+   "end": "18:15",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e94",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "18:00",
+   "end": null,
+   "title": "Русский язык (новый блок + упр.)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e45",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e98",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e155",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e50",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "mon",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e104",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "mon",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e161",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "mon",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e2",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e56",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e111",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e117",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "09:00",
+   "end": null,
+   "title": "Свободное время",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e8",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "09:30",
+   "end": null,
+   "title": "Собираться на шахматы",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e12",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "10:00",
+   "end": null,
+   "title": "Шахматы с тренером",
+   "place": "Ангара",
+   "category": "activity"
+  },
+  {
+   "id": "e65",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "10:00",
+   "end": null,
+   "title": "Шахматы с тренером",
+   "place": "Ангара",
+   "category": "activity"
+  },
+  {
+   "id": "e122",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "10:00",
+   "end": "10:40",
+   "title": "Алгебра",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e127",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "11:00",
+   "end": "11:25",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e133",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Биология",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e20",
+   "participantIds": [
+    "ruslan",
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "12:00",
+   "end": null,
+   "title": "Мальчики сами в ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e78",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "12:00",
+   "end": "13:00",
+   "title": "Английский (репетитор)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e138",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "12:15",
+   "end": "12:55",
+   "title": "География",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e79",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "13:00",
+   "end": null,
+   "title": "Едешь до ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e25",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "14:00",
+   "end": "14:40",
+   "title": "Вокал",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e81",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "14:00",
+   "end": "14:40",
+   "title": "Вокал",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e145",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "15:00",
+   "end": "16:20",
+   "title": "Рукоделие",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e172",
+   "participantIds": [
+    "me"
+   ],
+   "day": "tue",
+   "start": "15:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Вокал"
+  },
+  {
+   "id": "e29",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "15:30",
+   "end": null,
+   "title": "Английский — домашка",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e86",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "16:30",
+   "end": null,
+   "title": "Математика (практика)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e150",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "16:30",
+   "end": "18:40",
+   "title": "Художка",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e33",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "17:00",
+   "end": null,
+   "title": "Математика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e91",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "17:15",
+   "end": null,
+   "title": "Русский язык (практика)",
+   "place": null,
+   "category": "study",
+   "needsReview": "в таблице не было времени, подставлено 17:15"
+  },
+  {
+   "id": "e38",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "17:45",
+   "end": null,
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e42",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "18:30",
+   "end": null,
+   "title": "Окружающий мир",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e153",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "19:00",
+   "end": null,
+   "title": "Пилон",
+   "place": "«Вертикаль», Центральный рынок",
+   "category": "activity"
+  },
+  {
+   "id": "e181",
+   "participantIds": [
+    "me"
+   ],
+   "day": "tue",
+   "start": "19:00",
+   "end": null,
+   "title": "Моя работа",
+   "place": null,
+   "category": "work"
+  },
+  {
+   "id": "e46",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e99",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e156",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e51",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "tue",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e105",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "tue",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e162",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "tue",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e3",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e57",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e112",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e167",
+   "participantIds": [
+    "me"
+   ],
+   "day": "wed",
+   "start": "08:30",
+   "end": null,
+   "title": "Моя работа",
+   "place": null,
+   "category": "work"
+  },
+  {
+   "id": "e62",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "09:00",
+   "end": null,
+   "title": "Шахматы (компьютер)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e118",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "09:00",
+   "end": null,
+   "title": "Свободное время",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e13",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "10:00",
+   "end": null,
+   "title": "Собираться в ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e66",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "10:00",
+   "end": "12:00",
+   "title": "Жду",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e123",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "10:00",
+   "end": "10:40",
+   "title": "Алгебра",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e168",
+   "participantIds": [
+    "me"
+   ],
+   "day": "wed",
+   "start": "10:30",
+   "end": null,
+   "title": "Жду",
+   "place": null,
+   "category": "logistics",
+   "note": "Баян"
+  },
+  {
+   "id": "e16",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "10:40",
+   "end": "11:25",
+   "title": "Английский",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e71",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "10:45",
+   "end": null,
+   "title": "Баян",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e128",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "11:00",
+   "end": "11:25",
+   "title": "Геометрия",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e18",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Баян",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e75",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "11:30",
+   "end": null,
+   "title": "Баян",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e134",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e139",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "12:15",
+   "end": "12:55",
+   "title": "Информатика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e26",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "14:00",
+   "end": "15:00",
+   "title": "Бассейн",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e173",
+   "participantIds": [
+    "ruslan",
+    "ratmir",
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "14:00",
+   "end": null,
+   "title": "Бассейн",
+   "place": "бассейн «Чайка»",
+   "category": "activity"
+  },
+  {
+   "id": "e146",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "15:00",
+   "end": "16:20",
+   "title": "Рукоделие",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e174",
+   "participantIds": [
+    "me"
+   ],
+   "day": "wed",
+   "start": "15:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Рукоделие"
+  },
+  {
+   "id": "e87",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "16:30",
+   "end": null,
+   "title": "Математика (практика)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e151",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "16:30",
+   "end": "18:40",
+   "title": "Художка",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e34",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "17:00",
+   "end": "17:45",
+   "title": "Математика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e92",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "17:15",
+   "end": null,
+   "title": "Русский язык (практика)",
+   "place": null,
+   "category": "study",
+   "needsReview": "в таблице не было времени, подставлено 17:15"
+  },
+  {
+   "id": "e39",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "17:45",
+   "end": "18:15",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e95",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "18:00",
+   "end": null,
+   "title": "География (новая тема + тест)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e47",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e100",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e157",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e52",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "wed",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e106",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "wed",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e163",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "wed",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e4",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e58",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e113",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e119",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "09:00",
+   "end": null,
+   "title": "Свободное время",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e9",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "09:30",
+   "end": null,
+   "title": "Собираться на шахматы",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e14",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "10:00",
+   "end": null,
+   "title": "Шахматы с тренером",
+   "place": "Ангара",
+   "category": "activity"
+  },
+  {
+   "id": "e67",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "10:00",
+   "end": null,
+   "title": "Шахматы с тренером",
+   "place": "Ангара",
+   "category": "activity"
+  },
+  {
+   "id": "e124",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "10:00",
+   "end": "10:40",
+   "title": "Алгебра",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e72",
+   "participantIds": [
+    "ruslan",
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "10:45",
+   "end": null,
+   "title": "Мальчики идут до родителей",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e129",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "11:00",
+   "end": "11:25",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e135",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "11:30",
+   "end": "12:00",
+   "title": "Физика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e21",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "12:00",
+   "end": null,
+   "title": "Обед у родителей",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e140",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "12:15",
+   "end": null,
+   "title": "Уроки закончились",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e22",
+   "participantIds": [
+    "ruslan",
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "13:00",
+   "end": null,
+   "title": "Мальчики сами в ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e27",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "14:00",
+   "end": "14:40",
+   "title": "Вокал",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e82",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "14:00",
+   "end": "14:40",
+   "title": "Вокал",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e142",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "14:00",
+   "end": "15:50",
+   "title": "Художка",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e169",
+   "participantIds": [
+    "me"
+   ],
+   "day": "thu",
+   "start": "15:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Художка"
+  },
+  {
+   "id": "e30",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "15:30",
+   "end": null,
+   "title": "Английский — домашка",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e148",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "16:00",
+   "end": "18:00",
+   "title": "Театральный",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e88",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "16:30",
+   "end": null,
+   "title": "Математика (новая тема + задачи)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e35",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "17:00",
+   "end": null,
+   "title": "Математика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e93",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "17:15",
+   "end": null,
+   "title": "Русский язык (новый блок + упр.)",
+   "place": null,
+   "category": "study",
+   "needsReview": "в таблице не было времени, подставлено 17:15"
+  },
+  {
+   "id": "e40",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "17:45",
+   "end": null,
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e96",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "18:00",
+   "end": null,
+   "title": "Литература (чтение 25–30 стр)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e43",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "18:30",
+   "end": null,
+   "title": "Литература",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e154",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "19:00",
+   "end": null,
+   "title": "Пилон",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e182",
+   "participantIds": [
+    "me"
+   ],
+   "day": "thu",
+   "start": "19:00",
+   "end": null,
+   "title": "Моя работа",
+   "place": null,
+   "category": "work"
+  },
+  {
+   "id": "e48",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e101",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e158",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e53",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "thu",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e107",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "thu",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e164",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "thu",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e5",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e59",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e114",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e63",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "09:00",
+   "end": null,
+   "title": "Шахматы (компьютер)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e120",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "09:00",
+   "end": null,
+   "title": "Свободное время",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e68",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "10:00",
+   "end": null,
+   "title": "Математика (практика)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e125",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "10:00",
+   "end": "10:40",
+   "title": "Алгебра",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e73",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "10:45",
+   "end": null,
+   "title": "Русский язык (практика)",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e130",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "11:00",
+   "end": "11:25",
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e76",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "11:30",
+   "end": null,
+   "title": "Английский — домашка",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e136",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "11:30",
+   "end": "12:10",
+   "title": "Биология",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e141",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "12:15",
+   "end": "12:55",
+   "title": "История",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e23",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "13:00",
+   "end": "13:45",
+   "title": "Литература",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e28",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "14:00",
+   "end": "15:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e83",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "14:00",
+   "end": "15:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e143",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "14:00",
+   "end": "15:00",
+   "title": "Английский",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e170",
+   "participantIds": [
+    "me"
+   ],
+   "day": "fri",
+   "start": "14:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Английский"
+  },
+  {
+   "id": "e147",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "15:00",
+   "end": null,
+   "title": "Сама в ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e175",
+   "participantIds": [
+    "ruslan",
+    "ratmir",
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "15:00",
+   "end": null,
+   "title": "Все едут до ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e31",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "15:30",
+   "end": null,
+   "title": "Куда?",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e84",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "15:30",
+   "end": null,
+   "title": "Едешь до ДДТ",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e176",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "15:30",
+   "end": null,
+   "title": "Нейро-мозг",
+   "place": "Центральный рынок",
+   "category": "activity",
+   "needsReview": "в таблице не было времени, подставлено 15:30"
+  },
+  {
+   "id": "e149",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "16:00",
+   "end": "17:50",
+   "title": "Театральный",
+   "place": "ДДТ",
+   "category": "activity"
+  },
+  {
+   "id": "e89",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "16:30",
+   "end": null,
+   "title": "Английский (репетитор)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e179",
+   "participantIds": [
+    "ratmir",
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "16:30",
+   "end": null,
+   "title": "Василиса и Ратмир идут до художки",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e36",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "17:00",
+   "end": null,
+   "title": "Математика",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e177",
+   "participantIds": [
+    "me"
+   ],
+   "day": "fri",
+   "start": "17:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Нейро-мозг"
+  },
+  {
+   "id": "e41",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "17:45",
+   "end": null,
+   "title": "Русский",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e97",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "18:00",
+   "end": null,
+   "title": "Шахматы (компьютер)",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e152",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "18:00",
+   "end": "19:30",
+   "title": "Художка",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e178",
+   "participantIds": [
+    "me"
+   ],
+   "day": "fri",
+   "start": "18:00",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Английский"
+  },
+  {
+   "id": "e44",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "18:30",
+   "end": null,
+   "title": "Окружающий мир",
+   "place": null,
+   "category": "study"
+  },
+  {
+   "id": "e180",
+   "participantIds": [
+    "me"
+   ],
+   "day": "fri",
+   "start": "19:30",
+   "end": null,
+   "title": "Забрать / встретить",
+   "place": null,
+   "category": "logistics",
+   "note": "Художка"
+  },
+  {
+   "id": "e49",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e102",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e159",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e54",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "fri",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e108",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "fri",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e165",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "fri",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e6",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "sat",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e60",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "sat",
+   "start": "08:00",
+   "end": null,
+   "title": "Завтрак, гигиена, уборка",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e115",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "sat",
+   "start": "08:00",
+   "end": null,
+   "title": "Едешь к бабе, деде",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e7",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "sat",
+   "start": "09:00",
+   "end": "10:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity",
+   "needsReview": "в таблице: без времени и «до 15:30»; поставлено 09:00–10:30 как у Ратмира"
+  },
+  {
+   "id": "e64",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "sat",
+   "start": "09:00",
+   "end": "10:30",
+   "title": "Коловрат",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e10",
+   "participantIds": [
+    "ruslan"
+   ],
+   "day": "sat",
+   "start": "09:30",
+   "end": null,
+   "title": "К бабе и деде",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e69",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "sat",
+   "start": "10:00",
+   "end": null,
+   "title": "К бабе и деде",
+   "place": null,
+   "category": "logistics"
+  },
+  {
+   "id": "e131",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "sat",
+   "start": "11:00",
+   "end": null,
+   "title": "Пилон",
+   "place": null,
+   "category": "activity"
+  },
+  {
+   "id": "e103",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "sat",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e160",
+   "participantIds": [
+    "vasilisa"
+   ],
+   "day": "sat",
+   "start": "20:30",
+   "end": null,
+   "title": "Подготовка ко сну",
+   "place": null,
+   "category": "routine"
+  },
+  {
+   "id": "e109",
+   "participantIds": [
+    "ratmir"
+   ],
+   "day": "sat",
+   "start": "21:30",
+   "end": null,
+   "title": "Отбой 💤",
+   "place": null,
+   "category": "routine"
+  }
+ ]
+}
