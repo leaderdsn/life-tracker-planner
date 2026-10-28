@@ -50,10 +50,10 @@
 Без настройки приложение работает на одном компьютере. Чтобы связать администратора и гостевой экран на разных компьютерах:
 
 1. Создайте проект на [console.firebase.google.com](https://console.firebase.google.com) (тариф Spark, бесплатно).
-2. **Build → Authentication → Sign-in method** — включите **Anonymous**.
-3. **Build → Realtime Database → Create database** (регион europe-west1), режим **locked**.
+2. **Security → Authentication → Sign-in method** — включите **Anonymous**.
+3. **Databases & Storage → Realtime Database → Create Database** (регион europe-west1), режим **locked**.
 4. Вкладка **Rules** — вставьте содержимое [database.rules.json](database.rules.json) и опубликуйте.
-5. **Project settings → General → Your apps → Web app** — зарегистрируйте приложение и скопируйте конфиг.
+5. **Project Overview → + Add app → Web (`</>`)** — зарегистрируйте приложение и скопируйте конфиг.
 6. Для локального запуска создайте `.env.local` по образцу [.env.example](.env.example).
 7. Для сайта на GitHub Pages добавьте те же значения в **Settings → Secrets and variables → Actions** репозитория
    (`VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_DATABASE_URL`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`)
