@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import { EventChip, occurrences, useChipState, useScheduleStore } from '@/entities/schedule'
-import type { Occurrence, Participant } from '@/entities/schedule'
+import type { Occurrence, Participant, ScheduleEvent } from '@/entities/schedule'
 import { useToggleDone } from '@/features/toggle-done'
 import { parseIsoDate } from '@/shared/lib'
 
@@ -20,6 +20,8 @@ const emit = defineEmits<{
 const store = useScheduleStore()
 const { labels, now, stateFor, todayIso } = useChipState()
 const { canToggle, toggle } = useToggleDone()
+
+const pidFor = (event: ScheduleEvent) => (props.participantId === 'all' ? event.participantIds[0] : props.participantId)
 
 const clock = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' })
 
@@ -59,13 +61,14 @@ function participantsOf(occ: Occurrence): Participant[] {
           :event="entry.occ.event"
           :participants="participantsOf(entry.occ)"
           :labels="labels"
-          :status="stateFor(entry.occ.event, anchor).status"
-          :done="stateFor(entry.occ.event, anchor).done"
-          :conflict="stateFor(entry.occ.event, anchor).conflict"
+          :status="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).status"
+          :done="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).done"
+          :completion="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).completion"
+          :conflict="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).conflict"
           :can-toggle="canToggle(anchor)"
           show-time
           @open="emit('open-event', entry.occ.event.id)"
-          @toggle="toggle(entry.occ.event.id, anchor)"
+          @toggle="toggle(entry.occ.event.id, anchor, pidFor(entry.occ.event))"
         />
       </li>
     </template>

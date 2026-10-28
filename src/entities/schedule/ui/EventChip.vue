@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { isDoneState } from '../lib'
 import { chipBackground, initialsOf } from './participantView'
 
+import type { EffectiveCompletion } from '../lib'
 import type { EventStatus, Participant, ScheduleEvent } from '../model/types'
 
 const props = defineProps<{
@@ -10,6 +12,7 @@ const props = defineProps<{
   participants: Participant[]
   status: EventStatus
   done?: boolean
+  completion?: EffectiveCompletion
   conflict?: boolean
   showTime?: boolean
   canToggle?: boolean
@@ -22,8 +25,19 @@ const emit = defineEmits<{
 }>()
 
 const initials = computed(() =>
-  props.labels ? props.participants.map((p) => props.labels?.[p.id] ?? initialsOf([p])).join('') : initialsOf(props.participants),
+  props.labels ? props.participants.map((p) => props.labels?.[p.id] ?? initialsOf([p])).join('·') : initialsOf(props.participants),
 )
+const state = computed<EffectiveCompletion>(() => props.completion ?? (props.done ? 'done' : null))
+const isDone = computed(() => isDoneState(state.value))
+const checkLabel = computed(() => {
+  if (state.value === 'auto') return 'Отмечено автоматически — нажмите, чтобы отметить как невыполненное'
+  if (state.value === 'skipped') return 'Отмечено как невыполненное — нажмите, чтобы снять отметку'
+  return state.value === 'done' ? 'Снять отметку о выполнении' : 'Отметить выполненным'
+})
+const checkIcon = computed(() => {
+  if (state.value === 'skipped') return 'pi pi-times-circle'
+  return isDone.value ? 'pi pi-check-circle' : 'pi pi-circle'
+})
 const background = computed(() => chipBackground(props.participants))
 const timeLabel = computed(() => (props.event.end ? `${props.event.start}–${props.event.end}` : props.event.start))
 
@@ -32,7 +46,9 @@ const stateNotes = computed(() => {
   if (props.status === 'current') notes.push('идёт сейчас')
   if (props.status === 'next') notes.push('следующее')
   if (props.status === 'past') notes.push('прошло')
-  if (props.done) notes.push('выполнено')
+  if (state.value === 'done') notes.push('выполнено')
+  if (state.value === 'auto') notes.push('выполнено автоматически')
+  if (state.value === 'skipped') notes.push('не выполнено')
   if (props.conflict) notes.push('пересекается с другим занятием')
   if (props.event.needsReview) notes.push(`нужно проверить: ${props.event.needsReview}`)
   return notes
@@ -53,7 +69,9 @@ const ariaLabel = computed(() => {
       'is-current': status === 'current',
       'is-next': status === 'next',
       'is-past': status === 'past',
-      'is-done': done,
+      'is-done': isDone,
+      'is-auto': state === 'auto',
+      'is-skipped': state === 'skipped',
       'has-conflict': conflict,
       'has-check': canToggle,
       'needs-review': Boolean(event.needsReview),
@@ -81,11 +99,13 @@ const ariaLabel = computed(() => {
       v-if="canToggle"
       type="button"
       class="event-chip__check"
-      :aria-pressed="Boolean(done)"
-      :aria-label="done ? 'Снять отметку о выполнении' : 'Отметить выполненным'"
+      :aria-pressed="isDone"
+      :aria-label="checkLabel"
+      :title="state === 'auto' ? checkLabel : undefined"
       @click="emit('toggle')"
     >
-      <i :class="done ? 'pi pi-check-circle' : 'pi pi-circle'" aria-hidden="true" />
+      <i :class="checkIcon" aria-hidden="true" />
+      <span v-if="state === 'auto'" class="event-chip__auto" aria-hidden="true">авто</span>
     </button>
   </div>
 </template>
