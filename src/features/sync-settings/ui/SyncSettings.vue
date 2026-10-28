@@ -2,8 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { hashPin, useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
-import type { AlarmSound } from '@/entities/schedule'
+import { hashPin, SOUND_GROUPS, SOUND_LABELS, useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
 import { env, ROUTE_NAMES } from '@/shared/config'
 import { playOnce, unlockAudio, useClipboard } from '@/shared/lib'
 
@@ -16,11 +15,10 @@ const IDLE_OPTIONS = [
   { label: '2 минуты', value: 120 },
   { label: '5 минут', value: 300 },
 ]
-const SOUND_OPTIONS: { label: string; value: AlarmSound }[] = [
-  { label: 'Перезвон', value: 'chime' },
-  { label: 'Сигнал', value: 'beep' },
-  { label: 'Колокольчик', value: 'bell' },
-]
+const SOUND_OPTIONS = SOUND_GROUPS.map(({ label, sounds }) => ({
+  label,
+  items: sounds.map((value) => ({ label: SOUND_LABELS[value], value })),
+}))
 const PIN_PATTERN = /^\d{4,6}$/
 
 const store = useScheduleStore()
@@ -148,6 +146,8 @@ function openGuestHere() {
           :options="SOUND_OPTIONS"
           option-label="label"
           option-value="value"
+          option-group-label="label"
+          option-group-children="items"
           @update:model-value="store.updateSettings({ alarmSound: $event })"
         />
         <Button label="Прослушать" icon="pi pi-volume-up" severity="secondary" @click="preview" />

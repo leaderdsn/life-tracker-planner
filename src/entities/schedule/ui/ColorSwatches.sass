@@ -2,15 +2,16 @@
 
 .color-swatches
   display: grid
-  grid-template-columns: repeat(4, 1fr)
+  grid-template-columns: repeat(4, minmax(2.75rem, 1fr))
   gap: ds.$space-3
 
   +ds.media(sm)
-    grid-template-columns: repeat(8, 1fr)
+    grid-template-columns: repeat(8, minmax(2.75rem, 1fr))
 
   &__item
     display: grid
     place-items: center
+    min-width: 2.75rem
     min-height: 2.75rem
     border: 2px solid color-mix(in srgb, var(--app-chip-ink) 18%, transparent)
     border-radius: ds.$radius-md
