@@ -1,3 +1,5 @@
+import { ALARM_SOUNDS } from '../../config'
+
 import { createEmitter } from './emitter'
 import { parseShared } from './sharedSchedule'
 
@@ -6,10 +8,13 @@ import type { FirebaseConfig } from '@/shared/config'
 import type {
   AlarmAck,
   AlarmKey,
+  AlarmSound,
   DeviceRole,
+  ParticipantProfile,
   RingingInfo,
   SharedSchedule,
   SyncStatus,
+  SyncedCompletion,
   SyncTransport,
   Unsubscribe,
 } from '../../model/types'
@@ -41,6 +46,8 @@ export class FirebaseTransport implements SyncTransport {
   private scheduleEmitter = createEmitter<SharedSchedule | null>()
   private ringingEmitter = createEmitter<Record<AlarmKey, RingingInfo>>()
   private acksEmitter = createEmitter<Record<AlarmKey, AlarmAck>>()
+  private profilesEmitter = createEmitter<Record<string, ParticipantProfile>>()
+  private completionsEmitter = createEmitter<Record<string, SyncedCompletion>>()
 
   constructor(config: FirebaseConfig) {
     this.config = config
@@ -88,6 +95,23 @@ export class FirebaseTransport implements SyncTransport {
           decodeMap(v, (r): AlarmAck => ({ by: r.by === 'admin' ? 'admin' : 'guest', at: Number(r.at) || 0 })),
         ),
       )
+      watch(`${this.base}/profiles`, (v) =>
+        this.profilesEmitter.emit(
+          decodeMap(v, (r): ParticipantProfile => ({
+            ...(typeof r.avatar === 'string' ? { avatar: r.avatar } : {}),
+            ...(ALARM_SOUNDS.find((s) => s === r.alarmSound) ? { alarmSound: r.alarmSound as AlarmSound } : {}),
+          })),
+        ),
+      )
+      watch(`${this.base}/completions`, (v) =>
+        this.completionsEmitter.emit(
+          decodeMap(v, (r): SyncedCompletion => ({
+            status: r.status === 'skipped' ? 'skipped' : 'done',
+            by: r.by === 'admin' || r.by === 'participant' ? r.by : 'guest',
+            at: Number(r.at) || 0,
+          })),
+        ),
+      )
     } catch {
       if (session === this.session) this.setStatus('offline')
     }
@@ -107,6 +131,9 @@ export class FirebaseTransport implements SyncTransport {
   onRinging = (cb: (ringing: Record<AlarmKey, RingingInfo>) => void) => this.ringingEmitter.on(cb)
   onAcks = (cb: (acks: Record<AlarmKey, AlarmAck>) => void) => this.acksEmitter.on(cb)
 
+  onProfiles = (cb: (profiles: Record<string, ParticipantProfile>) => void) => this.profilesEmitter.on(cb)
+  onCompletions = (cb: (completions: Record<string, SyncedCompletion>) => void) => this.completionsEmitter.on(cb)
+
   private async write(path: string, value: unknown) {
     if (!this.db) return
     const { ref, set } = await import('firebase/database')
@@ -120,6 +147,15 @@ export class FirebaseTransport implements SyncTransport {
 
   setRinging(key: AlarmKey, info: RingingInfo | null): Promise<void> {
     return this.write(`ringing/${encodeKey(key)}`, info)
+  }
+
+  pushProfile(participantId: string, profile: ParticipantProfile): Promise<void> {
+    // the stamp keeps the node alive when every field was cleared, since empty nodes vanish
+    return this.write(`profiles/${encodeKey(participantId)}`, { ...profile, at: Date.now() })
+  }
+
+  setCompletion(key: string, value: SyncedCompletion | null): Promise<void> {
+    return this.write(`completions/${encodeKey(key)}`, value)
   }
 
   ack(key: AlarmKey, by: DeviceRole): Promise<void> {

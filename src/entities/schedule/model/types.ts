@@ -13,6 +13,17 @@ export type Participant = {
   name: string
   color: string
   order: number
+  /** SHA-256 of `${householdId ?? "local"}:${id}:${pin}`; null/undefined = no PIN */
+  pinHash?: string | null
+  avatar?: string
+  alarmSound?: AlarmSound
+}
+
+/** Fields a participant may edit about themself; synced separately from the schedule. */
+export type ParticipantProfile = {
+  /** data URL, 128×128 */
+  avatar?: string
+  alarmSound?: AlarmSound
 }
 
 /** Weekly recurring when `day` is set, one-off when `date` is set. */
@@ -105,12 +116,20 @@ export type ScheduleSnapshot = {
   settings: Settings
 }
 
-export type DeviceRole = 'admin' | 'guest'
+export type DeviceRole = 'admin' | 'guest' | 'participant'
 
 /** Stored per device, never synced. */
 export type DeviceConfig = {
   role: DeviceRole
   householdId: string | null
+  /** set when role is participant */
+  participantId: string | null
+}
+
+export type SyncedCompletion = {
+  status: CompletionStatus
+  by: DeviceRole
+  at: number
 }
 
 /** `${eventId}|${date}` */
@@ -145,4 +164,9 @@ export type SyncTransport = {
   onRinging(cb: (ringing: Record<AlarmKey, RingingInfo>) => void): Unsubscribe
   ack(key: AlarmKey, by: DeviceRole): Promise<void>
   onAcks(cb: (acks: Record<AlarmKey, AlarmAck>) => void): Unsubscribe
+  pushProfile(participantId: string, profile: ParticipantProfile): Promise<void>
+  onProfiles(cb: (profiles: Record<string, ParticipantProfile>) => void): Unsubscribe
+  /** key = `${eventId}|${date}`; null clears */
+  setCompletion(key: string, value: SyncedCompletion | null): Promise<void>
+  onCompletions(cb: (completions: Record<string, SyncedCompletion>) => void): Unsubscribe
 }
