@@ -1,0 +1,17 @@
+@use "@/shared/styles" as ds
+
+.legend-popover
+  width: min(22rem, calc(100vw - #{ds.$space-8}))
+  border: 1px solid var(--app-border)
+  border-radius: ds.$radius-lg
+  background: var(--app-surface)
+  color: var(--app-ink)
+  box-shadow: var(--app-shadow)
+
+  &__body
+    max-height: min(32rem, 70dvh)
+    overflow-y: auto
+
+  &__title
+    margin: 0 0 ds.$space-3
+    font-size: ds.$font-size-md

@@ -1,0 +1,55 @@
+@use "@/shared/styles" as ds
+
+.legend
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__heading
+    margin: 0 0 ds.$space-2
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-xs
+    letter-spacing: 0.04em
+    text-transform: uppercase
+
+  &__list
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+    margin: 0
+    padding: 0
+    list-style: none
+
+  &__row
+    display: grid
+    grid-template-columns: 7.5rem 1fr
+    align-items: center
+    gap: ds.$space-3
+
+    &--stack
+      grid-template-columns: 1fr
+      gap: ds.$space-2
+
+  &__sample
+    display: block
+    min-width: 0
+    pointer-events: none
+
+    &--card
+      font-size: 0.75rem
+
+  &__text
+    font-size: ds.$font-size-sm
+    line-height: ds.$line-height-tight
+
+  &__today
+    display: block
+    height: 1.75rem
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-sm
+    background: var(--app-today)
+
+  &__now
+    display: block
+    height: 0
+    border-top: 2px solid var(--app-now)
