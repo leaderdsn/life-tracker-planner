@@ -1,0 +1,38 @@
+@use "@/shared/styles" as ds
+
+.edit-participant
+  display: flex
+  flex-direction: column
+  gap: ds.$space-5
+  min-width: 0
+
+  &__title
+    margin: 0 0 ds.$space-2
+    font-size: ds.$font-size-md
+
+  &__label
+    display: block
+    margin-bottom: ds.$space-2
+    font-size: ds.$font-size-sm
+
+  &__hint
+    margin: ds.$space-2 0 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+
+  &__inline
+    display: flex
+    flex-wrap: wrap
+    gap: ds.$space-2
+
+  &__pin-form
+    display: flex
+    flex-wrap: wrap
+    gap: ds.$space-2
+    margin-top: ds.$space-3
+
+  &__error
+    flex-basis: 100%
+    margin: 0
+    color: var(--app-conflict)
+    font-size: ds.$font-size-sm
