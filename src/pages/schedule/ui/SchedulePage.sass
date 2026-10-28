@@ -2,11 +2,25 @@
 
 .schedule-page
   +ds.container
-  display: flex
-  flex-direction: column
-  gap: ds.$space-4
+  display: block
   min-width: 0
   padding-block: ds.$space-4 ds.$space-10
+
+  +ds.media(xl)
+    display: grid
+    grid-template-columns: minmax(0, 1fr) 16.5rem
+    align-items: start
+    gap: ds.$space-4
+    max-width: 88rem
+
+    &.is-legend-collapsed
+      grid-template-columns: minmax(0, 1fr) 11rem
+
+  &__content
+    display: flex
+    flex-direction: column
+    gap: ds.$space-4
+    min-width: 0
 
   &__personal
     display: flex

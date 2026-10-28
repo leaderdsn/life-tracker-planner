@@ -65,6 +65,7 @@ const label = computed(() => {
         />
       </div>
       <p class="view-toolbar__label" aria-live="polite">{{ label }}</p>
+      <slot />
     </div>
   </div>
 </template>
