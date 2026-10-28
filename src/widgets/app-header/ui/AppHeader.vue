@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 
 import { ParticipantDot, useScheduleStore } from '@/entities/schedule'
+import { SyncBadge } from '@/features/sync-settings'
 import { ThemeToggle } from '@/features/toggle-theme'
 import { env, ROUTE_NAMES } from '@/shared/config'
 
@@ -23,6 +24,7 @@ const route = useRoute()
           {{ env.appTitle }}
         </h1>
         <div class="app-header__actions">
+          <SyncBadge />
           <ThemeToggle />
           <Button
             icon="pi pi-cog"

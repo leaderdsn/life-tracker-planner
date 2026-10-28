@@ -1,0 +1,76 @@
+@use "@/shared/styles" as ds
+
+.sync-settings
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+
+  &__row
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    gap: ds.$space-3
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__inline
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: ds.$space-2
+
+  &__note,
+  &__warning
+    display: flex
+    gap: ds.$space-2
+    margin: 0
+    padding: ds.$space-3
+    border-radius: ds.$radius-md
+    background: var(--app-surface-muted)
+    font-size: ds.$font-size-sm
+
+  &__warning
+    background: var(--app-conflict-soft)
+    color: var(--app-conflict)
+
+  &__link
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__link-row
+    display: flex
+    gap: ds.$space-2
+
+  &__volume
+    display: flex
+    flex-direction: column
+    gap: ds.$space-3
+    padding-bottom: ds.$space-2
+    font-size: ds.$font-size-sm
+    font-weight: 600
+
+  &__pin
+    display: flex
+    flex-direction: column
+    gap: ds.$space-3
+
+  &__pin-form
+    display: flex
+    flex-wrap: wrap
+    gap: ds.$space-2
+
+  &__hint
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+    font-weight: 400
+
+  &__error
+    flex-basis: 100%
+    margin: 0
+    color: var(--app-conflict)
+    font-size: ds.$font-size-sm
