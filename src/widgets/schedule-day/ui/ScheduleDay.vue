@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 const store = useScheduleStore()
 const { labels, now, stateFor, todayIso } = useChipState()
-const { canToggle, toggle } = useToggleDone()
+const { canToggle, toggle, readOnly } = useToggleDone()
 
 const pidFor = (event: ScheduleEvent) => (props.participantId === 'all' ? event.participantIds[0] : props.participantId)
 
@@ -65,7 +65,8 @@ function participantsOf(occ: Occurrence): Participant[] {
           :done="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).done"
           :completion="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).completion"
           :conflict="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).conflict"
-          :can-toggle="canToggle(anchor)"
+          :can-toggle="canToggle(anchor, entry.occ.event)"
+          :readonly="readOnly"
           show-time
           @open="emit('open-event', entry.occ.event.id)"
           @toggle="toggle(entry.occ.event.id, anchor, pidFor(entry.occ.event))"

@@ -1,0 +1,106 @@
+@use "@/shared/styles" as ds
+
+.join-page
+  display: grid
+  min-height: 100dvh
+  place-items: center
+  padding: ds.$space-4
+
+  &__card
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: ds.$space-3
+    width: min(32rem, 100%)
+    min-width: 0
+    padding: ds.$space-6 ds.$space-4
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-lg
+    background: var(--app-surface)
+    box-shadow: var(--app-shadow)
+    text-align: center
+
+    +ds.media(sm)
+      padding: ds.$space-8
+
+  &__title
+    margin: 0
+    font-size: ds.$font-size-xl
+    overflow-wrap: anywhere
+
+  &__lead
+    margin: 0
+    color: var(--app-ink-muted)
+
+  &__status
+    margin: ds.$space-4 0
+    color: var(--app-ink-muted)
+
+  &__list
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr))
+    gap: ds.$space-3
+    width: 100%
+    margin: ds.$space-2 0 0
+    padding: 0
+    list-style: none
+
+  &__person
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: ds.$space-2
+    width: 100%
+    min-height: 7.5rem
+    padding: ds.$space-3 ds.$space-2
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-lg
+    background: var(--app-surface-muted)
+    color: var(--app-ink)
+    font: inherit
+    cursor: pointer
+    transition: border-color ds.$transition-fast, background ds.$transition-fast
+
+    &:hover
+      border-color: var(--app-accent)
+      background: var(--app-accent-soft)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &--admin
+      border-style: dashed
+
+  &__name
+    max-width: 100%
+    overflow: hidden
+    font-weight: 600
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  &__admin-icon
+    display: grid
+    place-items: center
+    width: 4rem
+    height: 4rem
+    border-radius: ds.$radius-full
+    background: var(--app-accent-soft)
+    color: var(--app-accent)
+    font-size: 1.5rem
+
+  &__warning
+    display: flex
+    gap: ds.$space-2
+    align-items: flex-start
+    margin: 0
+    padding: ds.$space-3
+    border: 1px solid var(--app-conflict)
+    border-radius: ds.$radius-md
+    background: var(--app-conflict-soft)
+    text-align: left
+
+  &__actions
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    gap: ds.$space-2

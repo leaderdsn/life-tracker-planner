@@ -26,7 +26,7 @@ watch(
 
 useReminderScheduler({
   onToast: (message) => {
-    if (device.role === 'admin') toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS })
+    if (device.role !== 'guest') toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS })
   },
 })
 </script>

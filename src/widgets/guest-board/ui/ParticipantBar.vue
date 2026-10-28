@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { initialOf } from '@/entities/schedule'
 import type { Participant } from '@/entities/schedule'
+import { Avatar } from '@/shared/ui'
 
 defineProps<{
   participants: Participant[]
@@ -34,7 +34,7 @@ const emit = defineEmits<{
       :aria-pressed="selected === p.id"
       @click="emit('select', p.id)"
     >
-      <span class="participant-bar__badge" :style="{ background: p.color }" aria-hidden="true">{{ labels[p.id] ?? initialOf(p.name) }}</span>
+      <Avatar :name="p.name" :color="p.color" :src="p.avatar" :label="labels[p.id]" size="md" />
       {{ p.name }}
     </button>
   </nav>

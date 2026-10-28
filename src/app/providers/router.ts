@@ -7,12 +7,14 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const loadSchedulePage = () => import('@/pages/schedule').then((m) => m.SchedulePage)
 const loadGuestPage = () => import('@/pages/guest').then((m) => m.GuestPage)
+const loadJoinPage = () => import('@/pages/join').then((m) => m.JoinPage)
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: { name: ROUTE_NAMES.all } },
   { path: '/all', name: ROUTE_NAMES.all, component: loadSchedulePage },
   { path: '/p/:id', name: ROUTE_NAMES.participant, component: loadSchedulePage, props: true },
   { path: '/guest', name: ROUTE_NAMES.guest, component: loadGuestPage },
+  { path: '/join', name: ROUTE_NAMES.join, component: loadJoinPage },
   {
     path: '/:pathMatch(.*)*',
     name: ROUTE_NAMES.notFound,
@@ -37,7 +39,26 @@ router.beforeEach((to) => {
     device.setRole('guest')
     return { name: ROUTE_NAMES.guest }
   }
+
+  if (to.name === ROUTE_NAMES.join && household) {
+    const sameAdmin = device.role === 'admin' && device.householdId === household
+    if (sameAdmin) return { name: ROUTE_NAMES.all }
+    if (device.householdId !== household || device.role === 'guest' || !device.participantId) {
+      device.setHousehold(household)
+      device.logout()
+    }
+    return { name: ROUTE_NAMES.join }
+  }
+
   if (device.role === 'guest') return to.name === ROUTE_NAMES.guest ? true : { name: ROUTE_NAMES.guest }
-  if (to.name === ROUTE_NAMES.guest) return { name: ROUTE_NAMES.all }
+
+  if (device.role === 'participant') {
+    const own = device.participantId
+    if (!own) return to.name === ROUTE_NAMES.join ? true : { name: ROUTE_NAMES.join }
+    if (to.name === ROUTE_NAMES.participant && to.params.id === own) return true
+    return { name: ROUTE_NAMES.participant, params: { id: own }, query: { view: to.query.view, date: to.query.date } }
+  }
+
+  if (to.name === ROUTE_NAMES.guest || to.name === ROUTE_NAMES.join) return { name: ROUTE_NAMES.all }
   return true
 })

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-import { ParticipantDot } from '@/entities/schedule'
 import type { Participant } from '@/entities/schedule'
 import { GuestEventCard } from '@/features/guest-alarm'
+import { Avatar } from '@/shared/ui'
 
 import type { BoardItem } from '../model/types'
 
@@ -52,7 +52,7 @@ const pending = computed(() => props.items.filter((i) => i.status !== 'past').le
 <template>
   <section class="guest-column" :class="{ 'is-wide': wide }" :aria-label="`Расписание: ${participant.name}`">
     <header class="guest-column__head">
-      <ParticipantDot :color="participant.color" class="guest-column__dot" />
+      <Avatar :name="participant.name" :color="participant.color" :src="participant.avatar" :label="labels[participant.id]" size="md" />
       <h2 class="guest-column__name">{{ participant.name }}</h2>
       <span v-if="items.length" class="guest-column__count">
         {{ pending ? `осталось ${pending}` : 'всё готово' }}

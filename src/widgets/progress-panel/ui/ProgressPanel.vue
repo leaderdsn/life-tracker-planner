@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { occurrences, ParticipantDot, periodRange, progress, useChipState, useScheduleStore } from '@/entities/schedule'
+import { initialLabels, occurrences, periodRange, progress, useChipState, useScheduleStore } from '@/entities/schedule'
 import type { ProgressPeriod } from '@/entities/schedule'
 import { parseIsoDate } from '@/shared/lib'
+import { Avatar } from '@/shared/ui'
 
 const props = defineProps<{
   participantId: string
@@ -17,6 +18,8 @@ const PERIODS: { value: ProgressPeriod; label: string }[] = [
 
 const store = useScheduleStore()
 const { now, todayIso } = useChipState()
+
+const labels = computed(() => initialLabels(store.sortedParticipants))
 
 const participants = computed(() =>
   props.participantId === 'all'
@@ -52,7 +55,7 @@ const sections = computed(() => {
         <h3 class="progress-panel__heading">{{ section.label }}</h3>
         <ul class="progress-panel__rows">
           <li v-for="row in section.rows" :key="row.participant.id" class="progress-panel__row">
-            <ParticipantDot :color="row.participant.color" />
+            <Avatar :name="row.participant.name" :color="row.participant.color" :src="row.participant.avatar" :label="labels[row.participant.id]" size="xs" />
             <span class="progress-panel__name">{{ row.participant.name }}</span>
             <span class="progress-panel__count">{{ row.done }} из {{ row.total }}</span>
             <div

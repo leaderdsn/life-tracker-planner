@@ -27,7 +27,7 @@ const emit = defineEmits<{
 
 const store = useScheduleStore()
 const { labels, stateFor, todayIso } = useChipState()
-const { canToggle, toggle } = useToggleDone()
+const { canToggle, toggle, readOnly } = useToggleDone()
 
 const dayNumber = new Intl.DateTimeFormat('ru-RU', { day: 'numeric' })
 
@@ -59,7 +59,7 @@ function eventsAt(rowIndex: number, day: Weekday): ScheduleEvent[] {
 
 <template>
   <div v-if="grid.rows.length === 0" class="schedule-week__empty">
-    На этой неделе занятий нет. Добавьте их в расписание участника.
+    {{ readOnly ? 'На этой неделе занятий нет.' : 'На этой неделе занятий нет. Добавьте их в расписание участника.' }}
   </div>
   <div v-else class="schedule-week" tabindex="0" role="region" aria-label="Расписание на неделю">
     <table class="schedule-week__table" :style="{ '--cols': columns.length }">
@@ -100,7 +100,8 @@ function eventsAt(rowIndex: number, day: Weekday): ScheduleEvent[] {
                   :done="stateFor(event, col.date, pidFor(event)).done"
                   :completion="stateFor(event, col.date, pidFor(event)).completion"
                   :conflict="stateFor(event, col.date, pidFor(event)).conflict"
-                  :can-toggle="canToggle(col.date)"
+                  :can-toggle="canToggle(col.date, event)"
+                  :readonly="readOnly"
                   @open="emit('open-event', event.id)"
                   @toggle="toggle(event.id, col.date, pidFor(event))"
                 />

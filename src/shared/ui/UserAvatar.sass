@@ -1,0 +1,39 @@
+@use "@/shared/styles" as ds
+
+.avatar
+  --avatar-size: 1.5rem
+  display: inline-flex
+  flex-shrink: 0
+  align-items: center
+  justify-content: center
+  width: var(--avatar-size)
+  height: var(--avatar-size)
+  overflow: hidden
+  border: 1px solid color-mix(in srgb, var(--app-ink) 25%, transparent)
+  border-radius: ds.$radius-full
+  background: var(--avatar-bg)
+  color: var(--app-chip-ink)
+  font-size: calc(var(--avatar-size) * 0.45)
+  font-weight: 700
+  line-height: 1
+  user-select: none
+
+  &--xs
+    --avatar-size: 1.25rem
+
+  &--md
+    --avatar-size: 2.5rem
+
+  &--lg
+    --avatar-size: 4rem
+
+  &--xl
+    --avatar-size: 6rem
+
+  &__img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+  &__text
+    white-space: nowrap

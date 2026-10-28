@@ -96,7 +96,10 @@ useIdleReturn({
 
 useAlarmSound({
   active: () => ringingKeys.value.size > 0,
-  sound: () => store.settings.alarmSound,
+  sound: () => {
+    const first = toValue(alarms.ringing)[0]
+    return first ? alarms.soundOf(first) : store.settings.alarmSound
+  },
   volume: () => store.settings.alarmVolume,
 })
 
