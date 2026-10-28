@@ -24,5 +24,7 @@ export const env = {
   appTitle: e.VITE_APP_TITLE ?? 'Расписание',
   apiUrl: e.VITE_API_URL ?? '/api',
   isDev: e.DEV,
+  /** Published address used for invite links when running locally */
+  publicUrl: e.VITE_PUBLIC_URL ?? '',
   firebase,
 } as const
