@@ -1,0 +1,95 @@
+@use "@/shared/styles" as ds
+
+.pin-keypad
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: ds.$space-3
+  width: min(22rem, 100%)
+  margin-inline: auto
+  outline: none
+  touch-action: manipulation
+  user-select: none
+
+  &__display
+    display: flex
+    gap: ds.$space-3
+    height: 2rem
+    align-items: center
+
+  &__dot
+    width: 1.25rem
+    height: 1.25rem
+    border: 2px solid var(--app-ink-muted)
+    border-radius: ds.$radius-full
+    transition: background ds.$transition-fast
+
+    &.is-filled
+      border-color: var(--app-accent)
+      background: var(--app-accent)
+
+  &__error
+    min-height: 1.5rem
+    margin: 0
+    color: var(--app-conflict)
+    font-weight: 700
+
+  &__grid
+    display: grid
+    grid-template-columns: repeat(3, 1fr)
+    gap: ds.$space-3
+    width: 100%
+
+  &__key
+    display: grid
+    place-items: center
+    min-height: 4.5rem
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-lg
+    background: var(--app-surface-muted)
+    color: var(--app-ink)
+    font: inherit
+    font-size: 2rem
+    font-weight: 700
+    cursor: pointer
+    touch-action: manipulation
+    -webkit-tap-highlight-color: transparent
+
+    &:active
+      background: var(--app-accent-soft)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &:disabled
+      opacity: 0.4
+      cursor: default
+
+    &--action
+      color: var(--app-ink-muted)
+      font-size: 1.6rem
+
+    &--submit
+      border-color: var(--app-accent)
+      background: var(--app-accent)
+      color: var(--app-background)
+      font-size: 1.6rem
+
+      &:active
+        background: var(--app-accent)
+        filter: brightness(1.1)
+
+  &__cancel
+    min-height: 3.5rem
+    padding: 0 ds.$space-8
+    border: 0
+    border-radius: ds.$radius-full
+    background: transparent
+    color: var(--app-ink-muted)
+    font: inherit
+    font-size: 1.125rem
+    font-weight: 600
+    cursor: pointer
+
+    &:focus-visible
+      +ds.focus-ring

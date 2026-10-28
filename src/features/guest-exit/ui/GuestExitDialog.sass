@@ -1,0 +1,19 @@
+@use "@/shared/styles" as ds
+
+.guest-exit-dialog
+  width: min(26rem, calc(100vw - #{ds.$space-8}))
+  border: 1px solid var(--app-border)
+  border-radius: ds.$radius-lg
+  background: var(--app-surface)
+  color: var(--app-ink)
+  box-shadow: var(--app-shadow)
+
+  .p-dialog-header
+    justify-content: center
+    padding: ds.$space-6 ds.$space-6 ds.$space-2
+
+  .p-dialog-title
+    font-size: ds.$font-size-xl
+
+  .p-dialog-content
+    padding: ds.$space-2 ds.$space-6 ds.$space-6

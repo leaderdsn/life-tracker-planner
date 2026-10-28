@@ -1,0 +1,67 @@
+@use "@/shared/styles" as ds
+
+$circumference: 150.8
+
+@keyframes guest-exit-fill
+  from
+    stroke-dashoffset: $circumference
+  to
+    stroke-dashoffset: 0
+
+.guest-exit
+  position: fixed
+  top: 0
+  right: 0
+  z-index: 30
+  display: grid
+  place-items: center
+  width: 7rem
+  height: 7rem
+  padding: 0
+  border: 0
+  background: transparent
+  color: var(--app-ink-muted)
+  touch-action: manipulation
+  user-select: none
+  -webkit-tap-highlight-color: transparent
+  cursor: default
+
+  &__icon
+    font-size: 1.25rem
+    opacity: 0.35
+    transition: opacity ds.$transition-fast
+
+  &__ring
+    position: absolute
+    width: 4.5rem
+    height: 4.5rem
+    opacity: 0
+    transform: rotate(-90deg)
+    transition: opacity ds.$transition-fast
+
+  &__track,
+  &__progress
+    fill: none
+    stroke-width: 4
+
+  &__track
+    stroke: var(--app-border)
+
+  &__progress
+    stroke: var(--app-accent)
+    stroke-linecap: round
+    stroke-dasharray: $circumference
+    stroke-dashoffset: $circumference
+
+  &.is-holding
+    .guest-exit__ring
+      opacity: 1
+
+    .guest-exit__icon
+      opacity: 1
+
+    .guest-exit__progress
+      animation: guest-exit-fill var(--hold-ms) linear forwards
+
+  &:focus-visible
+    +ds.focus-ring

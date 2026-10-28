@@ -1,0 +1,164 @@
+@use "@/shared/styles" as ds
+
+@keyframes guest-card-pulse
+  0%
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--app-now) 60%, transparent), var(--app-shadow)
+  70%
+    box-shadow: 0 0 0 0.9em color-mix(in srgb, var(--app-now) 0%, transparent), var(--app-shadow)
+  100%
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--app-now) 0%, transparent), var(--app-shadow)
+
+@keyframes guest-card-ring
+  0%, 100%
+    transform: rotate(0)
+  10%, 30%, 50%
+    transform: rotate(-18deg)
+  20%, 40%, 60%
+    transform: rotate(18deg)
+  70%
+    transform: rotate(0)
+
+.guest-card
+  position: relative
+  display: flex
+  flex-direction: column
+  width: 100%
+  min-height: 3.5em
+  padding: 0
+  border: 2px solid color-mix(in srgb, var(--app-chip-ink) 18%, transparent)
+  border-radius: 0.8em
+  isolation: isolate
+  color: var(--app-chip-ink)
+  font: inherit
+  line-height: ds.$line-height-tight
+  text-align: left
+  touch-action: manipulation
+  user-select: none
+  -webkit-tap-highlight-color: transparent
+
+  &::before
+    content: ""
+    position: absolute
+    inset: 0
+    z-index: -1
+    border-radius: inherit
+    background: var(--card-bg)
+
+  &__row
+    display: flex
+    align-items: flex-start
+    gap: 0.7em
+    padding: 0.7em 0.8em
+
+  &__time
+    flex-shrink: 0
+    font-size: 1.1em
+    font-weight: 800
+    font-variant-numeric: tabular-nums
+
+  &__body
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: 0.25em
+    min-width: 0
+
+  &__title
+    font-size: 1.15em
+    font-weight: 700
+    overflow-wrap: break-word
+
+  &__place
+    font-size: 0.9em
+    opacity: 0.85
+
+  &__who
+    flex-shrink: 0
+    padding: 0.1em 0.5em
+    border-radius: ds.$radius-full
+    background: rgb(255 255 255 / 65%)
+    font-size: 0.85em
+    font-weight: 700
+
+  &__tag
+    position: absolute
+    top: -0.7em
+    right: 0.7em
+    padding: 0.1em 0.7em
+    border-radius: ds.$radius-full
+    background: var(--app-accent)
+    color: var(--app-background)
+    font-size: 0.8em
+    font-weight: 800
+    letter-spacing: 0.03em
+
+  &__seen
+    flex-shrink: 0
+    color: color-mix(in srgb, var(--app-chip-ink) 70%, transparent)
+    font-size: 1.4em
+    line-height: 1
+
+  &__sr
+    position: absolute
+    width: 1px
+    height: 1px
+    overflow: hidden
+    clip-path: inset(50%)
+
+  &__hint
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 0.5em
+    padding: 0.6em 0.5em
+    border-radius: 0 0 0.55em 0.55em
+    background: color-mix(in srgb, var(--app-now) 22%, rgb(255 255 255 / 70%))
+    font-size: 0.8em
+    white-space: nowrap
+    font-weight: 800
+    text-align: center
+
+  &__bell
+    font-size: 1.3em
+    transform-origin: 50% 0
+
+  &.is-current
+    border-color: var(--app-accent)
+    border-width: 0.2em
+    box-shadow: var(--app-glow), var(--app-shadow)
+
+  &.is-next
+    border-style: dashed
+    border-color: var(--app-accent)
+    border-width: 0.2em
+
+  &.is-past
+    color: var(--app-past-ink)
+
+    &::before
+      opacity: var(--app-past-opacity)
+
+  &.is-seen
+    .guest-card__title
+      text-decoration: line-through
+      text-decoration-thickness: 2px
+
+  &.is-ringing
+    min-height: 5em
+    border-width: 0.25em
+    border-color: var(--app-now)
+    cursor: pointer
+    animation: guest-card-pulse 1.4s ease-out infinite
+
+    .guest-card__title
+      font-size: 1.4em
+
+    .guest-card__bell
+      animation: guest-card-ring 1.4s ease-in-out infinite
+
+    &:focus-visible
+      +ds.focus-ring
+
+    @media (prefers-reduced-motion: reduce)
+      .guest-card__bell
+        animation: none
