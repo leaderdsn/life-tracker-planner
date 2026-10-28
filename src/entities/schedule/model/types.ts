@@ -106,7 +106,19 @@ export type Settings = {
   autoComplete: boolean
 }
 
-export type AlarmSound = 'chime' | 'beep' | 'bell'
+export type AlarmSound =
+  | 'chime'
+  | 'bell'
+  | 'marimba'
+  | 'xylophone'
+  | 'harp'
+  | 'piano'
+  | 'cuckoo'
+  | 'soft'
+  | 'birds'
+  | 'drops'
+  | 'beep'
+  | 'digital'
 
 export type ScheduleSnapshot = {
   version: number

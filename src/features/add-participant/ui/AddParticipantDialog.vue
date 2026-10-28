@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
-import { EventForm, initialOf, PASTEL_COLORS, useScheduleStore, WEEKDAY_SHORT } from '@/entities/schedule'
+import { ColorSwatches, EventForm, initialOf, PASTEL_COLORS, useScheduleStore, WEEKDAY_SHORT } from '@/entities/schedule'
 import type { NewEvent } from '@/entities/schedule'
 import { AppDialog } from '@/shared/ui'
-
-import ColorSwatches from './ColorSwatches.vue'
 
 const emit = defineEmits<{
   created: [participantId: string]

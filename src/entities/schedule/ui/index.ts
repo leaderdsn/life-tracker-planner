@@ -1,3 +1,4 @@
+export { default as ColorSwatches } from './ColorSwatches.vue'
 export { default as EventChip } from './EventChip.vue'
 export { default as EventForm } from './EventForm.vue'
 export { default as ParticipantDot } from './ParticipantDot.vue'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-import { hashParticipantPin, useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
+import { ColorSwatches, hashParticipantPin, useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
 import { useClipboard } from '@/shared/lib'
 import { AppDialog } from '@/shared/ui'
 
@@ -81,6 +81,14 @@ function removePin() {
           :avatar="participant.avatar"
           @change="store.updateOwnProfile(participant.id, { avatar: $event })"
           @remove="store.updateOwnProfile(participant.id, { avatar: undefined })"
+        />
+      </section>
+
+      <section aria-labelledby="ep-color">
+        <h3 id="ep-color" class="edit-participant__title">Цвет</h3>
+        <ColorSwatches
+          :model-value="participant.color"
+          @update:model-value="store.updateParticipant(participant.id, { color: $event })"
         />
       </section>
 
