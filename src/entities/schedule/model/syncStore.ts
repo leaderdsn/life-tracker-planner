@@ -1,16 +1,30 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { createTransport, generateHouseholdId, pruneAcks } from '../lib'
+import { createTransport, generateHouseholdId, mergeProfiles, pruneAcks } from '../lib'
 
 import { useDeviceStore } from './deviceStore'
 
-import type { AlarmAck, AlarmKey, DeviceRole, RingingInfo, SharedSchedule, SyncStatus, SyncTransport, Unsubscribe } from './types'
+import type {
+  AlarmAck,
+  AlarmKey,
+  DeviceRole,
+  Participant,
+  ParticipantProfile,
+  RingingInfo,
+  SharedSchedule,
+  SyncedCompletion,
+  SyncStatus,
+  SyncTransport,
+  Unsubscribe,
+} from './types'
 
 export const useSyncStore = defineStore('sync', () => {
   const device = useDeviceStore()
   const status = ref<SyncStatus>('off')
   const remoteSchedule = ref<SharedSchedule | null>(null)
+  const remoteProfiles = ref<Record<string, ParticipantProfile>>({})
+  const remoteCompletions = ref<Record<string, SyncedCompletion>>({})
   const rawRinging = ref<Record<AlarmKey, RingingInfo>>({})
   const acks = ref<Record<AlarmKey, AlarmAck>>({})
   /** bumps after every successful connect() so the admin can publish right away */
@@ -19,6 +33,11 @@ export const useSyncStore = defineStore('sync', () => {
   let transport: SyncTransport | null = null
   let connectedTo: string | null = null
   let unsubs: Unsubscribe[] = []
+
+  /** Remote participants with their profiles applied; what a device without local data picks from at login. */
+  const remoteParticipants = computed<Participant[]>(() =>
+    remoteSchedule.value ? mergeProfiles(remoteSchedule.value.participants, remoteProfiles.value) : [],
+  )
 
   /** Alarms that are ringing and not yet acknowledged by anyone. */
   const ringing = computed(() =>
@@ -41,6 +60,8 @@ export const useSyncStore = defineStore('sync', () => {
     unsubs = [
       t.onStatus((s) => (status.value = s)),
       t.onSchedule((s) => (remoteSchedule.value = s)),
+      t.onProfiles((p) => (remoteProfiles.value = p)),
+      t.onCompletions((c) => (remoteCompletions.value = c)),
       t.onRinging((r) => (rawRinging.value = r)),
       t.onAcks((a) => (acks.value = pruneAcks(a, Date.now()))),
     ]
@@ -70,6 +91,21 @@ export const useSyncStore = defineStore('sync', () => {
     return transport?.pushSchedule(schedule).catch(() => undefined)
   }
 
+  function pushProfile(participantId: string, profile: ParticipantProfile) {
+    if (!transport) return
+    remoteProfiles.value = { ...remoteProfiles.value, [participantId]: profile }
+    return transport.pushProfile(participantId, profile).catch(() => undefined)
+  }
+
+  function setCompletion(key: string, value: SyncedCompletion | null) {
+    if (!transport) return
+    const next = { ...remoteCompletions.value }
+    if (value) next[key] = value
+    else delete next[key]
+    remoteCompletions.value = next
+    return transport.setCompletion(key, value).catch(() => undefined)
+  }
+
   function setRinging(key: AlarmKey, info: RingingInfo | null) {
     if (!info && !(key in rawRinging.value)) return
     const next = { ...rawRinging.value }
@@ -94,6 +130,9 @@ export const useSyncStore = defineStore('sync', () => {
   return {
     status,
     remoteSchedule,
+    remoteProfiles,
+    remoteCompletions,
+    remoteParticipants,
     connectCount,
     ringing,
     acks,
@@ -102,6 +141,8 @@ export const useSyncStore = defineStore('sync', () => {
     stop,
     enableSync,
     pushSchedule,
+    pushProfile,
+    setCompletion,
     setRinging,
     ack,
     silence,

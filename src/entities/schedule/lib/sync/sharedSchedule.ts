@@ -1,10 +1,11 @@
 import { SCHEMA_VERSION } from '../../config'
 import { migrate } from '../persistence'
+import { withoutProfile } from '../profiles'
 
 import type { ScheduleSnapshot, SharedSchedule } from '../../model/types'
 
 export function toShared(s: ScheduleSnapshot | SharedSchedule): SharedSchedule {
-  return { version: s.version, participants: s.participants, events: s.events, settings: s.settings }
+  return { version: s.version, participants: s.participants.map(withoutProfile), events: s.events, settings: s.settings }
 }
 
 /** Validates data from the wire; the database drops empty arrays and nulls, so they are restored. */

@@ -1,6 +1,7 @@
 import { getCurrentScope, onScopeDispose } from 'vue'
 
 import { occurrences, useScheduleStore } from '@/entities/schedule'
+import { playOnce } from '@/shared/lib'
 
 import { loadFired, saveFired } from './firedStorage'
 import { beep, showNotification } from './notify'
@@ -18,7 +19,7 @@ export function useReminderScheduler({ onToast }: Options) {
     const now = Date.now()
     const fired = loadFired(now)
     const today = new Date(now)
-    const occs = occurrences(store.events, today, today)
+    const occs = store.isParticipant ? store.ownOccurrences(today, today) : occurrences(store.events, today, today)
     const due = dueReminders(occs, store.settings, now, new Set(Object.keys(fired)))
     if (!due.length) return
 
@@ -29,7 +30,10 @@ export function useReminderScheduler({ onToast }: Options) {
       if (!showNotification(text)) onToast(text)
     }
     saveFired(fired)
-    if (store.settings.sound) beep()
+    if (!store.settings.sound) return
+    if (store.isParticipant) {
+      playOnce(store.ownParticipant?.alarmSound ?? store.settings.alarmSound, store.settings.alarmVolume)
+    } else beep()
   }
 
   function start() {

@@ -8,7 +8,9 @@ import {
   useScheduleStore,
   useSyncStore,
 } from '@/entities/schedule'
-import type { AlarmKey } from '@/entities/schedule'
+import type { AlarmKey, Occurrence } from '@/entities/schedule'
+
+import { alarmSoundFor } from './alarmSound'
 
 const TICK_MS = 1000
 
@@ -54,9 +56,13 @@ export function useGuestAlarms() {
     { immediate: true },
   )
 
+  /** The ringing occurrence's sound: first participant's own, else the admin default. */
+  const soundOf = (occ: Occurrence) =>
+    alarmSoundFor(occ.event, schedule.participants, schedule.settings.alarmSound)
+
   function ack(key: AlarmKey) {
     void sync.ack(key, 'guest')
   }
 
-  return { ringing, ack, now }
+  return { ringing, soundOf, ack, now }
 }
