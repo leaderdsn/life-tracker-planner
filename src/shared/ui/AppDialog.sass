@@ -1,0 +1,28 @@
+@use "@/shared/styles" as ds
+
+.app-dialog
+  width: min(32rem, calc(100vw - #{ds.$space-8}))
+  border: 1px solid var(--app-border)
+  border-radius: ds.$radius-lg
+  background: var(--app-surface)
+  color: var(--app-ink)
+  box-shadow: var(--app-shadow)
+
+  &--wide
+    width: min(40rem, calc(100vw - #{ds.$space-8}))
+
+  &--sheet
+    width: 100vw
+    max-width: 100vw
+    max-height: 92dvh
+    margin: 0
+    border-radius: ds.$radius-lg ds.$radius-lg 0 0
+
+  .p-dialog-content
+    padding-inline: ds.$space-5
+
+  .p-dialog-header
+    padding: ds.$space-5 ds.$space-5 ds.$space-3
+
+  .p-dialog-footer
+    padding: ds.$space-3 ds.$space-5 ds.$space-5
