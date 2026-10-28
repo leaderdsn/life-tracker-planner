@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { useDeviceStore } from '@/entities/schedule'
 import { ROUTE_NAMES } from '@/shared/config'
 
-import { router } from './router'
+import { launchRouteFromSearch, router } from './router'
 
 async function visit(path: string) {
   await router.push(path)
@@ -15,6 +15,20 @@ beforeEach(async () => {
   localStorage.clear()
   setActivePinia(createPinia())
   await router.replace('/nowhere')
+})
+
+describe('launchRouteFromSearch', () => {
+  it.each([
+    ['join', '?join=house1', '/join?h=house1'],
+    ['guest', '?guest=house2', '/guest?h=house2'],
+    ['none', '', null],
+    ['unrelated query', '?utm=1', null],
+    ['empty value', '?join=', null],
+    ['url-encoded id', '?join=a%2Fb%20c%26d', '/join?h=a%2Fb%20c%26d'],
+    ['join wins over guest', '?guest=g&join=j', '/join?h=j'],
+  ])('%s', (_name, search, expected) => {
+    expect(launchRouteFromSearch(search)).toBe(expected)
+  })
 })
 
 describe('router guards by role', () => {
