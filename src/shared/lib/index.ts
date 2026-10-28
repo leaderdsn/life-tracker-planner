@@ -1,3 +1,3 @@
-export { delay } from './delay'
-export { formatVersion } from './formatVersion'
+export * from './text'
+export * from './time'
 export { useClipboard } from './useClipboard'
