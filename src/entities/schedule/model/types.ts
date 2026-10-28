@@ -82,7 +82,20 @@ export type Settings = {
   sound: boolean
   /** start inclusive, end exclusive; may wrap past midnight; null = off */
   quietHours: { from: Time; to: Time } | null
+  /** minutes before start when the guest screen starts ringing */
+  guestAlarmLead: number
+  /** seconds without interaction before the guest screen returns to «Все» */
+  guestIdleReturn: number
+  alarmSound: AlarmSound
+  /** 0..1 */
+  alarmVolume: number
+  /** SHA-256 hex of the admin PIN; null = not set */
+  adminPinHash: string | null
+  /** derive 'done' for occurrences whose participant moved on to the next one */
+  autoComplete: boolean
 }
+
+export type AlarmSound = 'chime' | 'beep' | 'bell'
 
 export type ScheduleSnapshot = {
   version: number
@@ -90,4 +103,46 @@ export type ScheduleSnapshot = {
   events: ScheduleEvent[]
   completions: Completion[]
   settings: Settings
+}
+
+export type DeviceRole = 'admin' | 'guest'
+
+/** Stored per device, never synced. */
+export type DeviceConfig = {
+  role: DeviceRole
+  householdId: string | null
+}
+
+/** `${eventId}|${date}` */
+export type AlarmKey = string
+
+export type RingingInfo = {
+  title: string
+  participantNames: string[]
+  startedAt: number
+}
+
+export type AlarmAck = {
+  by: DeviceRole
+  at: number
+}
+
+export type SyncStatus = 'off' | 'connecting' | 'online' | 'offline'
+
+/** Part of the snapshot shared between devices; completions stay local. */
+export type SharedSchedule = Pick<ScheduleSnapshot, 'version' | 'participants' | 'events' | 'settings'>
+
+export type Unsubscribe = () => void
+
+export type SyncTransport = {
+  connect(householdId: string): Promise<void>
+  disconnect(): void
+  getStatus(): SyncStatus
+  onStatus(cb: (status: SyncStatus) => void): Unsubscribe
+  pushSchedule(schedule: SharedSchedule): Promise<void>
+  onSchedule(cb: (schedule: SharedSchedule | null) => void): Unsubscribe
+  setRinging(key: AlarmKey, info: RingingInfo | null): Promise<void>
+  onRinging(cb: (ringing: Record<AlarmKey, RingingInfo>) => void): Unsubscribe
+  ack(key: AlarmKey, by: DeviceRole): Promise<void>
+  onAcks(cb: (acks: Record<AlarmKey, AlarmAck>) => void): Unsubscribe
 }

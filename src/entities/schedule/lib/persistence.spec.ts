@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { createSeedSnapshot, STORAGE_KEY } from '../config'
+import { createSeedSnapshot, SCHEMA_VERSION, STORAGE_KEY } from '../config'
 
 import { load, migrate, parseSnapshot, save } from './persistence'
 
@@ -63,5 +63,38 @@ describe('load / save', () => {
     const snap = migrate(valid())
     save(snap)
     expect(load()).toEqual(snap)
+  })
+})
+
+describe('migration v1 -> v2', () => {
+  const v1Settings = { notificationsEnabled: true, defaultRemindBefore: 15, sound: false, quietHours: null }
+
+  it('fills guest settings defaults and keeps old values', () => {
+    const res = migrate({ ...valid(), settings: v1Settings })
+    expect(res.version).toBe(SCHEMA_VERSION)
+    expect(res.settings).toEqual({
+      ...v1Settings,
+      guestAlarmLead: 30,
+      guestIdleReturn: 60,
+      alarmSound: 'chime',
+      alarmVolume: 0.8,
+      adminPinHash: null,
+      autoComplete: false,
+    })
+  })
+
+  it.each<[string, unknown, unknown]>([
+    ['unknown sound', { alarmSound: 'siren' }, 'chime'],
+    ['known sound', { alarmSound: 'bell' }, 'bell'],
+  ])('validates %s', (_name, patch, expected) => {
+    expect(migrate({ ...valid(), settings: patch }).settings.alarmSound).toBe(expected)
+  })
+
+  it.each<[string, unknown, number]>([
+    ['volume above 1', 7, 1],
+    ['negative volume', -1, 0.8],
+    ['valid volume', 0.3, 0.3],
+  ])('clamps %s', (_name, alarmVolume, expected) => {
+    expect(migrate({ ...valid(), settings: { alarmVolume } }).settings.alarmVolume).toBe(expected)
   })
 })
