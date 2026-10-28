@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PASTEL_COLORS } from '@/entities/schedule'
+import { COLOR_NAMES, PASTEL_COLORS } from '../config'
 
 const model = defineModel<string>({ required: true })
 
@@ -17,7 +17,8 @@ const colors: readonly string[] = PASTEL_COLORS
       :class="{ 'is-selected': model === color }"
       :style="{ background: color }"
       :aria-checked="model === color"
-      :aria-label="`Цвет ${index + 1}`"
+      :title="COLOR_NAMES[color]"
+      :aria-label="`Цвет: ${COLOR_NAMES[color] ?? index + 1}`"
       @click="model = color"
     >
       <i v-if="model === color" class="pi pi-check" aria-hidden="true" />

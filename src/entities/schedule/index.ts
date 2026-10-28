@@ -76,6 +76,7 @@ export {
   chipBackground,
   createDraft,
   draftToEvents,
+  ColorSwatches,
   EventChip,
   EventForm,
   eventToDraft,

@@ -31,7 +31,34 @@ export const PASTEL_COLORS = [
   '#FFD9C2',
   '#C9ECEF',
   '#E3EBB5',
+  '#F7B7A3',
+  '#A8E6CF',
+  '#A5D8F3',
+  '#B8B8F0',
+  '#E8B4D8',
+  '#F5CF8B',
+  '#B5C9A8',
+  '#8FD3D0',
 ]
+
+export const COLOR_NAMES: Record<string, string> = {
+  '#FCE8B2': 'Сливочный',
+  '#CFE2FF': 'Голубой',
+  '#CDEFD6': 'Фисташковый',
+  '#E4D9F5': 'Сиреневый',
+  '#F9D3D9': 'Розовый',
+  '#FFD9C2': 'Персиковый',
+  '#C9ECEF': 'Бирюзовый',
+  '#E3EBB5': 'Салатовый',
+  '#F7B7A3': 'Коралловый',
+  '#A8E6CF': 'Мятный',
+  '#A5D8F3': 'Небесный',
+  '#B8B8F0': 'Барвинок',
+  '#E8B4D8': 'Орхидея',
+  '#F5CF8B': 'Медовый',
+  '#B5C9A8': 'Шалфей',
+  '#8FD3D0': 'Морской',
+}
 
 export const CATEGORY_LABELS: Record<EventCategory, string> = {
   activity: 'Занятие',
@@ -51,7 +78,28 @@ export const DEVICE_STORAGE_KEY = 'life-tracker:device'
 
 export const GUEST_CACHE_KEY = 'life-tracker:guest-cache'
 
-export const ALARM_SOUNDS: AlarmSound[] = ['chime', 'beep', 'bell']
+export const SOUND_GROUPS: { label: string; sounds: AlarmSound[] }[] = [
+  { label: 'Мелодичные', sounds: ['chime', 'bell', 'marimba', 'xylophone', 'cuckoo'] },
+  { label: 'Спокойные', sounds: ['harp', 'piano', 'soft', 'birds', 'drops'] },
+  { label: 'Громкие', sounds: ['beep', 'digital'] },
+]
+
+export const ALARM_SOUNDS: AlarmSound[] = SOUND_GROUPS.flatMap((group) => group.sounds)
+
+export const SOUND_LABELS: Record<AlarmSound, string> = {
+  chime: 'Перезвон',
+  bell: 'Колокольчик',
+  marimba: 'Маримба',
+  xylophone: 'Ксилофон',
+  cuckoo: 'Кукушка',
+  harp: 'Арфа',
+  piano: 'Пианино',
+  soft: 'Мягкий',
+  birds: 'Птицы',
+  drops: 'Капли',
+  beep: 'Сигнал',
+  digital: 'Будильник',
+}
 
 export const GUEST_LEAD_OPTIONS = [5, 10, 15, 30, 45, 60]
 
