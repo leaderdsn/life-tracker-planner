@@ -22,6 +22,22 @@ const routes: RouteRecordRaw[] = [
   },
 ]
 
+/**
+ * Links shared through messengers lose everything after "#" surprisingly often,
+ * so invites use a plain query (?join=… / ?guest=…) that is turned into a hash route here.
+ */
+export function launchRouteFromSearch(search: string): string | null {
+  const params = new URLSearchParams(search)
+  const join = params.get('join')
+  if (join) return `/join?h=${encodeURIComponent(join)}`
+  const guest = params.get('guest')
+  if (guest) return `/guest?h=${encodeURIComponent(guest)}`
+  return null
+}
+
+const launchRoute = launchRouteFromSearch(location.search)
+if (launchRoute) history.replaceState(null, '', `${location.pathname}#${launchRoute}`)
+
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,

@@ -59,6 +59,7 @@ describe('sync store', () => {
     const id = sync.enableSync()
     expect(id).toHaveLength(24)
     expect(sync.enableSync()).toBe(id)
-    expect(sync.guestLink).toContain(`#/guest?h=${id}`)
+    expect(sync.guestLink).toContain(`?guest=${id}`)
+    expect(sync.inviteLink).toContain(`?join=${id}`)
   })
 })
