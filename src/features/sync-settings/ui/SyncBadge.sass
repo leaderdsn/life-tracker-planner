@@ -1,0 +1,40 @@
+@use "@/shared/styles" as ds
+
+@keyframes sync-badge-blink
+  50%
+    opacity: 0.35
+
+.sync-badge
+  display: inline-flex
+  align-items: center
+  gap: 0.5em
+  color: var(--app-ink-muted)
+  font-size: ds.$font-size-sm
+  font-weight: 600
+  white-space: nowrap
+
+  &__dot
+    width: 0.7em
+    height: 0.7em
+    border-radius: ds.$radius-full
+    background: var(--app-ink-muted)
+
+  &__label
+    display: none
+
+    +ds.media(md)
+      display: inline
+
+    &.is-hidden
+      +ds.visually-hidden
+      display: inline
+
+  &.is-online .sync-badge__dot
+    background: var(--app-done)
+
+  &.is-offline .sync-badge__dot
+    background: var(--app-conflict)
+
+  &.is-connecting .sync-badge__dot
+    background: var(--app-accent)
+    animation: sync-badge-blink 1s ease-in-out infinite
