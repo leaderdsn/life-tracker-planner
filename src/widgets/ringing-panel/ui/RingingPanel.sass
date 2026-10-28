@@ -1,0 +1,70 @@
+@use "@/shared/styles" as ds
+
+@keyframes ringing-panel-shake
+  0%, 100%
+    transform: rotate(0)
+  20%, 60%
+    transform: rotate(-16deg)
+  40%, 80%
+    transform: rotate(16deg)
+
+.ringing-panel
+  padding: ds.$space-4
+  border: 2px solid var(--app-now)
+  border-radius: ds.$radius-lg
+  background: var(--app-conflict-soft)
+  box-shadow: var(--app-shadow)
+
+  &__head
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    gap: ds.$space-2
+    margin-bottom: ds.$space-3
+
+  &__title
+    display: flex
+    align-items: center
+    gap: ds.$space-2
+    margin: 0
+    color: var(--app-conflict)
+    font-size: ds.$font-size-lg
+
+  &__bell
+    transform-origin: 50% 0
+    animation: ringing-panel-shake 1.6s ease-in-out infinite
+
+    @media (prefers-reduced-motion: reduce)
+      animation: none
+
+  &__list
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+    margin: 0
+    padding: 0
+    list-style: none
+
+  &__item
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    gap: ds.$space-3
+    padding: ds.$space-3
+    border-radius: ds.$radius-md
+    background: var(--app-surface)
+
+  &__text
+    display: flex
+    flex-direction: column
+    min-width: 0
+
+  &__name
+    font-weight: 700
+    overflow-wrap: anywhere
+
+  &__meta
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm

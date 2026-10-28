@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useToast } from 'primevue/usetoast'
+import { watch } from 'vue'
 
-import { useScheduleStore } from '@/entities/schedule'
+import { useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
 import { useReminderScheduler } from '@/features/notifications'
 import { useThemeStore } from '@/features/toggle-theme'
 import { useIsMobile, UndoToast } from '@/shared/ui'
@@ -12,11 +13,21 @@ const REMINDER_TOAST_MS = 10_000
 useThemeStore()
 
 const store = useScheduleStore()
+const device = useDeviceStore()
+const sync = useSyncStore()
 const toast = useToast()
 const isMobile = useIsMobile()
 
+watch(
+  () => device.householdId,
+  (id) => (id ? sync.start() : sync.stop()),
+  { immediate: true },
+)
+
 useReminderScheduler({
-  onToast: (message) => toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS }),
+  onToast: (message) => {
+    if (device.role === 'admin') toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS })
+  },
 })
 </script>
 
