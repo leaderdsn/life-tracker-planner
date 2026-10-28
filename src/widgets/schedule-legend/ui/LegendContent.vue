@@ -1,30 +1,45 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { EventChip, initialLabels, useScheduleStore } from '@/entities/schedule'
+import { EventChip, initialLabels, useDeviceStore, useScheduleStore } from '@/entities/schedule'
 import type { Participant, ScheduleEvent } from '@/entities/schedule'
 import { GuestEventCard } from '@/features/guest-alarm'
+import { Avatar } from '@/shared/ui'
+
+import LegendRow from './LegendRow.vue'
 
 const store = useScheduleStore()
+const device = useDeviceStore()
 
 const FALLBACK: Participant = { id: 'demo', name: 'Участник', color: '#CFE2FF', order: 0 }
 const FALLBACK_SECOND: Participant = { id: 'demo2', name: 'Участник', color: '#CDEFD6', order: 1 }
 
-const demoEvent: ScheduleEvent = {
-  id: 'legend-demo',
-  participantIds: ['demo'],
-  day: 'mon',
-  start: '10:00',
-  title: 'Занятие',
-  category: 'activity',
+function sampleEvent(title: string, extra: Partial<ScheduleEvent> = {}): ScheduleEvent {
+  return { id: `legend-${title}`, participantIds: ['demo'], day: 'mon', start: '10:00', title, category: 'activity', ...extra }
 }
-const reviewEvent: ScheduleEvent = { ...demoEvent, needsReview: 'Проверьте' }
 
-const people = computed(() => store.sortedParticipants)
-const labels = computed(() => ({ ...initialLabels(people.value), demo: 'У', demo2: 'Д' }))
+const events = {
+  current: sampleEvent('Алгебра'),
+  next: sampleEvent('Бассейн'),
+  past: sampleEvent('Вокал'),
+  done: sampleEvent('Танцы'),
+  auto: sampleEvent('Чтение'),
+  skipped: sampleEvent('Йога'),
+  open: sampleEvent('Химия'),
+  conflict: sampleEvent('Футбол'),
+  review: sampleEvent('Музыка', { needsReview: 'Проверьте' }),
+}
+
+const everyone = computed(() => store.sortedParticipants)
+const people = computed(() =>
+  device.role === 'participant' ? everyone.value.filter((p) => p.id === device.participantId) : everyone.value,
+)
+const labels = computed<Record<string, string>>(() => ({ ...initialLabels(everyone.value), demo: 'У', demo2: 'Д' }))
 const sample = computed(() => people.value[0] ?? FALLBACK)
-const shared = computed(() => (people.value.length > 1 ? people.value.slice(0, 2) : [sample.value, FALLBACK_SECOND]))
+const shared = computed(() => (everyone.value.length > 1 ? everyone.value.slice(0, 2) : [sample.value, FALLBACK_SECOND]))
+const showGuest = computed(() => device.role === 'admin')
 const noop = () => undefined
+const SHARED_NOTE = 'Два значка рядом: общее занятие нескольких участников'
 </script>
 
 <template>
@@ -32,17 +47,15 @@ const noop = () => undefined
     <section class="legend__group" aria-labelledby="legend-people">
       <h3 id="legend-people" class="legend__heading">Участники</h3>
       <ul class="legend__list">
-        <li v-for="p in people" :key="p.id" class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[p]" :labels="labels" status="upcoming" />
-          </span>
-          <span class="legend__text">{{ p.name }}</span>
+        <li v-for="p in people" :key="p.id" class="legend__person">
+          <Avatar :name="p.name" :color="p.color" :src="p.avatar" :label="labels[p.id]" size="md" />
+          <span class="legend__name" :title="p.name">{{ p.name }}</span>
         </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="shared" :labels="labels" status="upcoming" />
+        <li class="legend__person">
+          <span class="legend__pair" aria-hidden="true">
+            <Avatar v-for="p in shared" :key="p.id" :name="p.name" :color="p.color" :label="labels[p.id]" size="md" />
           </span>
-          <span class="legend__text">Двухцветная карточка: общее занятие нескольких участников</span>
+          <span class="legend__note" :title="SHARED_NOTE">{{ SHARED_NOTE }}</span>
         </li>
       </ul>
     </section>
@@ -50,92 +63,60 @@ const noop = () => undefined
     <section class="legend__group" aria-labelledby="legend-time">
       <h3 id="legend-time" class="legend__heading">Время</h3>
       <ul class="legend__list">
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="current" />
-          </span>
-          <span class="legend__text">Идёт сейчас</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="next" />
-          </span>
-          <span class="legend__text">Следующее</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="past" />
-          </span>
-          <span class="legend__text">Прошло</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true"><span class="legend__today" /></span>
-          <span class="legend__text">Сегодня: подсвеченный столбец</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true"><span class="legend__now" /></span>
-          <span class="legend__text">Текущее время в дневном виде</span>
-        </li>
+        <LegendRow decorative text="Идёт сейчас">
+          <EventChip :event="events.current" :participants="[sample]" :labels="labels" status="current" />
+        </LegendRow>
+        <LegendRow decorative text="Следующее">
+          <EventChip :event="events.next" :participants="[sample]" :labels="labels" status="next" />
+        </LegendRow>
+        <LegendRow decorative text="Прошло">
+          <EventChip :event="events.past" :participants="[sample]" :labels="labels" status="past" />
+        </LegendRow>
+        <LegendRow decorative text="Сегодня: подсвеченный столбец">
+          <span class="legend__today" />
+        </LegendRow>
+        <LegendRow decorative text="Текущее время в дневном виде">
+          <span class="legend__now" />
+        </LegendRow>
       </ul>
     </section>
 
     <section class="legend__group" aria-labelledby="legend-done">
       <h3 id="legend-done" class="legend__heading">Выполнение</h3>
       <ul class="legend__list">
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="past" completion="done" can-toggle @toggle="noop" />
-          </span>
-          <span class="legend__text">Выполнено</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="past" completion="auto" can-toggle @toggle="noop" />
-          </span>
-          <span class="legend__text">Отмечено автоматически</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="past" completion="skipped" can-toggle @toggle="noop" />
-          </span>
-          <span class="legend__text">Не выполнено</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="upcoming" can-toggle @toggle="noop" />
-          </span>
-          <span class="legend__text">Нажмите на кружок, чтобы отметить</span>
-        </li>
+        <LegendRow decorative text="Выполнено">
+          <EventChip :event="events.done" :participants="[sample]" :labels="labels" status="past" completion="done" can-toggle @toggle="noop" />
+        </LegendRow>
+        <LegendRow decorative text="Отмечено автоматически">
+          <EventChip :event="events.auto" :participants="[sample]" :labels="labels" status="past" completion="auto" can-toggle @toggle="noop" />
+        </LegendRow>
+        <LegendRow decorative text="Не выполнено">
+          <EventChip :event="events.skipped" :participants="[sample]" :labels="labels" status="past" completion="skipped" can-toggle @toggle="noop" />
+        </LegendRow>
+        <LegendRow decorative text="Нажмите на кружок, чтобы отметить">
+          <EventChip :event="events.open" :participants="[sample]" :labels="labels" status="upcoming" can-toggle @toggle="noop" />
+        </LegendRow>
       </ul>
     </section>
 
     <section class="legend__group" aria-labelledby="legend-warn">
       <h3 id="legend-warn" class="legend__heading">Внимание</h3>
       <ul class="legend__list">
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="demoEvent" :participants="[sample]" :labels="labels" status="upcoming" conflict />
-          </span>
-          <span class="legend__text">Пересечение по времени у одного участника</span>
-        </li>
-        <li class="legend__row">
-          <span class="legend__sample" aria-hidden="true" inert>
-            <EventChip :event="reviewEvent" :participants="[sample]" :labels="labels" status="upcoming" />
-          </span>
-          <span class="legend__text">Проверьте: спорное место из исходной таблицы</span>
-        </li>
+        <LegendRow decorative text="Пересечение по времени у одного участника">
+          <EventChip :event="events.conflict" :participants="[sample]" :labels="labels" status="upcoming" conflict />
+        </LegendRow>
+        <LegendRow decorative text="Проверьте: спорное место из исходной таблицы">
+          <EventChip :event="events.review" :participants="[sample]" :labels="labels" status="upcoming" />
+        </LegendRow>
       </ul>
     </section>
 
-    <section class="legend__group" aria-labelledby="legend-guest">
+    <section v-if="showGuest" class="legend__group" aria-labelledby="legend-guest">
       <h3 id="legend-guest" class="legend__heading">Гостевой экран</h3>
       <ul class="legend__list">
-        <li class="legend__row legend__row--stack">
-          <span class="legend__sample legend__sample--card" aria-hidden="true" inert>
-            <GuestEventCard title="Занятие" time="10:00" :participants="[sample]" status="current" ringing />
-          </span>
-          <span class="legend__text">Звенит у гостя: можно отключить на панели сверху</span>
-        </li>
+        <LegendRow decorative stack text="Звенит у гостя: можно отключить на панели сверху">
+          <GuestEventCard title="Бассейн" time="10:00" :participants="[sample]" status="current" ringing />
+        </LegendRow>
       </ul>
     </section>
   </div>
