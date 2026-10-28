@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+import { env } from '@/shared/config'
+
 import { createTransport, generateHouseholdId, mergeProfiles, pruneAcks } from '../lib'
 
 import { useDeviceStore } from './deviceStore'
@@ -18,6 +20,13 @@ import type {
   SyncTransport,
   Unsubscribe,
 } from './types'
+
+/** Links opened on other devices must not point to a local dev server. */
+function appBaseUrl(): string {
+  const local = /^(localhost|127.0.0.1|[::1])$/.test(location.hostname)
+  if (local && env.publicUrl) return env.publicUrl.endsWith('/') ? env.publicUrl : `${env.publicUrl}/`
+  return `${location.origin}${import.meta.env.BASE_URL}`
+}
 
 export const useSyncStore = defineStore('sync', () => {
   const device = useDeviceStore()
@@ -46,7 +55,7 @@ export const useSyncStore = defineStore('sync', () => {
 
   const guestLink = computed(() =>
     device.householdId
-      ? `${location.origin}${import.meta.env.BASE_URL}#/guest?h=${device.householdId}`
+      ? `${appBaseUrl()}#/guest?h=${device.householdId}`
       : '',
   )
 
