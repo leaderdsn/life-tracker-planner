@@ -1,0 +1,45 @@
+@use "@/shared/styles" as ds
+
+.quick-start
+  display: grid
+  grid-template-columns: minmax(0, 1fr)
+  gap: ds.$space-6
+  margin: 0
+  padding: 0
+  list-style: none
+
+  +ds.media(lg)
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  &__step
+    display: flex
+    gap: ds.$space-4
+    min-width: 0
+
+  &__number
+    flex-shrink: 0
+    display: inline-grid
+    place-items: center
+    width: ds.$space-10
+    height: ds.$space-10
+    border-radius: ds.$radius-full
+    background: var(--p-primary-color)
+    color: var(--p-primary-contrast-color)
+    font-weight: 700
+
+  &__content
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+    min-width: 0
+    flex: 1
+
+  &__title
+    margin: 0
+    font-size: ds.$font-size-lg
+    color: var(--p-text-color)
+
+  &__description
+    margin: 0
+    color: var(--p-text-muted-color)
+    font-size: ds.$font-size-sm

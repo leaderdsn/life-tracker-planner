@@ -1,0 +1,72 @@
+@use "@/shared/styles" as ds
+
+.technology-card
+  height: 100%
+  border: 1px solid var(--p-content-border-color)
+  transition: transform ds.$transition-base, box-shadow ds.$transition-base
+
+  &:hover
+    transform: translateY(-2px)
+    box-shadow: 0 12px 24px -16px var(--technology-accent)
+
+  &__header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: ds.$space-5 ds.$space-5 0
+
+  &__badge
+    display: inline-grid
+    place-items: center
+    min-width: ds.$space-12
+    height: ds.$space-12
+    padding-inline: ds.$space-2
+    border-radius: ds.$radius-md
+    background: color-mix(in srgb, var(--technology-accent) 18%, transparent)
+    color: var(--p-text-color)
+    font-weight: 700
+    font-size: ds.$font-size-sm
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--technology-accent) 45%, transparent)
+
+  &__logo
+    display: block
+    width: 28px
+    height: 28px
+    object-fit: contain
+
+  &__title
+    margin: 0
+    font-size: ds.$font-size-lg
+
+  &__description,
+  &__purpose
+    margin: 0
+    line-height: ds.$line-height-normal
+
+  &__description
+    color: var(--p-text-color)
+
+  &__purpose
+    display: flex
+    gap: ds.$space-2
+    margin-top: ds.$space-3
+    font-size: ds.$font-size-sm
+    color: var(--p-text-muted-color)
+
+    .pi
+      margin-top: 0.2em
+      color: var(--p-primary-color)
+
+  &__link
+    display: inline-flex
+    align-items: center
+    gap: ds.$space-1
+    color: var(--p-primary-color)
+    font-weight: 500
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline
+
+    &:focus-visible
+      +ds.focus-ring
