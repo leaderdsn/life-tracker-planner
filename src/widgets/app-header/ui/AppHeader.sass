@@ -4,70 +4,91 @@
   position: sticky
   top: 0
   z-index: 10
-  height: ds.$header-height
-  border-bottom: 1px solid var(--p-content-border-color)
-  background: color-mix(in srgb, var(--app-background) 80%, transparent)
+  border-bottom: 1px solid var(--app-border)
+  background: color-mix(in srgb, var(--app-background) 88%, transparent)
   backdrop-filter: blur(12px)
 
   &__inner
     +ds.container
     display: flex
-    align-items: center
+    flex-direction: column
     gap: ds.$space-2
-    height: 100%
+    padding-block: ds.$space-2 0
 
-    +ds.media(md)
-      gap: ds.$space-4
+  &__top
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: ds.$space-2
 
-  &__logo
+  &__title
     display: inline-flex
     align-items: center
     gap: ds.$space-2
     min-width: 0
-    color: var(--p-text-color)
+    margin: 0
+    font-size: ds.$font-size-lg
     font-weight: 700
-    text-decoration: none
-
-    img
-      flex-shrink: 0
-
-    &:focus-visible
-      +ds.focus-ring
-
-  &__title
-    overflow: hidden
-    white-space: nowrap
-    text-overflow: ellipsis
-
-  &__nav
-    display: none
-    gap: ds.$space-1
-    margin-inline: auto
-
-    +ds.media(md)
-      display: flex
-
-  &__link
-    padding: ds.$space-2 ds.$space-3
-    border-radius: ds.$radius-sm
-    color: var(--p-text-muted-color)
-    font-size: ds.$font-size-sm
-    text-decoration: none
-    transition: color ds.$transition-fast, background ds.$transition-fast
-
-    &:hover
-      color: var(--p-text-color)
-      background: var(--p-content-hover-background)
-
-    &:focus-visible
-      +ds.focus-ring
 
   &__actions
     display: flex
     flex-shrink: 0
     align-items: center
     gap: ds.$space-1
-    margin-left: auto
+
+  &__tabs
+    position: relative
+    display: flex
+    gap: ds.$space-1
+    overflow-x: auto
+    padding-bottom: ds.$space-2
+    scrollbar-width: none
+    padding-right: ds.$space-8
+    mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent)
 
     +ds.media(md)
-      margin-left: 0
+      mask-image: none
+
+  &__tab
+    display: inline-flex
+    flex-shrink: 0
+    align-items: center
+    gap: ds.$space-2
+    min-height: 2.75rem
+    padding: 0 ds.$space-4
+    border: 1px solid transparent
+    border-radius: ds.$radius-full
+    background: transparent
+    color: var(--app-ink)
+    font: inherit
+    font-size: ds.$font-size-sm
+    font-weight: 600
+    text-decoration: none
+    cursor: pointer
+    transition: background ds.$transition-fast
+
+    &:hover
+      background: var(--app-surface-muted)
+
+    &:focus-visible
+      +ds.focus-ring
+
+    &.is-active
+      border-color: var(--app-accent)
+      background: var(--app-accent-soft)
+
+    &--add
+      border-style: dashed
+      border-color: var(--app-border)
+      color: var(--app-ink-muted)
+
+  &__add-label
+    +ds.visually-hidden
+
+    +ds.media(md)
+      position: static
+      width: auto
+      height: auto
+      margin: 0
+      overflow: visible
+      clip-path: none

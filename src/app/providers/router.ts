@@ -1,15 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { ROUTE_NAMES } from '@/shared/config'
 
 import type { RouteRecordRaw } from 'vue-router'
 
+const loadSchedulePage = () => import('@/pages/schedule').then((m) => m.SchedulePage)
+
 const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    name: ROUTE_NAMES.home,
-    component: () => import('@/pages/home').then((m) => m.HomePage),
-  },
+  { path: '/', redirect: { name: ROUTE_NAMES.all } },
+  { path: '/all', name: ROUTE_NAMES.all, component: loadSchedulePage },
+  { path: '/p/:id', name: ROUTE_NAMES.participant, component: loadSchedulePage, props: true },
   {
     path: '/:pathMatch(.*)*',
     name: ROUTE_NAMES.notFound,
@@ -18,11 +18,9 @@ const routes: RouteRecordRaw[] = [
 ]
 
 export const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, _from, savedPosition) {
-    if (savedPosition) return savedPosition
-    if (to.hash) return { el: to.hash, behavior: 'smooth' }
-    return { top: 0 }
+  scrollBehavior(_to, _from, savedPosition) {
+    return savedPosition ?? false
   },
 })

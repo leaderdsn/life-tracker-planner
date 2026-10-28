@@ -1,47 +1,63 @@
 <script setup lang="ts">
-import { ThemeToggle } from '@/features/toggle-theme'
-import { APP_LINKS, env, ROUTE_NAMES } from '@/shared/config'
+import { useRoute } from 'vue-router'
 
-const NAV_ITEMS = [
-  { hash: '#stack', label: 'Стек' },
-  { hash: '#architecture', label: 'Архитектура' },
-  { hash: '#quick-start', label: 'Быстрый старт' },
-] as const
+import { ParticipantDot, useScheduleStore } from '@/entities/schedule'
+import { ThemeToggle } from '@/features/toggle-theme'
+import { env, ROUTE_NAMES } from '@/shared/config'
+
+const emit = defineEmits<{
+  'add-participant': []
+  'open-settings': []
+}>()
+
+const store = useScheduleStore()
+const route = useRoute()
 </script>
 
 <template>
   <header class="app-header">
     <div class="app-header__inner">
-      <RouterLink :to="{ name: ROUTE_NAMES.home }" class="app-header__logo">
-        <img src="/favicon.svg" alt="" width="28" height="28">
-        <span class="app-header__title">{{ env.appTitle }}</span>
-      </RouterLink>
-
-      <nav class="app-header__nav" aria-label="Разделы страницы">
-        <RouterLink
-          v-for="item in NAV_ITEMS"
-          :key="item.hash"
-          :to="{ name: ROUTE_NAMES.home, hash: item.hash }"
-          class="app-header__link"
-        >
-          {{ item.label }}
-        </RouterLink>
-      </nav>
-
-      <div class="app-header__actions">
-        <ThemeToggle />
-        <Button
-          as="a"
-          :href="APP_LINKS.repository"
-          target="_blank"
-          rel="noopener noreferrer"
-          icon="pi pi-github"
-          aria-label="Репозиторий на GitHub"
-          severity="secondary"
-          variant="text"
-          rounded
-        />
+      <div class="app-header__top">
+        <h1 class="app-header__title">
+          <img src="/favicon.svg" alt="" width="28" height="28">
+          {{ env.appTitle }}
+        </h1>
+        <div class="app-header__actions">
+          <ThemeToggle />
+          <Button
+            icon="pi pi-cog"
+            aria-label="Настройки"
+            severity="secondary"
+            variant="text"
+            rounded
+            @click="emit('open-settings')"
+          />
+        </div>
       </div>
+
+      <nav class="app-header__tabs" aria-label="Участники">
+        <RouterLink
+          :to="{ name: ROUTE_NAMES.all, query: route.query }"
+          class="app-header__tab"
+          active-class="is-active"
+        >
+          Все
+        </RouterLink>
+        <RouterLink
+          v-for="p in store.sortedParticipants"
+          :key="p.id"
+          :to="{ name: ROUTE_NAMES.participant, params: { id: p.id }, query: route.query }"
+          class="app-header__tab"
+          active-class="is-active"
+        >
+          <ParticipantDot :color="p.color" />
+          {{ p.name }}
+        </RouterLink>
+        <button type="button" class="app-header__tab app-header__tab--add" @click="emit('add-participant')">
+          <i class="pi pi-plus" aria-hidden="true" />
+          <span class="app-header__add-label">Добавить участника</span>
+        </button>
+      </nav>
     </div>
   </header>
 </template>

@@ -1,0 +1,104 @@
+@use "@/shared/styles" as ds
+
+.schedule-week
+  overflow: auto
+  max-height: 75dvh
+  border: 1px solid var(--app-border)
+  border-radius: ds.$radius-lg
+  background: var(--app-surface)
+  box-shadow: var(--app-shadow)
+
+  &:focus-visible
+    +ds.focus-ring
+
+  &__empty
+    padding: ds.$space-8
+    border: 1px dashed var(--app-border)
+    border-radius: ds.$radius-lg
+    color: var(--app-ink-muted)
+    text-align: center
+
+  &__table
+    width: 100%
+    min-width: calc(4rem + var(--cols) * 150px)
+    border-collapse: separate
+    border-spacing: 0
+    table-layout: fixed
+
+  &__sr
+    +ds.visually-hidden
+
+  &__corner,
+  &__time
+    position: sticky
+    left: 0
+    z-index: 2
+    width: 4rem
+    background: var(--app-surface)
+
+  &__head
+    position: sticky
+    top: 0
+    z-index: 3
+    padding: ds.$space-1
+    border-bottom: 1px solid var(--app-border)
+    background: var(--app-surface)
+
+    &.is-today
+      background: var(--app-today)
+
+  &__corner
+    top: 0
+    z-index: 4
+    border-bottom: 1px solid var(--app-border)
+
+  &__day
+    display: flex
+    flex-direction: column
+    align-items: center
+    width: 100%
+    min-height: 2.75rem
+    border: 0
+    border-radius: ds.$radius-md
+    background: transparent
+    color: var(--app-ink)
+    font: inherit
+    font-weight: 700
+    cursor: pointer
+
+    &:hover
+      background: var(--app-surface-muted)
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__num
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+    font-weight: 500
+
+  &__time
+    padding: ds.$space-2
+    border-top: 1px solid var(--app-border)
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+    font-variant-numeric: tabular-nums
+    text-align: center
+    vertical-align: top
+
+  &__cell
+    padding: ds.$space-1
+    border-top: 1px solid var(--app-border)
+    border-left: 1px solid var(--app-border)
+    vertical-align: top
+
+    &.is-today
+      background: var(--app-today)
+
+  &__chips
+    display: flex
+    flex-direction: column
+    gap: ds.$space-1
+    margin: 0
+    padding: 0
+    list-style: none

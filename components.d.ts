@@ -11,14 +11,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AutoComplete: typeof import('primevue/autocomplete')['default']
     Button: typeof import('primevue/button')['default']
-    Card: typeof import('primevue/card')['default']
-    Chip: typeof import('primevue/chip')['default']
-    Message: typeof import('primevue/message')['default']
+    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
+    DatePicker: typeof import('primevue/datepicker')['default']
+    Dialog: typeof import('primevue/dialog')['default']
+    InputText: typeof import('primevue/inputtext')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('primevue/select')['default']
     SelectButton: typeof import('primevue/selectbutton')['default']
-    Skeleton: typeof import('primevue/skeleton')['default']
-    Tag: typeof import('primevue/tag')['default']
+    Toast: typeof import('primevue/toast')['default']
+    ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }
 }

@@ -12,5 +12,3 @@ interface ImportMeta {
 /** Application version from package.json, injected by Vite `define`. */
 declare const __APP_VERSION__: string
 
-/** Merged dependencies + devDependencies from package.json, injected by Vite `define`. */
-declare const __DEPENDENCIES__: Record<string, string>

@@ -1,0 +1,49 @@
+@use "@/shared/styles" as ds
+
+.view-toolbar
+  display: flex
+  flex-direction: column
+  gap: ds.$space-2
+  min-width: 0
+
+  +ds.media(md)
+    flex-direction: row
+    align-items: center
+    gap: ds.$space-4
+
+  :deep(.p-selectbutton)
+    display: flex
+
+    +ds.media(md)
+      display: inline-flex
+
+  :deep(.p-togglebutton)
+    flex: 1
+    min-height: 2.75rem
+
+  &__row
+    display: flex
+    flex: 1
+    align-items: center
+    gap: ds.$space-2
+    min-width: 0
+
+    +ds.media(md)
+      gap: ds.$space-4
+
+  &__nav
+    display: flex
+    flex-shrink: 0
+    align-items: center
+    gap: ds.$space-1
+
+  &__label
+    flex: 1
+    min-width: 0
+    margin: 0
+    font-size: ds.$font-size-md
+    font-weight: 700
+    text-align: right
+
+    +ds.media(md)
+      font-size: ds.$font-size-lg

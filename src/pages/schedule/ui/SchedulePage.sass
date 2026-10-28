@@ -1,0 +1,15 @@
+@use "@/shared/styles" as ds
+
+.schedule-page
+  +ds.container
+  display: flex
+  flex-direction: column
+  gap: ds.$space-4
+  min-width: 0
+  padding-block: ds.$space-4 ds.$space-10
+
+  &__personal
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: ds.$space-2
