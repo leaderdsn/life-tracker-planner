@@ -65,7 +65,7 @@ PIN защищает от случайных изменений, а не от в
 1. Создайте проект на [console.firebase.google.com](https://console.firebase.google.com) (тариф Spark, бесплатно).
 2. **Security → Authentication → Sign-in method** — включите **Anonymous**.
 3. **Databases & Storage → Realtime Database → Create Database** (регион europe-west1), режим **locked**.
-4. Вкладка **Rules** — вставьте содержимое [database.rules.json](database.rules.json) и опубликуйте. Проект общий с vue-interview-prep, поэтому в файле есть и его правила (`interviewPrep`); при изменении обновите файл в обоих репозиториях.
+4. Вкладка **Rules** — вставьте содержимое [database.rules.json](database.rules.json) и опубликуйте. Проект общий с vue-interview-prep и ussr-school-prep, поэтому в файле есть и их правила (`interviewPrep`, `schoolPrep`); при изменении обновите файл во всех трёх репозиториях.
 5. **Project Overview → + Add app → Web (`</>`)** — зарегистрируйте приложение и скопируйте конфиг.
 6. Для локального запуска создайте `.env.local` по образцу [.env.example](.env.example).
 7. Для сайта на GitHub Pages добавьте те же значения в **Settings → Secrets and variables → Actions** репозитория
