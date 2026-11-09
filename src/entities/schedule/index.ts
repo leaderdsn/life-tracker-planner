@@ -41,7 +41,10 @@ export {
   canToggle,
   centerCrop,
   completionKey,
+  decodeCsv,
   eventsForWeek,
+  eventsToRows,
+  eventsVisibleInAll,
   effectiveCompletion,
   effectiveCompletionFor,
   eventStatus,
@@ -55,19 +58,35 @@ export {
   migrate,
   normalizeEvent,
   occurrences,
+  occurrencesVisibleInAll,
   parseSnapshot,
   periodRange,
+  planImport,
   progress,
   pruneAcks,
+  readSpreadsheet,
   resizeAvatar,
+  rowsToEvents,
   toProfile,
   ValidationError,
   verifyAdminPin,
   verifyParticipantPin,
   verifyPin,
+  visibleInAll,
   withoutProfile,
+  writeSpreadsheet,
 } from './lib'
-export type { ValidationField } from './lib'
+export type {
+  ImportedEvent,
+  ImportMode,
+  ImportPlan,
+  ImportSummary,
+  ParsedImport,
+  RowError,
+  SpreadsheetData,
+  SpreadsheetFormat,
+  ValidationField,
+} from './lib'
 export { useDeviceStore } from './model/deviceStore'
 export { useScheduleStore } from './model/scheduleStore'
 export { useSyncStore } from './model/syncStore'

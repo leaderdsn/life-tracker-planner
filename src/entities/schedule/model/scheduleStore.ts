@@ -20,11 +20,14 @@ import {
   parseShared,
   parseSnapshot,
   progress,
+  randomId,
   save,
+  slugify,
   toProfile,
   toShared,
+  uniqueId,
 } from '../lib'
-import type { CompletionSyncState } from '../lib'
+import type { CompletionSyncState, ImportPlan } from '../lib'
 
 import { useDeviceStore } from './deviceStore'
 import { useSyncStore } from './syncStore'
@@ -44,34 +47,6 @@ import type {
 type NewEvent = Omit<ScheduleEvent, 'id'>
 
 const SAVE_DELAY_MS = 300
-
-const TRANSLIT: Record<string, string> = {
-  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y', к: 'k', л: 'l',
-  м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch', ш: 'sh',
-  щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
-}
-
-function slugify(name: string): string {
-  const slug = [...name.toLowerCase()]
-    .map((ch) => TRANSLIT[ch] ?? ch)
-    .join('')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-  return slug || 'p'
-}
-
-function uniqueId(base: string, taken: Set<string>): string {
-  let id = base
-  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`
-  return id
-}
-
-function randomId(taken: Set<string>): string {
-  let id: string
-  do id = `e${Math.random().toString(36).slice(2, 9)}`
-  while (taken.has(id))
-  return id
-}
 
 type RemoteCache = { schedule: SharedSchedule; profiles: Record<string, ParticipantProfile> }
 
@@ -518,6 +493,14 @@ export const useScheduleStore = defineStore('schedule', () => {
     restore(data)
   }
 
+  function applyImport(plan: ImportPlan) {
+    assertEditable()
+    rememberForUndo()
+    participants.value = plan.result.participants
+    events.value = plan.result.events
+    commitCompletions(plan.result.completions)
+  }
+
   function resetToSeed() {
     assertEditable()
     rememberForUndo()
@@ -559,6 +542,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     undo,
     exportJson,
     importJson,
+    applyImport,
     resetToSeed,
   }
 })

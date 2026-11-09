@@ -40,6 +40,8 @@ export type ScheduleEvent = {
   category: EventCategory
   /** minutes before start; undefined = default from settings */
   remindBefore?: number
+  /** false = hidden only in the admin «Все» tab (week, day, month); undefined means shown */
+  showInAll?: boolean
   /** reason shown in the "?" badge; cleared once the user edits or confirms the event */
   needsReview?: string
 }

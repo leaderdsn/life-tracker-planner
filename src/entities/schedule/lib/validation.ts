@@ -58,6 +58,7 @@ export function normalizeEvent(e: ScheduleEvent): ScheduleEvent {
   const note = e.note?.trim()
   if (note) out.note = note
   if (e.remindBefore !== undefined && e.remindBefore !== null) out.remindBefore = e.remindBefore
+  if (e.showInAll === false) out.showInAll = false
   if (e.needsReview) out.needsReview = e.needsReview
   return out
 }

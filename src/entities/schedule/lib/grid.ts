@@ -4,7 +4,9 @@ import { WEEKDAYS } from '../config'
 
 import type { Grid, GridRow, ScheduleEvent, Weekday } from '../model/types'
 
-type GridOptions = { participantIds?: string[]; days?: Weekday[] }
+import { visibleInAll } from './visibility'
+
+type GridOptions = { participantIds?: string[]; days?: Weekday[]; onlyVisibleInAll?: boolean }
 
 export function eventsForWeek(events: ScheduleEvent[], weekStart: Date): ScheduleEvent[] {
   const from = toIsoDate(weekStart)
@@ -23,10 +25,11 @@ export function eventsForWeek(events: ScheduleEvent[], weekStart: Date): Schedul
 const byStartThenTitle = (a: ScheduleEvent, b: ScheduleEvent) =>
   minutes(a.start) - minutes(b.start) || a.title.localeCompare(b.title, 'ru')
 
-export function buildGrid(events: ScheduleEvent[], { participantIds, days }: GridOptions = {}): Grid {
+export function buildGrid(events: ScheduleEvent[], { participantIds, days, onlyVisibleInAll }: GridOptions = {}): Grid {
+  const pool = onlyVisibleInAll ? events.filter(visibleInAll) : events
   const filtered = participantIds
-    ? events.filter((e) => e.participantIds.some((id) => participantIds.includes(id)))
-    : events
+    ? pool.filter((e) => e.participantIds.some((id) => participantIds.includes(id)))
+    : pool
 
   const shown =
     days ??
