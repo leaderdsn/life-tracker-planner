@@ -18,6 +18,8 @@ const props = defineProps<{
   canToggle?: boolean
   /** Participants view only: the card is not a button and never opens the editor. */
   readonly?: boolean
+  /** Admin personal tabs: flag events hidden from the «Все» tab. */
+  markHidden?: boolean
   labels?: Record<string, string>
 }>()
 
@@ -25,6 +27,8 @@ const emit = defineEmits<{
   open: []
   toggle: []
 }>()
+
+const HIDDEN_IN_ALL_HINT = 'Скрыто во вкладке «Все»'
 
 const initials = computed(() =>
   props.labels ? props.participants.map((p) => props.labels?.[p.id] ?? initialsOf([p])).join('·') : initialsOf(props.participants),
@@ -40,6 +44,7 @@ const checkIcon = computed(() => {
   if (state.value === 'skipped') return 'pi pi-times-circle'
   return isDone.value ? 'pi pi-check-circle' : 'pi pi-circle'
 })
+const hiddenInAll = computed(() => props.markHidden === true && props.event.showInAll === false)
 const background = computed(() => chipBackground(props.participants))
 const timeLabel = computed(() => (props.event.end ? `${props.event.start}–${props.event.end}` : props.event.start))
 
@@ -52,6 +57,7 @@ const stateNotes = computed(() => {
   if (state.value === 'auto') notes.push('выполнено автоматически')
   if (state.value === 'skipped') notes.push('не выполнено')
   if (props.conflict) notes.push('пересекается с другим занятием')
+  if (hiddenInAll.value) notes.push(HIDDEN_IN_ALL_HINT)
   if (props.event.needsReview) notes.push(`нужно проверить: ${props.event.needsReview}`)
   return notes
 })
@@ -77,6 +83,7 @@ const ariaLabel = computed(() => {
       'has-conflict': conflict,
       'has-check': canToggle,
       'needs-review': Boolean(event.needsReview),
+      'is-hidden-in-all': hiddenInAll,
     }"
     :style="{ '--chip-bg': background }"
   >
@@ -98,6 +105,9 @@ const ariaLabel = computed(() => {
     </component>
     <span v-if="conflict" class="event-chip__badge event-chip__badge--conflict" title="Пересекается с другим занятием">
       <i class="pi pi-exclamation-triangle" aria-hidden="true" />
+    </span>
+    <span v-if="hiddenInAll" class="event-chip__badge event-chip__badge--hidden" :title="HIDDEN_IN_ALL_HINT">
+      <i class="pi pi-eye-slash" aria-hidden="true" />
     </span>
     <span
       v-if="event.needsReview"

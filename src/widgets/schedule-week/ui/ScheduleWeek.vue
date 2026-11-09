@@ -7,6 +7,7 @@ import {
   eventsForWeek,
   useChipState,
   useScheduleStore,
+  visibleInAll,
   WEEKDAY_NAMES,
   WEEKDAY_SHORT,
   WEEKDAYS,
@@ -36,7 +37,8 @@ const pidFor = (event: ScheduleEvent) => (props.participantId === 'all' ? event.
 const weekStart = computed(() => startOfWeek(parseIsoDate(props.anchor)))
 
 const grid = computed(() => {
-  const events = eventsForWeek(store.eventsOf(props.participantId), weekStart.value)
+  const source = store.eventsOf(props.participantId)
+  const events = eventsForWeek(props.participantId === 'all' ? source.filter(visibleInAll) : source, weekStart.value)
   return buildGrid(events)
 })
 
@@ -102,6 +104,7 @@ function eventsAt(rowIndex: number, day: Weekday): ScheduleEvent[] {
                   :conflict="stateFor(event, col.date, pidFor(event)).conflict"
                   :can-toggle="canToggle(col.date, event)"
                   :readonly="readOnly"
+                  :mark-hidden="participantId !== 'all' && !readOnly"
                   @open="emit('open-event', event.id)"
                   @toggle="toggle(event.id, col.date, pidFor(event))"
                 />

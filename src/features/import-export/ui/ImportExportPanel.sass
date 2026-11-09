@@ -21,3 +21,20 @@
 
   &__file
     +ds.visually-hidden
+
+  &__hint
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+
+  &__link
+    padding: 0
+    border: 0
+    background: none
+    color: var(--app-accent)
+    font: inherit
+    text-decoration: underline
+    cursor: pointer
+
+    &:focus-visible
+      +ds.focus-ring

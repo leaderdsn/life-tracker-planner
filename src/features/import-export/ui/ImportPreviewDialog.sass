@@ -1,0 +1,108 @@
+@use "@/shared/styles" as ds
+
+.import-preview
+  display: flex
+  flex-direction: column
+  gap: ds.$space-3
+  min-width: 0
+
+  &__file
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+    overflow-wrap: anywhere
+
+  &__counts
+    display: grid
+    grid-template-columns: repeat(3, 1fr)
+    gap: ds.$space-2
+    margin: 0
+    padding: 0
+    list-style: none
+
+  &__count
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: ds.$space-2
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-md
+    background: var(--app-surface-muted)
+    font-size: ds.$font-size-xs
+    text-align: center
+
+    strong
+      font-size: ds.$font-size-lg
+
+    &.is-error
+      border-color: var(--app-conflict)
+      background: var(--app-conflict-soft)
+      color: var(--app-conflict)
+
+  &__note
+    margin: 0
+    color: var(--app-ink-muted)
+    font-size: ds.$font-size-sm
+
+  &__scroll
+    max-width: 100%
+    overflow-x: auto
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-md
+
+    &:focus-visible
+      +ds.focus-ring
+
+  &__table
+    width: max-content
+    min-width: 100%
+    border-collapse: collapse
+    font-size: ds.$font-size-sm
+
+    th, td
+      padding: ds.$space-1 ds.$space-2
+      border-bottom: 1px solid var(--app-border)
+      text-align: left
+      white-space: nowrap
+
+    th
+      background: var(--app-surface-muted)
+      font-weight: 600
+
+    tr:last-child td
+      border-bottom: 0
+
+  &__errors
+    padding: ds.$space-3
+    border: 1px solid var(--app-conflict)
+    border-radius: ds.$radius-md
+    background: var(--app-conflict-soft)
+    color: var(--app-conflict)
+
+  &__heading
+    display: flex
+    align-items: center
+    gap: ds.$space-2
+    margin: 0 0 ds.$space-2
+    font-size: ds.$font-size-sm
+
+  &__error-list
+    max-height: 9rem
+    margin: 0
+    padding-left: ds.$space-4
+    overflow-y: auto
+    font-size: ds.$font-size-sm
+
+  &__empty
+    margin: 0
+    font-weight: 600
+
+  &__footer
+    display: flex
+    flex-direction: column
+    gap: ds.$space-2
+
+    +ds.media(sm)
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: flex-end

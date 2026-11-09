@@ -101,3 +101,25 @@ describe('EventChip readonly', () => {
     expect(wrapper.find('.event-chip__check').exists()).toBe(true)
   })
 })
+
+describe('EventChip скрыто во вкладке «Все»', () => {
+  const hidden = { ...event, showInAll: false }
+
+  it('показывает значок с подсказкой и подписью', () => {
+    const wrapper = mount(EventChip, {
+      props: { event: hidden, participants: [participant], status: 'upcoming', markHidden: true },
+    })
+    const badge = wrapper.get('.event-chip__badge--hidden')
+    expect(badge.attributes('title')).toBe('Скрыто во вкладке «Все»')
+    expect(badge.find('.pi-eye-slash').exists()).toBe(true)
+    expect(wrapper.get('.event-chip__main').attributes('aria-label')).toContain('Скрыто во вкладке «Все»')
+  })
+
+  it('без markHidden и у обычного события значка нет', () => {
+    expect(mountChip({ event: hidden }).find('.event-chip__badge--hidden').exists()).toBe(false)
+    const shown = mount(EventChip, {
+      props: { event, participants: [participant], status: 'upcoming', markHidden: true },
+    })
+    expect(shown.find('.event-chip__badge--hidden').exists()).toBe(false)
+  })
+})

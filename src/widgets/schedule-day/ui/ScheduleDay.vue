@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { EventChip, occurrences, useChipState, useScheduleStore } from '@/entities/schedule'
+import { EventChip, occurrences, useChipState, useScheduleStore, visibleInAll } from '@/entities/schedule'
 import type { Occurrence, Participant, ScheduleEvent } from '@/entities/schedule'
 import { useToggleDone } from '@/features/toggle-done'
 import { parseIsoDate } from '@/shared/lib'
@@ -27,7 +27,8 @@ const clock = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-dig
 
 const occs = computed(() => {
   const day = parseIsoDate(props.anchor)
-  return occurrences(store.eventsOf(props.participantId), day, day)
+  const source = store.eventsOf(props.participantId)
+  return occurrences(props.participantId === 'all' ? source.filter(visibleInAll) : source, day, day)
 })
 
 const entries = computed<Entry[]>(() => {
@@ -67,6 +68,7 @@ function participantsOf(occ: Occurrence): Participant[] {
           :conflict="stateFor(entry.occ.event, anchor, pidFor(entry.occ.event)).conflict"
           :can-toggle="canToggle(anchor, entry.occ.event)"
           :readonly="readOnly"
+          :mark-hidden="participantId !== 'all' && !readOnly"
           show-time
           @open="emit('open-event', entry.occ.event.id)"
           @toggle="toggle(entry.occ.event.id, anchor, pidFor(entry.occ.event))"

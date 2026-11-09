@@ -28,6 +28,7 @@ const events = {
   open: sampleEvent('Химия'),
   conflict: sampleEvent('Футбол'),
   review: sampleEvent('Музыка', { needsReview: 'Проверьте' }),
+  hidden: sampleEvent('Рисование', { showInAll: false }),
 }
 
 const everyone = computed(() => store.sortedParticipants)
@@ -107,6 +108,9 @@ const SHARED_NOTE = 'Два значка рядом: общее занятие �
         </LegendRow>
         <LegendRow decorative text="Проверьте: спорное место из исходной таблицы">
           <EventChip :event="events.review" :participants="[sample]" :labels="labels" status="upcoming" />
+        </LegendRow>
+        <LegendRow v-if="showGuest" decorative text="Скрыто во вкладке «Все»: видно только в личной вкладке">
+          <EventChip :event="events.hidden" :participants="[sample]" :labels="labels" status="upcoming" mark-hidden />
         </LegendRow>
       </ul>
     </section>

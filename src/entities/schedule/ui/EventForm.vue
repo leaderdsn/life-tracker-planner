@@ -87,6 +87,7 @@ function submit(): boolean {
         date: draft.value.date,
         remindBefore: draft.value.remindBefore,
         category: draft.value.category,
+        showInAll: draft.value.showInAll,
       })
     }
     return true
@@ -204,6 +205,11 @@ defineExpose({ submit, isBlank })
           fluid
         />
       </div>
+    </div>
+
+    <div class="event-form__oneoff">
+      <ToggleSwitch v-model="draft.showInAll" :input-id="`${uid}-show-all`" />
+      <label :for="`${uid}-show-all`">Показывать во вкладке «Все»</label>
     </div>
 
     <p v-if="error" class="event-form__error" role="alert">

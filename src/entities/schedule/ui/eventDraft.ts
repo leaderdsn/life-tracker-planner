@@ -15,6 +15,7 @@ export type EventDraft = {
   place: string
   remindBefore: number | null
   category: EventCategory
+  showInAll: boolean
 }
 
 export const WORKDAYS: Weekday[] = WEEKDAYS.slice(0, 5)
@@ -30,6 +31,7 @@ export function createDraft(overrides: Partial<EventDraft> = {}): EventDraft {
     place: '',
     remindBefore: null,
     category: 'activity',
+    showInAll: true,
     ...overrides,
   }
 }
@@ -45,6 +47,7 @@ export function eventToDraft(event: ScheduleEvent): EventDraft {
     place: event.place ?? '',
     remindBefore: event.remindBefore ?? null,
     category: event.category,
+    showInAll: event.showInAll !== false,
   })
 }
 
@@ -64,6 +67,7 @@ export function draftToEvents(
     place: draft.place,
     category: draft.category,
     remindBefore: draft.remindBefore ?? undefined,
+    showInAll: draft.showInAll ? undefined : false,
     day: undefined,
     date: undefined,
   }

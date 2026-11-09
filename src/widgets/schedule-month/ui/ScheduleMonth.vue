@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { occurrences, ParticipantDot, progress, useChipState, useScheduleStore, WEEKDAY_SHORT, WEEKDAYS } from '@/entities/schedule'
+import { occurrences, ParticipantDot, progress, useChipState, useScheduleStore, visibleInAll, WEEKDAY_SHORT, WEEKDAYS } from '@/entities/schedule'
 import type { Occurrence, Participant } from '@/entities/schedule'
 import { addDays, parseIsoDate, startOfWeek, toIsoDate } from '@/shared/lib'
 
@@ -37,7 +37,9 @@ const cells = computed<DayCell[]>(() => {
   const to = addDays(startOfWeek(last), 6)
 
   const byDate = new Map<string, Occurrence[]>()
-  for (const occ of occurrences(store.eventsOf(props.participantId), from, to)) {
+  const source = store.eventsOf(props.participantId)
+  const visible = props.participantId === 'all' ? source.filter(visibleInAll) : source
+  for (const occ of occurrences(visible, from, to)) {
     const list = byDate.get(occ.date) ?? []
     list.push(occ)
     byDate.set(occ.date, list)
