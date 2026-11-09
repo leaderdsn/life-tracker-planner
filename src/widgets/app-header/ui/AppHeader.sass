@@ -4,25 +4,32 @@
   position: sticky
   top: 0
   z-index: 10
-  border-bottom: 1px solid var(--app-border)
-  background: color-mix(in srgb, var(--app-background) 88%, transparent)
-  backdrop-filter: blur(12px)
+  border-bottom: 1px solid color-mix(in srgb, var(--app-border) 80%, transparent)
+  background: color-mix(in srgb, var(--app-background) 78%, transparent)
+  backdrop-filter: saturate(1.6) blur(18px)
 
   &__inner
     +ds.container
-    display: flex
-    flex-direction: column
-    gap: ds.$space-2
-    padding-block: ds.$space-2 0
+    display: grid
+    grid-template-columns: minmax(0, 1fr)
+    gap: ds.$space-1
+    padding-block: ds.$space-2
 
     +ds.media(xl)
       max-width: ds.$container-wide-width
+      grid-template-columns: auto minmax(0, 1fr) auto
+      align-items: center
+      gap: ds.$space-6
+      padding-block: ds.$space-3
 
   &__top
     display: flex
     align-items: center
     justify-content: space-between
     gap: ds.$space-2
+
+    +ds.media(xl)
+      display: contents
 
   &__title
     display: inline-flex
@@ -31,59 +38,94 @@
     min-width: 0
     margin: 0
     font-size: ds.$font-size-lg
-    font-weight: 700
+    font-weight: 750
+    letter-spacing: ds.$tracking-tight
+
+    +ds.media(xl)
+      grid-column: 1
+      grid-row: 1
+
+    img
+      border-radius: ds.$radius-sm
+      box-shadow: var(--app-shadow-1)
 
   &__actions
     display: flex
     flex-shrink: 0
     align-items: center
-    gap: ds.$space-1
+    gap: ds.$space-2
+
+    +ds.media(xl)
+      grid-column: 3
+      grid-row: 1
 
   &__tabs
     position: relative
     display: flex
     gap: ds.$space-1
+    min-width: 0
+    padding: 2px
     overflow-x: auto
-    padding-bottom: ds.$space-2
     scrollbar-width: none
     padding-right: ds.$space-8
     mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent)
 
     +ds.media(md)
+      padding-right: 2px
       mask-image: none
+
+    +ds.media(xl)
+      grid-column: 2
+      grid-row: 1
 
   &__tab
     display: inline-flex
     flex-shrink: 0
     align-items: center
     gap: ds.$space-2
-    min-height: 2.75rem
-    padding: 0 ds.$space-4
+    min-height: 2.5rem
+    padding: 0 ds.$space-4 0 ds.$space-3
     border: 1px solid transparent
     border-radius: ds.$radius-full
     background: transparent
-    color: var(--app-ink)
+    color: var(--app-ink-muted)
     font: inherit
     font-size: ds.$font-size-sm
     font-weight: 600
     text-decoration: none
     cursor: pointer
-    transition: background ds.$transition-fast
+    transition: background ds.$transition-fast, color ds.$transition-fast, box-shadow ds.$transition-fast, transform ds.$transition-press
+
+    &:first-child:not(:has(.avatar))
+      padding-left: ds.$space-4
 
     &:hover
-      background: var(--app-surface-muted)
+      background: color-mix(in srgb, var(--app-ink) 6%, transparent)
+      color: var(--app-ink)
+
+    &:active
+      transform: scale(0.97)
 
     &:focus-visible
       +ds.focus-ring
 
     &.is-active
-      border-color: var(--app-accent)
+      border-color: color-mix(in srgb, var(--app-accent) 28%, transparent)
       background: var(--app-accent-soft)
+      color: var(--app-accent-strong)
+      box-shadow: var(--app-shadow-1)
 
     &--add
-      border-style: dashed
-      border-color: var(--app-border)
+      padding-inline: ds.$space-3
+      border: 1px dashed var(--app-border-strong)
       color: var(--app-ink-muted)
+
+      +ds.media(md)
+        padding-inline: ds.$space-4 ds.$space-4
+
+      &:hover
+        border-color: var(--app-accent)
+        color: var(--app-accent-strong)
 
   &__add-label
     +ds.visually-hidden

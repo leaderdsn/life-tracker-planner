@@ -35,28 +35,22 @@ const label = computed(() => {
 
 <template>
   <div class="view-toolbar">
-    <SelectButton
-      :model-value="view"
-      :options="[...VIEW_OPTIONS]"
-      option-label="label"
-      option-value="value"
-      :allow-empty="false"
-      aria-label="Вид расписания"
-      @update:model-value="emit('update:view', $event)"
-    />
-    <div class="view-toolbar__row">
+    <h2 class="view-toolbar__label" aria-live="polite">{{ label }}</h2>
+    <div class="view-toolbar__controls">
       <div class="view-toolbar__nav">
         <Button
           icon="pi pi-chevron-left"
+          class="view-toolbar__step"
           severity="secondary"
           variant="text"
           rounded
           aria-label="Предыдущий период"
           @click="emit('step', -1)"
         />
-        <Button label="Сегодня" severity="secondary" size="small" @click="emit('today')" />
+        <Button label="Сегодня" class="view-toolbar__today" severity="secondary" size="small" rounded @click="emit('today')" />
         <Button
           icon="pi pi-chevron-right"
+          class="view-toolbar__step"
           severity="secondary"
           variant="text"
           rounded
@@ -64,7 +58,16 @@ const label = computed(() => {
           @click="emit('step', 1)"
         />
       </div>
-      <p class="view-toolbar__label" aria-live="polite">{{ label }}</p>
+      <SelectButton
+        class="view-toolbar__switch"
+        :model-value="view"
+        :options="[...VIEW_OPTIONS]"
+        option-label="label"
+        option-value="value"
+        :allow-empty="false"
+        aria-label="Вид расписания"
+        @update:model-value="emit('update:view', $event)"
+      />
       <slot />
     </div>
   </div>

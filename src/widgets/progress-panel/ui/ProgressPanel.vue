@@ -58,6 +58,7 @@ const sections = computed(() => {
             <Avatar :name="row.participant.name" :color="row.participant.color" :src="row.participant.avatar" :label="labels[row.participant.id]" size="xs" />
             <span class="progress-panel__name">{{ row.participant.name }}</span>
             <span class="progress-panel__count">{{ row.done }} из {{ row.total }}</span>
+            <span class="progress-panel__percent" aria-hidden="true">{{ row.percent }}%</span>
             <div
               class="progress-panel__bar"
               role="progressbar"

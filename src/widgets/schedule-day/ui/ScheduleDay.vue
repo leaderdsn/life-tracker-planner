@@ -47,7 +47,11 @@ function participantsOf(occ: Occurrence): Participant[] {
 </script>
 
 <template>
-  <div v-if="occs.length === 0" class="schedule-day__empty">В этот день занятий нет. Можно отдохнуть.</div>
+  <div v-if="occs.length === 0" class="schedule-day__empty">
+    <span class="schedule-day__empty-art" aria-hidden="true"><i class="pi pi-sun" /></span>
+    <p class="schedule-day__empty-title">В этот день занятий нет</p>
+    <p class="schedule-day__empty-hint">Можно отдохнуть.</p>
+  </div>
   <ol v-else class="schedule-day" aria-label="Расписание на день">
     <template v-for="entry in entries" :key="entry.kind === 'now' ? 'now' : entry.occ.event.id">
       <li v-if="entry.kind === 'now'" class="schedule-day__now" aria-label="Сейчас">

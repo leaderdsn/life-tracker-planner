@@ -4,13 +4,16 @@
   +ds.container
   display: block
   min-width: 0
-  padding-block: ds.$space-4 ds.$space-10
+  padding-block: ds.$space-6 calc(#{ds.$space-20} + env(safe-area-inset-bottom, 0px))
+
+  +ds.media(md)
+    padding-block: ds.$space-8 ds.$space-12
 
   +ds.media(xl)
     display: grid
     grid-template-columns: minmax(0, 1fr) 19rem
     align-items: start
-    gap: ds.$space-4
+    gap: ds.$space-6
     max-width: ds.$container-wide-width
 
     &.is-legend-collapsed
@@ -19,8 +22,15 @@
   &__content
     display: flex
     flex-direction: column
-    gap: ds.$space-4
+    gap: ds.$space-5
     min-width: 0
+
+    +ds.media(md)
+      gap: ds.$space-6
+
+  &__view
+    min-width: 0
+    +ds.fade-slide-in(8px, 260ms)
 
   &__personal
     display: flex

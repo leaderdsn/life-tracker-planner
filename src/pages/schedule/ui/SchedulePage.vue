@@ -62,15 +62,17 @@ function openCreate() {
         <RemoveParticipantButton :participant-id="personal.id" />
       </div>
 
-      <ScheduleDay v-if="view === 'day'" :participant-id="participantId" :anchor="anchor" @open-event="openEvent" />
-      <ScheduleWeek
-        v-else-if="view === 'week'"
-        :participant-id="participantId"
-        :anchor="anchor"
-        @open-event="openEvent"
-        @open-day="openDay"
-      />
-      <ScheduleMonth v-else :participant-id="participantId" :anchor="anchor" @open-day="openDay" />
+      <div :key="view" class="schedule-page__view">
+        <ScheduleDay v-if="view === 'day'" :participant-id="participantId" :anchor="anchor" @open-event="openEvent" />
+        <ScheduleWeek
+          v-else-if="view === 'week'"
+          :participant-id="participantId"
+          :anchor="anchor"
+          @open-event="openEvent"
+          @open-day="openDay"
+        />
+        <ScheduleMonth v-else :participant-id="participantId" :anchor="anchor" @open-day="openDay" />
+      </div>
 
       <ProgressPanel :participant-id="participantId" />
     </div>

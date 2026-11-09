@@ -6,14 +6,16 @@
   align-items: stretch
   width: 100%
   min-width: 0
-  border: 1px solid color-mix(in srgb, var(--app-chip-ink) 18%, transparent)
+  border: 1px solid color-mix(in srgb, var(--app-chip-ink) 10%, transparent)
   border-radius: ds.$radius-md
   isolation: isolate
   color: var(--app-chip-ink)
   font-size: ds.$font-size-sm
-  line-height: ds.$line-height-tight
-  transition: box-shadow ds.$transition-fast, opacity ds.$transition-fast
+  line-height: ds.$line-height-snug
+  box-shadow: var(--app-shadow-1)
+  transition: box-shadow ds.$transition-fast, opacity ds.$transition-fast, transform ds.$transition-press
 
+  // Translucent participant fill
   &::before
     content: ""
     position: absolute
@@ -21,16 +23,42 @@
     z-index: -1
     border-radius: inherit
     background: var(--chip-bg)
+    opacity: var(--app-chip-fill)
     transition: opacity ds.$transition-fast
+
+  // Left accent bar in a deeper shade of the participant color
+  &::after
+    content: ""
+    position: absolute
+    top: 7px
+    bottom: 7px
+    left: 4px
+    width: 3px
+    border-radius: ds.$radius-full
+    background: linear-gradient(rgb(36 34 58 / 38%), rgb(36 34 58 / 38%)), var(--chip-bg)
+    pointer-events: none
+
+  &:has(.event-chip__main:not(.is-readonly)):hover
+    box-shadow: var(--app-shadow-2)
+    transform: translateY(-1px)
+
+  &:has(.event-chip__main:not(.is-readonly)):active
+    transform: scale(0.985)
+    transition-duration: 90ms
+
+  @media (prefers-reduced-motion: reduce)
+    &:has(.event-chip__main:not(.is-readonly)):hover,
+    &:has(.event-chip__main:not(.is-readonly)):active
+      transform: none
 
   &__main
     display: flex
     flex: 1
     align-items: flex-start
-    gap: ds.$space-1
+    gap: 6px
     min-width: 0
     min-height: 2.75rem
-    padding: ds.$space-2 ds.$space-1 ds.$space-2 ds.$space-2
+    padding: ds.$space-2 ds.$space-1 ds.$space-2 0.875rem
     border: 0
     border-radius: inherit
     background: transparent
@@ -46,36 +74,46 @@
       cursor: default
 
   &__initials
+    display: inline-grid
     flex-shrink: 0
-    padding: 0.1rem 0.35rem
+    place-items: center
+    min-width: 1.375rem
+    height: 1.375rem
+    padding: 0 0.25rem
     border-radius: ds.$radius-full
-    background: rgb(255 255 255 / 65%)
-    font-size: ds.$font-size-xs
+    background: rgb(255 255 255 / 72%)
+    box-shadow: 0 0 0 1px rgb(36 34 58 / 8%)
+    font-size: 0.625rem
     font-weight: 700
+    letter-spacing: 0
+    line-height: 1
 
   &__body
     display: flex
     flex-direction: column
     gap: 2px
     min-width: 0
+    padding-top: 2px
 
   &__title
-    font-weight: 600
+    font-weight: 650
+    letter-spacing: ds.$tracking-snug
     overflow-wrap: break-word
     word-break: normal
 
   &__meta
+    color: color-mix(in srgb, var(--app-chip-ink) 74%, transparent)
     font-size: ds.$font-size-xs
-    opacity: 0.85
+    font-variant-numeric: tabular-nums
 
   &__check
     position: absolute
-    top: 2px
-    right: 2px
+    top: 4px
+    right: 4px
     display: grid
     place-items: center
-    width: 1.4rem
-    height: 1.4rem
+    width: 1.5rem
+    height: 1.5rem
     padding: 0
     border: 0
     border-radius: ds.$radius-full
@@ -83,6 +121,7 @@
     color: inherit
     font-size: 1rem
     cursor: pointer
+    transition: background ds.$transition-fast, transform ds.$transition-press
 
     &::after
       content: ""
@@ -90,18 +129,21 @@
       inset: -0.4rem
 
     &:hover
-      background: rgb(255 255 255 / 45%)
+      background: rgb(255 255 255 / 55%)
+
+    &:active
+      transform: scale(0.9)
 
     &:focus-visible
       +ds.focus-ring
 
   &__auto
     position: absolute
-    top: 1.45rem
+    top: 1.5rem
     right: 0
     padding: 0 0.25rem
     border-radius: ds.$radius-full
-    background: rgb(255 255 255 / 70%)
+    background: rgb(255 255 255 / 75%)
     font-size: 0.6rem
     font-weight: 800
     line-height: 1.3
@@ -119,6 +161,7 @@
     width: 1.25rem
     height: 1.25rem
     border-radius: ds.$radius-full
+    box-shadow: var(--app-shadow-1)
     font-size: ds.$font-size-xs
     font-weight: 800
 
@@ -143,31 +186,48 @@
       color: #5c4400
       border: 1px solid #b38600
 
+  // Now: elevated with a soft glow ring
   &.is-current
-    border-width: 2px
     border-color: var(--app-accent)
-    box-shadow: var(--app-glow), var(--app-shadow)
+    box-shadow: 0 0 0 2px var(--app-accent), var(--app-glow), var(--app-shadow-2)
 
+    &::before
+      opacity: 1
+
+  // Next: dashed ring
   &.is-next
-    border-style: dashed
-    border-width: 2px
-    border-color: var(--app-accent)
+    outline: 2px dashed var(--app-accent)
+    outline-offset: 1px
 
+  // Past: muted
   &.is-past
     color: var(--app-past-ink)
+    box-shadow: none
 
     &::before
       opacity: var(--app-past-opacity)
 
+    &::after
+      opacity: 0.6
+
     .event-chip__initials
       color: var(--app-chip-ink)
 
+  // Done: check mark plus a soft strike
   &.is-done
     .event-chip__title
       text-decoration: line-through
-      text-decoration-thickness: 1px
+      text-decoration-color: color-mix(in srgb, currentcolor 50%, transparent)
+      text-decoration-thickness: 1.5px
+
     .event-chip__main
-      opacity: 0.75
+      opacity: 0.72
+
+    .event-chip__check
+      color: var(--app-chip-done)
+
+  &.is-past.is-done .event-chip__check
+    color: inherit
 
   &.is-skipped
     .event-chip__main
@@ -175,7 +235,6 @@
 
     .event-chip__check
       color: var(--app-conflict)
-
 
   &.has-conflict
     border-width: 2px

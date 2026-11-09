@@ -106,3 +106,36 @@
       flex-direction: row
       flex-wrap: wrap
       justify-content: flex-end
+
+.import-preview
+  gap: ds.$space-4
+
+  &__count
+    gap: 2px
+    padding: ds.$space-3
+    border-radius: ds.$radius-lg
+    background: var(--app-surface-muted)
+
+    strong
+      font-size: ds.$font-size-xl
+      font-variant-numeric: tabular-nums
+      letter-spacing: ds.$tracking-tight
+
+  &__scroll
+    border-radius: ds.$radius-lg
+
+  &__table
+    th
+      color: var(--app-ink-muted)
+      font-size: ds.$font-size-xs
+      letter-spacing: ds.$tracking-label
+      text-transform: uppercase
+
+    th, td
+      padding: ds.$space-2 ds.$space-3
+
+  &__errors
+    border-radius: ds.$radius-lg
+
+  &__footer
+    gap: ds.$space-3

@@ -3,15 +3,12 @@
 .legend
   display: flex
   flex-direction: column
-  gap: ds.$space-4
+  gap: ds.$space-6
   min-width: 0
 
   &__heading
-    margin: 0 0 ds.$space-2
-    color: var(--app-ink-muted)
-    font-size: ds.$font-size-xs
-    letter-spacing: 0.04em
-    text-transform: uppercase
+    +ds.section-label
+    margin-bottom: ds.$space-3
 
   &__list
     display: flex
@@ -54,11 +51,12 @@
   &__today
     display: block
     height: 1.75rem
-    border: 1px solid var(--app-border)
+    border: 1px solid color-mix(in srgb, var(--app-accent) 25%, var(--app-border))
     border-radius: ds.$radius-sm
     background: var(--app-today)
 
   &__now
     display: block
-    height: 0
-    border-top: 2px solid var(--app-now)
+    height: 2px
+    border-radius: ds.$radius-full
+    background: var(--app-now)

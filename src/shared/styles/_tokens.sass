@@ -1,7 +1,7 @@
-// Design tokens: spacing, radii, typography, layout.
-// Colors are NOT defined here — use PrimeVue CSS variables (var(--p-*)) so dark mode works.
+// Design tokens: spacing, radii, typography, layout, motion.
+// Colors are NOT defined here — use var(--app-*) / PrimeVue CSS variables (var(--p-*)) so dark mode works.
 
-// Spacing scale (4px base)
+// Spacing scale (4px base, 8pt rhythm: prefer even steps)
 $space-1: 0.25rem
 $space-2: 0.5rem
 $space-3: 0.75rem
@@ -14,14 +14,16 @@ $space-12: 3rem
 $space-16: 4rem
 $space-20: 5rem
 
-// Radii
-$radius-sm: 0.375rem
+// Radii: 8 / 12 / 16 / 24
+$radius-sm: 0.5rem
 $radius-md: 0.75rem
 $radius-lg: 1rem
+$radius-xl: 1.5rem
+$radius-dialog: 1.25rem
 $radius-full: 999px
 
 // Typography
-$font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+$font-family: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
 $font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
 
 $font-size-xs: 0.75rem
@@ -32,8 +34,14 @@ $font-size-xl: 1.5rem
 $font-size-2xl: 2rem
 $font-size-3xl: clamp(2.25rem, 5vw + 1rem, 3.75rem)
 
-$line-height-tight: 1.2
+$line-height-tight: 1.25
+$line-height-snug: 1.4
 $line-height-normal: 1.6
+
+// Letter-spacing: tighter on large text, open on small-caps labels
+$tracking-tight: -0.02em
+$tracking-snug: -0.01em
+$tracking-label: 0.06em
 
 // Layout
 $container-width: 72rem
@@ -45,5 +53,7 @@ $header-height: 4rem
 $breakpoints: (sm: 36rem, md: 48rem, lg: 64rem, xl: 80rem)
 
 // Motion
-$transition-fast: 150ms ease
-$transition-base: 250ms ease
+$ease-out: cubic-bezier(0.2, 0.7, 0.2, 1)
+$transition-press: 120ms $ease-out
+$transition-fast: 150ms $ease-out
+$transition-base: 240ms $ease-out

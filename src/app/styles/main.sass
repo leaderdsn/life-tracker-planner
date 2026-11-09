@@ -24,43 +24,66 @@
 
 @layer app
   :root
-    --app-background: #f6f4fb
+    // Surfaces: warm off-white canvas, white cards, hairline borders
+    --app-background: #faf8f6
     --app-surface: #ffffff
-    --app-surface-muted: #efecf8
-    --app-border: #e1ddef
-    --app-ink: #2a2840
-    --app-ink-muted: #5e5a78
+    --app-surface-muted: #f3f0f8
+    --app-surface-raised: #ffffff
+    --app-border: #ebe6f1
+    --app-border-strong: #d8d2e4
+    --app-ink: #26233b
+    --app-ink-muted: #5f5a78
     --app-accent: #6657cc
-    --app-accent-soft: #e9e6fb
-    --app-today: #f0eeff
-    --app-now: #b4234a
+    --app-accent-strong: #5446b3
+    --app-accent-contrast: #ffffff
+    --app-accent-soft: #ece9fc
+    --app-today: #f4f1ff
+    --app-band: rgb(102 87 204 / 3.5%)
+    --app-now: #c02654
     --app-conflict: #b4234a
     --app-conflict-soft: #fde7ec
     --app-done: #1f7a4d
     --app-chip-ink: #24223a
+    --app-chip-done: #14633b
+    --app-chip-fill: 0.78
     --app-past-ink: #24223a
-    --app-past-opacity: 0.55
-    --app-shadow: 0 1px 2px rgb(42 40 64 / 6%), 0 6px 18px rgb(42 40 64 / 7%)
-    --app-glow: 0 0 0 3px rgb(102 87 204 / 24%)
+    --app-past-opacity: 0.5
+    --app-overlay: rgb(38 35 59 / 38%)
+    // Elevation: 1 = resting cards, 2 = raised/hover, 3 = dialogs and popovers
+    --app-shadow-1: 0 1px 2px rgb(38 35 59 / 5%), 0 1px 1px rgb(38 35 59 / 3%)
+    --app-shadow-2: 0 1px 2px rgb(38 35 59 / 5%), 0 4px 14px rgb(38 35 59 / 7%)
+    --app-shadow-3: 0 2px 4px rgb(38 35 59 / 6%), 0 12px 32px rgb(38 35 59 / 12%), 0 28px 56px -16px rgb(38 35 59 / 18%)
+    --app-shadow: var(--app-shadow-2)
+    --app-glow: 0 0 0 4px rgb(102 87 204 / 22%)
 
   :root.app-dark
-    --app-background: #17161f
-    --app-surface: #201f2b
-    --app-surface-muted: #2a2938
-    --app-border: #3a3850
+    // Deep plum-navy with lifted layers
+    --app-background: #121022
+    --app-surface: #1b1930
+    --app-surface-muted: #262340
+    --app-surface-raised: #232040
+    --app-border: #2e2a4b
+    --app-border-strong: #403b66
     --app-ink: #ece9f7
-    --app-ink-muted: #b0abc8
+    --app-ink-muted: #b3aecd
     --app-accent: #b3a9f0
-    --app-accent-soft: #332f55
-    --app-today: #26243a
+    --app-accent-strong: #cdc6f7
+    --app-accent-contrast: #1c1740
+    --app-accent-soft: #342f5e
+    --app-today: #221f3f
+    --app-band: rgb(179 169 240 / 3.5%)
     --app-now: #ff8fa3
     --app-conflict: #ff8fa3
-    --app-conflict-soft: #402733
+    --app-conflict-soft: #432535
     --app-done: #7fdca8
     --app-past-ink: #ece9f7
-    --app-past-opacity: 0.35
-    --app-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 18px rgb(0 0 0 / 28%)
-    --app-glow: 0 0 0 3px rgb(179 169 240 / 32%)
+    --app-chip-fill: 0.9
+    --app-past-opacity: 0.32
+    --app-overlay: rgb(8 6 20 / 62%)
+    --app-shadow-1: 0 1px 2px rgb(0 0 0 / 30%), 0 0 0 1px rgb(255 255 255 / 2%)
+    --app-shadow-2: 0 2px 4px rgb(0 0 0 / 24%), 0 8px 20px rgb(0 0 0 / 28%)
+    --app-shadow-3: 0 4px 8px rgb(0 0 0 / 30%), 0 20px 44px rgb(0 0 0 / 46%)
+    --app-glow: 0 0 0 4px rgb(179 169 240 / 28%)
 
   html
     color-scheme: light
@@ -74,17 +97,27 @@
     color: var(--app-ink)
     font-family: ds.$font-family
     font-size: ds.$font-size-md
+    font-optical-sizing: auto
     line-height: ds.$line-height-normal
+    letter-spacing: ds.$tracking-snug
     -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    text-rendering: optimizeLegibility
     transition: background ds.$transition-base
+
+  h1,
+  h2,
+  h3
+    letter-spacing: ds.$tracking-tight
+    line-height: ds.$line-height-tight
+
+  ::selection
+    background: var(--app-accent-soft)
 
   #app
     display: flex
     flex-direction: column
     min-height: 100dvh
-
-  .p-toast
-    max-width: calc(100vw - 2rem)
 
   code
     font-family: ds.$font-family-mono
@@ -92,3 +125,135 @@
   // PrimeVue buttons rendered as links (as="a")
   a.p-button
     text-decoration: none
+
+  .p-button
+    font-weight: 600
+    letter-spacing: ds.$tracking-snug
+    transition: background ds.$transition-fast, border-color ds.$transition-fast, color ds.$transition-fast, box-shadow ds.$transition-fast, transform ds.$transition-press
+
+    &:not(:disabled):active
+      transform: scale(0.97)
+
+  .p-button:not(.p-button-text):not(.p-button-outlined):not(.p-button-link):not(.p-button-icon-only)
+    box-shadow: var(--app-shadow-1)
+
+  .p-button-secondary:not(.p-button-text):not(.p-button-outlined)
+    border: 1px solid var(--app-border)
+    background: var(--app-surface)
+    color: var(--app-ink)
+
+    &:not(:disabled):hover
+      border-color: var(--app-border-strong)
+      background: var(--app-surface-muted)
+      color: var(--app-ink)
+
+  .p-button-text.p-button-secondary
+    color: var(--app-ink-muted)
+
+    &:not(:disabled):hover
+      background: var(--app-surface-muted)
+      color: var(--app-ink)
+
+  .p-inputtext,
+  .p-textarea,
+  .p-select,
+  .p-multiselect
+    border-color: var(--app-border-strong)
+    border-radius: ds.$radius-md
+    background: var(--app-surface)
+    transition: border-color ds.$transition-fast, box-shadow ds.$transition-fast
+
+  .p-dialog-mask
+    background: var(--app-overlay)
+    backdrop-filter: blur(4px)
+
+  .p-dialog
+    border-radius: ds.$radius-dialog
+    box-shadow: var(--app-shadow-3)
+
+  .p-confirmdialog
+    width: min(26rem, calc(100vw - 2rem))
+
+  // Toasts: floating glass cards
+  .p-toast
+    max-width: calc(100vw - 2rem)
+
+  .p-toast-message
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-lg
+    background: color-mix(in srgb, var(--app-surface-raised) 92%, transparent)
+    color: var(--app-ink)
+    box-shadow: var(--app-shadow-3)
+    backdrop-filter: blur(14px)
+    outline: 0
+
+  .p-toast-message-content
+    padding: ds.$space-3 ds.$space-4
+    gap: ds.$space-3
+
+  .p-toast-summary
+    font-weight: 600
+
+  .p-toast-message-icon
+    color: var(--app-accent)
+
+  @keyframes app-fade-slide-in
+    from
+      opacity: 0
+      transform: translateY(var(--enter-distance, 6px))
+
+    to
+      opacity: 1
+      transform: none
+
+  @media (prefers-reduced-motion: reduce)
+    *,
+    *::before,
+    *::after
+      animation-duration: 0.01ms !important
+      animation-iteration-count: 1 !important
+      transition-duration: 0.01ms !important
+
+// Segmented controls (SelectButton): one pill track with soft selected segments
+@layer app
+  .p-selectbutton
+    display: inline-flex
+    gap: 2px
+    padding: 3px
+    border: 1px solid var(--app-border)
+    border-radius: ds.$radius-full
+    background: var(--app-surface-muted)
+
+  .p-selectbutton .p-togglebutton
+    position: relative
+    min-width: 0
+    padding: 0
+    border: 0
+    border-radius: ds.$radius-full
+    background: transparent
+    color: var(--app-ink-muted)
+    box-shadow: none
+    font-weight: 600
+    transition: color ds.$transition-fast, background ds.$transition-fast
+
+    &::before
+      display: none
+
+    &:not(.p-disabled):not(.p-togglebutton-checked):hover
+      background: color-mix(in srgb, var(--app-ink) 6%, transparent)
+      color: var(--app-ink)
+
+    &.p-togglebutton-checked
+      background: var(--app-surface-raised)
+      color: var(--app-ink)
+      box-shadow: var(--app-shadow-2)
+
+    &:focus-visible
+      outline: 2px solid var(--app-accent)
+      outline-offset: 2px
+
+  .p-selectbutton .p-togglebutton-content
+    padding: 0.5rem 0.875rem
+    border-radius: inherit
+    background: transparent
+    box-shadow: none
