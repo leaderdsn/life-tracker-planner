@@ -168,6 +168,7 @@ defineExpose({ submit, isBlank })
         :manual-input="false"
         placeholder="Выберите дату"
         show-icon
+        icon-display="input"
         fluid
       />
     </div>
