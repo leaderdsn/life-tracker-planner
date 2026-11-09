@@ -69,7 +69,8 @@ export async function readSpreadsheet(input: File | ArrayBuffer, name: string): 
   const events = toTable(book.Sheets[EVENTS_SHEET] ?? book.Sheets[first])
   const participantsName = book.SheetNames.find((n) => n.trim().toLowerCase() === PARTICIPANTS_SHEET.toLowerCase())
   const participants = participantsName && participantsName !== first ? toTable(book.Sheets[participantsName]) : undefined
-  return { events: events ?? [], ...(participants ? { participants } : {}) }
+  const sheets = book.SheetNames.map((n) => ({ name: n, table: toTable(book.Sheets[n]) ?? [] }))
+  return { events: events ?? [], ...(participants ? { participants } : {}), sheets }
 }
 
 export async function writeSpreadsheet(

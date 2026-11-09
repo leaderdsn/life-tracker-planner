@@ -6,12 +6,13 @@ import { normalizeEvent, ValidationError } from '../validation'
 
 import { columnOf, COLUMN_ORDER, EVENT_HEADERS, headerKey, PARTICIPANT_HEADERS } from './columns'
 import type { Column } from './columns'
+import { parseGrid } from './grid'
 
 import type { EventCategory, Participant, ScheduleEvent, Weekday } from '../../model/types'
 
 export type Table = unknown[][]
 
-export type SpreadsheetData = { events: Table; participants?: Table }
+export type SpreadsheetData = { events: Table; participants?: Table; sheets?: { name: string; table: Table }[] }
 
 export type RowError = { row: number; message: string }
 
@@ -24,15 +25,16 @@ export type ParsedImport = {
   errors: RowError[]
   /** non-empty data rows in the events table */
   rows: number
+  format?: 'grid' | 'rows'
 }
 
 const HEX = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i
 
-const isBlank = (v: unknown) => v === undefined || v === null || (typeof v === 'string' && !v.trim())
+export const isBlank = (v: unknown) => v === undefined || v === null || (typeof v === 'string' && !v.trim())
 
-const text = (v: unknown) => (isBlank(v) ? '' : String(v).trim())
+export const text = (v: unknown) => (isBlank(v) ? '' : String(v).trim())
 
-const nameKey = (name: string) => name.toLowerCase().replace(/ё/g, 'е').replace(/\s+/g, ' ').trim()
+export const nameKey = (name: string) => name.toLowerCase().replace(/ё/g, 'е').replace(/\s+/g, ' ').trim()
 
 const ruDate = (iso: string) => iso.split('-').reverse().join('.')
 
@@ -152,7 +154,7 @@ function hexOf(v: unknown): string | null {
   return `#${body.toUpperCase()}`
 }
 
-class Roster {
+export class Roster {
   readonly created: Participant[] = []
   private readonly byName = new Map<string, Participant>()
   private readonly ids: Set<string>
@@ -164,6 +166,10 @@ class Roster {
     this.ids = new Set(existing.map((p) => p.id))
     this.colors = new Set(existing.map((p) => p.color.toUpperCase()))
     this.order = existing.reduce((max, p) => Math.max(max, p.order), -1) + 1
+  }
+
+  all(): Participant[] {
+    return [...this.byName.values()].sort((a, b) => a.order - b.order)
   }
 
   resolve(name: string, color?: string | null): Participant {
@@ -216,9 +222,11 @@ function missingColumns(columns: Map<number, Column>): string[] {
 }
 
 export function rowsToEvents(data: SpreadsheetData, existingParticipants: Participant[] = []): ParsedImport {
-  const result: ParsedImport = { events: [], participants: [], errors: [], rows: 0 }
+  const result: ParsedImport = { events: [], participants: [], errors: [], rows: 0, format: 'rows' }
   const header = findHeader(data.events)
   if (!header) {
+    const grid = parseGrid(data, existingParticipants)
+    if (grid) return grid
     result.errors.push({ row: 1, message: 'Не найдена строка заголовков (Участники, День, Начало, Занятие…)' })
     return result
   }

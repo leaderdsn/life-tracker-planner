@@ -12,6 +12,7 @@ export type ImportSummary = {
   removed: number
   newParticipants: number
   errors: RowError[]
+  format?: 'grid' | 'rows'
 }
 
 export type ImportPlan = {
@@ -57,6 +58,7 @@ export function planImport(current: Current, parsed: ParsedImport, mode: ImportM
       removed: mode === 'replace' ? current.events.length : 0,
       newParticipants: parsed.participants.length,
       errors: parsed.errors,
+      ...(parsed.format ? { format: parsed.format } : {}),
     },
   }
 }
