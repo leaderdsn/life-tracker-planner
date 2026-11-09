@@ -81,11 +81,33 @@
     border-radius: 12px 12px 0 0
     background: var(--app-list)
 
+    // Cards scrolling under the sticky header would show through its rounded corners;
+    // cover the area outside the curve with the (viewport-fixed) board gradient
+    &::before,
+    &::after
+      content: ""
+      position: absolute
+      top: 0
+      z-index: -1
+      width: 12px
+      height: 12px
+      background: var(--app-board) fixed
+      pointer-events: none
+
+    &::before
+      left: 0
+      mask: radial-gradient(circle at 100% 100%, transparent 11.5px, #000 12px)
+
+    &::after
+      right: 0
+      mask: radial-gradient(circle at 0 100%, transparent 11.5px, #000 12px)
+
   &__corner
     top: 0
     z-index: 4
     border-radius: 0
-    background: transparent
+    // time labels scroll under it, so it carries the board backdrop instead of being transparent
+    background: var(--app-board) fixed
 
   &__day
     display: flex
