@@ -13,6 +13,8 @@ const props = withDefaults(
   { src: null, label: '', size: 'sm' },
 )
 
+import { readableInk } from '../lib/color'
+
 const failed = ref(false)
 watch(() => props.src, () => (failed.value = false))
 
@@ -21,7 +23,7 @@ const text = computed(() => props.label || props.name.trim().charAt(0).toUpperCa
 </script>
 
 <template>
-  <span class="avatar" :class="`avatar--${size}`" :style="{ '--avatar-bg': color }" aria-hidden="true">
+  <span class="avatar" :class="`avatar--${size}`" :style="{ '--avatar-bg': color, '--avatar-ink': readableInk(color) }" aria-hidden="true">
     <img v-if="showImage" class="avatar__img" :src="src ?? undefined" alt="" @error="failed = true">
     <span v-else class="avatar__text">{{ text }}</span>
   </span>

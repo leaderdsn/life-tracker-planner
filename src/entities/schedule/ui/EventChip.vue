@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { readableInkForAll } from '@/shared/lib'
+
 import { isDoneState } from '../lib'
 import { chipBackground, initialsOf } from './participantView'
 
@@ -46,6 +48,7 @@ const checkIcon = computed(() => {
 })
 const hiddenInAll = computed(() => props.markHidden === true && props.event.showInAll === false)
 const background = computed(() => chipBackground(props.participants))
+const ink = computed(() => readableInkForAll(props.participants.map((p) => p.color)) ?? undefined)
 const timeLabel = computed(() => (props.event.end ? `${props.event.start}–${props.event.end}` : props.event.start))
 
 const stateNotes = computed(() => {
@@ -85,7 +88,7 @@ const ariaLabel = computed(() => {
       'needs-review': Boolean(event.needsReview),
       'is-hidden-in-all': hiddenInAll,
     }"
-    :style="{ '--chip-bg': background }"
+    :style="{ '--chip-bg': background, '--chip-ink': ink }"
   >
     <component
       :is="readonly ? 'div' : 'button'"

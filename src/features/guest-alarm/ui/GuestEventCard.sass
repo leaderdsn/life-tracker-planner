@@ -25,11 +25,11 @@
   width: 100%
   min-height: 3.5em
   padding: 0
-  border: 2px solid color-mix(in srgb, var(--app-chip-ink) 14%, transparent)
+  border: 2px solid color-mix(in srgb, var(--card-ink, var(--app-chip-ink)) 14%, transparent)
   border-radius: 1em
   box-shadow: var(--app-shadow-1)
   isolation: isolate
-  color: var(--app-chip-ink)
+  color: var(--card-ink, var(--app-chip-ink))
   font: inherit
   line-height: ds.$line-height-tight
   text-align: left
@@ -96,7 +96,7 @@
 
   &__seen
     flex-shrink: 0
-    color: color-mix(in srgb, var(--app-chip-ink) 70%, transparent)
+    color: color-mix(in srgb, var(--card-ink, var(--app-chip-ink)) 70%, transparent)
     font-size: 1.4em
     line-height: 1
 

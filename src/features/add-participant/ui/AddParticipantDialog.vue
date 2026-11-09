@@ -3,6 +3,7 @@ import { computed, ref, useTemplateRef, watch } from 'vue'
 
 import { ColorSwatches, EventForm, initialOf, PASTEL_COLORS, useScheduleStore, WEEKDAY_SHORT } from '@/entities/schedule'
 import type { NewEvent } from '@/entities/schedule'
+import { readableInk } from '@/shared/lib'
 import { AppDialog } from '@/shared/ui'
 
 const emit = defineEmits<{
@@ -87,7 +88,7 @@ function finish() {
       </div>
 
       <div class="add-participant__preview" aria-label="Так будет выглядеть метка">
-        <span class="add-participant__chip" :style="{ background: color }">
+        <span class="add-participant__chip" :style="{ background: color, color: readableInk(color) }">
           <span class="add-participant__initial" aria-hidden="true">{{ previewInitial }}</span>
           {{ name.trim() || 'Имя участника' }}
         </span>

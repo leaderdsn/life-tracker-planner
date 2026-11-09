@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import { chipBackground, initialOf } from '@/entities/schedule'
+import { readableInkForAll } from '@/shared/lib'
 import type { EventStatus, Participant } from '@/entities/schedule'
 
 const props = defineProps<{
@@ -21,6 +22,7 @@ const emit = defineEmits<{
 }>()
 
 const background = computed(() => chipBackground(props.participants))
+const ink = computed(() => readableInkForAll(props.participants.map((p) => p.color)) ?? undefined)
 const initials = computed(() =>
   props.participants.map((p) => props.labels?.[p.id] ?? initialOf(p.name)).join('·'),
 )
@@ -46,7 +48,7 @@ function onClick() {
       'is-next': status === 'next',
       'is-past': status === 'past',
     }"
-    :style="{ '--card-bg': background }"
+    :style="{ '--card-bg': background, '--card-ink': ink }"
     :type="ringing ? 'button' : undefined"
     :aria-live="ringing ? 'assertive' : undefined"
     @click="onClick"
