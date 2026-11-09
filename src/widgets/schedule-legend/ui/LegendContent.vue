@@ -76,7 +76,7 @@ const SHARED_NOTE = 'Два значка рядом: общее занятие �
         <LegendRow decorative text="Сегодня: подсвеченный столбец">
           <span class="legend__today" />
         </LegendRow>
-        <LegendRow decorative text="Текущее время в дневном виде">
+        <LegendRow decorative text="Текущее время">
           <span class="legend__now" />
         </LegendRow>
       </ul>

@@ -51,9 +51,10 @@ const columns = computed(() =>
 
 const NOW_TAIL_MINUTES = 60
 
-/** Row that contains the current time and how far through it we are (0..1); null when outside the rows. */
+/** Row that holds the current time and how far through it we are (0..1); null when this isn't the current week. */
 const nowMark = computed(() => {
   const rows = grid.value.rows
+  if (!rows.length || !columns.value.some((col) => col.isToday)) return null
   const current = new Date(now.value)
   const at = current.getHours() * 60 + current.getMinutes()
   let index = -1
@@ -61,17 +62,21 @@ const nowMark = computed(() => {
     if (minutes(row.time) <= at) index = i
   })
   const first = rows[index]
-  if (!first) return null
+  if (!first) return { index: 0, progress: 0 }
   const next = rows[index + 1]
   const span = next ? minutes(next.time) - minutes(first.time) : NOW_TAIL_MINUTES
-  const progress = (at - minutes(first.time)) / span
-  if (progress > 1) return null
+  const progress = Math.min((at - minutes(first.time)) / span, 1)
   return { index, progress }
 })
 
-function nowOffset(rowIndex: number, isToday: boolean): string | null {
+const nowLabel = computed(() => {
+  const current = new Date(now.value)
+  return `${String(current.getHours()).padStart(2, '0')}:${String(current.getMinutes()).padStart(2, '0')}`
+})
+
+function nowOffset(rowIndex: number): string | null {
   const mark = nowMark.value
-  if (!isToday || !mark || mark.index !== rowIndex) return null
+  if (!mark || mark.index !== rowIndex) return null
   // Snap to the nearest row boundary so the line never cuts through a card
   return mark.progress < 0.5 ? '0%' : '100%'
 }
@@ -121,12 +126,21 @@ function eventsAt(rowIndex: number, day: Weekday): ScheduleEvent[] {
       </thead>
       <tbody>
         <tr v-for="(row, rowIndex) in grid.rows" :key="row.time">
-          <th scope="row" class="schedule-week__time">{{ row.time }}</th>
+          <th scope="row" class="schedule-week__time">
+            {{ row.time }}
+            <span
+              v-if="nowOffset(rowIndex)"
+              class="schedule-week__now-label"
+              :style="{ '--now-offset': nowOffset(rowIndex) ?? '0%' }"
+              aria-hidden="true"
+            >{{ nowLabel }}</span>
+          </th>
           <td v-for="col in columns" :key="col.day" class="schedule-week__cell" :class="{ 'is-today': col.isToday }">
             <span
-              v-if="nowOffset(rowIndex, col.isToday)"
+              v-if="nowOffset(rowIndex)"
               class="schedule-week__now"
-              :style="{ '--now-offset': nowOffset(rowIndex, col.isToday) ?? '0%' }"
+              :class="{ 'is-today': col.isToday }"
+              :style="{ '--now-offset': nowOffset(rowIndex) ?? '0%' }"
               aria-hidden="true"
             />
             <ul class="schedule-week__chips">

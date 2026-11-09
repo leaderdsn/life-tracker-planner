@@ -172,10 +172,13 @@
     left: 0
     z-index: 1
     height: 2px
-    background: var(--app-now)
+    background: color-mix(in srgb, var(--app-now) 45%, transparent)
     pointer-events: none
 
-    &::before
+    &.is-today
+      background: var(--app-now)
+
+    &.is-today::before
       content: ""
       position: absolute
       top: 50%
@@ -186,3 +189,19 @@
       background: var(--app-now)
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-now) 24%, transparent)
       transform: translateY(-50%)
+
+  &__now-label
+    position: absolute
+    top: var(--now-offset)
+    right: 4px
+    z-index: 1
+    padding: 1px 6px
+    border-radius: ds.$radius-full
+    background: var(--app-now)
+    color: #fff
+    font-size: ds.$font-size-xs
+    font-weight: 700
+    font-variant-numeric: tabular-nums
+    line-height: 1.4
+    transform: translateY(-50%)
+    pointer-events: none
