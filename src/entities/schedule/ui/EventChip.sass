@@ -168,13 +168,13 @@
 
   // Now: elevated with a soft glow ring
   &.is-current
-    outline: 2px solid var(--app-accent)
-    outline-offset: 0
+    outline: 1px solid color-mix(in srgb, var(--app-accent) 45%, transparent)
+    outline-offset: -1px
 
   // Next: dashed ring
   &.is-next
-    outline: 2px dashed var(--app-accent)
-    outline-offset: 1px
+    outline: 1px dashed color-mix(in srgb, var(--app-accent) 45%, transparent)
+    outline-offset: -1px
 
   // Past: muted
   &.is-past
