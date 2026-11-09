@@ -22,6 +22,7 @@ export const PARTICIPANT_HEADERS = { name: 'Имя', color: 'Цвет' } as cons
 
 export const EVENTS_SHEET = 'Расписание'
 export const PARTICIPANTS_SHEET = 'Участники'
+export const GUIDE_SHEET = 'Как заполнять'
 
 export const headerKey = (value: unknown): string =>
   (typeof value === 'string' || typeof value === 'number' ? String(value) : '')

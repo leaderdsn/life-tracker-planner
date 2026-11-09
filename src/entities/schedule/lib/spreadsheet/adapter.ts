@@ -1,4 +1,4 @@
-import { EVENTS_SHEET, PARTICIPANTS_SHEET } from './columns'
+import { EVENTS_SHEET, GUIDE_SHEET, PARTICIPANTS_SHEET } from './columns'
 import { eventsToRows } from './rows'
 import type { SpreadsheetData } from './rows'
 
@@ -69,7 +69,7 @@ export async function readSpreadsheet(input: File | ArrayBuffer, name: string): 
   const events = toTable(book.Sheets[EVENTS_SHEET] ?? book.Sheets[first])
   const participantsName = book.SheetNames.find((n) => n.trim().toLowerCase() === PARTICIPANTS_SHEET.toLowerCase())
   const participants = participantsName && participantsName !== first ? toTable(book.Sheets[participantsName]) : undefined
-  const sheets = book.SheetNames.map((n) => ({ name: n, table: toTable(book.Sheets[n]) ?? [] }))
+  const sheets = book.SheetNames.filter((n) => n.trim().toLowerCase() !== GUIDE_SHEET.toLowerCase()).map((n) => ({ name: n, table: toTable(book.Sheets[n]) ?? [] }))
   return { events: events ?? [], ...(participants ? { participants } : {}), sheets }
 }
 
