@@ -138,6 +138,8 @@ export type DeviceConfig = {
   householdId: string | null
   /** set when role is participant */
   participantId: string | null
+  /** admin only: no sound on this device */
+  muted: boolean
 }
 
 export type SyncedCompletion = {

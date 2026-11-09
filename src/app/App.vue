@@ -3,7 +3,7 @@ import { useToast } from 'primevue/usetoast'
 import { watch } from 'vue'
 
 import { useDeviceStore, useScheduleStore, useSyncStore } from '@/entities/schedule'
-import { useReminderScheduler } from '@/features/notifications'
+import { useGuestRingingNotifier, useReminderScheduler } from '@/features/notifications'
 import { useThemeStore } from '@/features/toggle-theme'
 import { useIsMobile, UndoToast } from '@/shared/ui'
 
@@ -24,11 +24,12 @@ watch(
   { immediate: true },
 )
 
-useReminderScheduler({
-  onToast: (message) => {
-    if (device.role !== 'guest') toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS })
-  },
-})
+function onToast(message: string) {
+  if (device.role !== 'guest') toast.add({ severity: 'info', summary: message, life: REMINDER_TOAST_MS })
+}
+
+useReminderScheduler({ onToast })
+useGuestRingingNotifier({ onToast })
 </script>
 
 <template>

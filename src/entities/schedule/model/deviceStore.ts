@@ -18,6 +18,7 @@ export function parseDevice(raw: unknown): DeviceConfig {
     role,
     householdId: typeof r.householdId === 'string' && r.householdId ? r.householdId : null,
     participantId: role === 'participant' && typeof r.participantId === 'string' && r.participantId ? r.participantId : null,
+    muted: r.muted === true,
   }
 }
 
@@ -35,11 +36,12 @@ export const useDeviceStore = defineStore('device', () => {
   const role = ref<DeviceRole>(initial.role)
   const householdId = ref<string | null>(initial.householdId)
   const participantId = ref<string | null>(initial.participantId)
+  const muted = ref(initial.muted)
 
   /** participant role without a participant: the login screen is due */
   const needsLogin = computed(() => role.value === 'participant' && participantId.value === null)
 
-  watch([role, householdId, participantId], () => {
+  watch([role, householdId, participantId, muted], () => {
     try {
       localStorage.setItem(
         DEVICE_STORAGE_KEY,
@@ -47,12 +49,20 @@ export const useDeviceStore = defineStore('device', () => {
           role: role.value,
           householdId: householdId.value,
           participantId: participantId.value,
+          muted: muted.value,
         } satisfies DeviceConfig),
       )
     } catch {
       // Storage may be unavailable; the choice then lasts until reload.
     }
   })
+
+  /** Mute applies to the admin device only. */
+  const soundOff = computed(() => role.value === 'admin' && muted.value)
+
+  function toggleMuted() {
+    muted.value = !muted.value
+  }
 
   function setRole(next: DeviceRole) {
     role.value = next
@@ -91,5 +101,5 @@ export const useDeviceStore = defineStore('device', () => {
     participantId.value = null
   }
 
-  return { role, householdId, participantId, needsLogin, setRole, setHousehold, loginParticipant, loginAdmin, logout }
+  return { role, householdId, participantId, muted, soundOff, needsLogin, toggleMuted, setRole, setHousehold, loginParticipant, loginAdmin, logout }
 })

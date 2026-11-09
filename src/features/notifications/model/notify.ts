@@ -12,15 +12,43 @@ export function canShowNotification(): boolean {
   return typeof Notification !== 'undefined' && Notification.permission === 'granted'
 }
 
-export function showNotification(message: string): boolean {
-  if (!canShowNotification()) return false
+export type ShowOptions = { tag?: string; silent?: boolean }
+
+const TITLE = 'Расписание'
+
+function showDirect(message: string, { tag, silent }: ShowOptions): boolean {
   try {
-    new Notification('Расписание', { body: message })
+    new Notification(TITLE, { body: message, tag, silent })
     return true
   } catch {
-    // Some mobile browsers only allow notifications through a service worker.
     return false
   }
+}
+
+async function showViaWorker(message: string, { tag, silent }: ShowOptions): Promise<boolean> {
+  try {
+    if (!(await navigator.serviceWorker.getRegistration())) return false
+    const registration = await navigator.serviceWorker.ready
+    await registration.showNotification(TITLE, {
+      body: message,
+      tag,
+      silent,
+      icon: `${import.meta.env.BASE_URL}icon.svg`,
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Returns false when no system notification can be shown, so the caller can fall back to a toast. */
+export function showNotification(message: string, options: ShowOptions = {}): boolean {
+  if (!canShowNotification()) return false
+  if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+    void showViaWorker(message, options).then((ok) => ok || showDirect(message, options))
+    return true
+  }
+  return showDirect(message, options)
 }
 
 let audio: AudioContext | undefined

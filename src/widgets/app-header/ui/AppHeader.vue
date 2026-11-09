@@ -22,6 +22,9 @@ const isAdmin = computed(() => device.role === 'admin')
 const tabs = computed(() =>
   isAdmin.value ? store.sortedParticipants : store.sortedParticipants.filter((p) => p.id === device.participantId),
 )
+const muteLabel = computed(() =>
+  device.muted ? 'Включить звук на этом устройстве' : 'Выключить звук на этом устройстве',
+)
 const route = useRoute()
 </script>
 
@@ -36,6 +39,18 @@ const route = useRoute()
         <div class="app-header__actions">
           <SyncBadge />
           <ThemeToggle />
+          <Button
+            v-if="isAdmin"
+            :class="{ 'is-active': device.muted }"
+            :icon="device.muted ? 'pi pi-volume-off' : 'pi pi-volume-up'"
+            :aria-label="muteLabel"
+            :aria-pressed="device.muted"
+            :title="muteLabel"
+            :severity="device.muted ? 'primary' : 'secondary'"
+            :variant="device.muted ? undefined : 'text'"
+            rounded
+            @click="device.toggleMuted()"
+          />
           <Button
             icon="pi pi-cog"
             :aria-label="isAdmin ? 'Настройки' : 'Мои настройки'"

@@ -42,3 +42,25 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return
   event.respondWith(request.mode === 'navigate' ? networkFirst(request) : cacheFirst(request))
 })
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      const existing = list.find((client) => 'focus' in client)
+      if (existing) return existing.focus()
+      return self.clients.openWindow(self.registration.scope)
+    }),
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      const existing = list.find((client) => 'focus' in client)
+      if (existing) return existing.focus()
+      return self.clients.openWindow(self.registration.scope)
+    }),
+  )
+})

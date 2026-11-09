@@ -5,6 +5,7 @@ import { canEdit, useDeviceStore, useScheduleStore } from '@/entities/schedule'
 import { AddParticipantDialog } from '@/features/add-participant'
 import { EditEventDialog } from '@/features/edit-event'
 import { EditParticipantDialog, MySettingsDialog } from '@/features/participant-profile'
+import { NotificationBanner } from '@/features/notifications'
 import { RemoveParticipantButton } from '@/features/remove-participant'
 import { AppHeader } from '@/widgets/app-header'
 import { ProgressPanel } from '@/widgets/progress-panel'
@@ -50,6 +51,7 @@ function openCreate() {
 
   <main class="schedule-page" :class="{ 'is-legend-collapsed': legendCollapsed }">
     <div class="schedule-page__content">
+      <NotificationBanner v-if="isAdmin" />
       <RingingPanel v-if="isAdmin" />
 
       <ViewToolbar :view="view" :anchor="anchor" @update:view="setView" @step="step" @today="today">

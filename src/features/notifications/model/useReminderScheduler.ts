@@ -1,6 +1,6 @@
 import { getCurrentScope, onScopeDispose } from 'vue'
 
-import { occurrences, useScheduleStore } from '@/entities/schedule'
+import { occurrences, useDeviceStore, useScheduleStore } from '@/entities/schedule'
 import { playOnce } from '@/shared/lib'
 
 import { loadFired, saveFired } from './firedStorage'
@@ -13,6 +13,7 @@ type Options = { onToast: (message: string) => void }
 
 export function useReminderScheduler({ onToast }: Options) {
   const store = useScheduleStore()
+  const device = useDeviceStore()
   let timer: ReturnType<typeof setInterval> | undefined
 
   function tick() {
@@ -27,10 +28,10 @@ export function useReminderScheduler({ onToast }: Options) {
     for (const reminder of due) {
       fired[reminder.key] = now
       const text = reminderText(reminder, nameOf)
-      if (!showNotification(text)) onToast(text)
+      if (!showNotification(text, { tag: reminder.key, silent: device.soundOff })) onToast(text)
     }
     saveFired(fired)
-    if (!store.settings.sound) return
+    if (!store.settings.sound || device.soundOff) return
     if (store.isParticipant) {
       playOnce(store.ownParticipant?.alarmSound ?? store.settings.alarmSound, store.settings.alarmVolume)
     } else beep()
@@ -40,9 +41,15 @@ export function useReminderScheduler({ onToast }: Options) {
     if (timer) return
     tick()
     timer = setInterval(tick, TICK_MS)
+    document.addEventListener('visibilitychange', onVisible)
+  }
+
+  function onVisible() {
+    if (!document.hidden) tick()
   }
 
   function stop() {
+    document.removeEventListener('visibilitychange', onVisible)
     clearInterval(timer)
     timer = undefined
   }

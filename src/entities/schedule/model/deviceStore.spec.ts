@@ -31,6 +31,7 @@ describe('device store', () => {
       role: 'guest',
       householdId: 'abc',
       participantId: null,
+      muted: false,
     })
     setActivePinia(createPinia())
     expect(useDeviceStore().role).toBe('guest')
