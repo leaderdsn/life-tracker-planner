@@ -5,7 +5,7 @@ import GuestEventCard from './GuestEventCard.vue'
 
 import type { EventStatus, Participant } from '@/entities/schedule'
 
-const participant: Participant = { id: 'r', name: 'Мирон', color: '#cfe2ff', order: 0 }
+const participant: Participant = { id: 'r', name: 'Миша', color: '#cfe2ff', order: 0 }
 
 function mountCard(props: { status?: EventStatus; seen?: boolean; ringing?: boolean } = {}) {
   return mount(GuestEventCard, {

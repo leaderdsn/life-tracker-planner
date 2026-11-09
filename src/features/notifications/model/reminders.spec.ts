@@ -83,11 +83,11 @@ describe('isQuietHours', () => {
 })
 
 describe('reminderText', () => {
-  const nameOf = (id: string) => ({ a: 'Мирон', b: 'Тимур' })[id] ?? id
+  const nameOf = (id: string) => ({ a: 'Миша', b: 'Петя' })[id] ?? id
   it.each<[ReminderKind, Partial<ScheduleEvent>, string]>([
-    ['before', { place: 'ДДТ' }, 'Через 10 мин: Вокал (Мирон), ДДТ'],
-    ['start', { place: 'ДДТ' }, 'Началось: Вокал (Мирон), ДДТ'],
-    ['start', { participantIds: ['a', 'b'] }, 'Началось: Вокал (Мирон, Тимур)'],
+    ['before', { place: 'Школа' }, 'Через 10 мин: Вокал (Миша), Школа'],
+    ['start', { place: 'Школа' }, 'Началось: Вокал (Миша), Школа'],
+    ['start', { participantIds: ['a', 'b'] }, 'Началось: Вокал (Миша, Петя)'],
   ])('%s %j', (kind, patch, expected) => {
     const o = occ(patch)
     expect(reminderText({ key: 'k', kind, occ: o, minutesBefore: 10 }, nameOf)).toBe(expected)

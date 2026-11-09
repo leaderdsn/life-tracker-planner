@@ -37,7 +37,7 @@ vi.mock('../lib', async (orig) => ({
 
 const remote = (): SharedSchedule => ({
   version: SCHEMA_VERSION,
-  participants: [{ id: 'ratmir', name: 'Тимур', color: '#CFE2FF', order: 0, pinHash: 'hash' }],
+  participants: [{ id: 'petya', name: 'Петя', color: '#CFE2FF', order: 0, pinHash: 'hash' }],
   events: [],
   settings: { adminPinHash: 'admin-hash' } as SharedSchedule['settings'],
 })
@@ -71,7 +71,7 @@ describe('admin push guard', () => {
     fake.schedule?.(remote())
     await settle()
     expect(sync.remoteReceived).toBe(true)
-    expect(store.participants.map((p) => [p.id, p.pinHash])).toEqual([['ratmir', 'hash']])
+    expect(store.participants.map((p) => [p.id, p.pinHash])).toEqual([['petya', 'hash']])
     expect(store.settings.adminPinHash).toBe('admin-hash')
 
     push.mockClear()

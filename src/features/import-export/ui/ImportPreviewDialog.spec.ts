@@ -5,7 +5,7 @@ import ImportPreviewDialog from './ImportPreviewDialog.vue'
 
 import type { ImportMode, ImportSummary, ParsedImport, Participant } from '@/entities/schedule'
 
-const ruslan: Participant = { id: 'r', name: 'Мирон', color: '#bde0fe', order: 0 }
+const misha: Participant = { id: 'r', name: 'Миша', color: '#bde0fe', order: 0 }
 const anya: Participant = { id: 'a', name: 'Аня', color: '#ffc8dd', order: 1 }
 
 const event = (i: number): ParsedImport['events'][number] => ({
@@ -34,7 +34,7 @@ function mountDialog(parsed: Partial<ParsedImport> = {}, skipped = 0) {
       visible: true,
       fileName: 'raspisanie.xlsx',
       parsed: full,
-      existing: [ruslan],
+      existing: [misha],
       summaries: { replace: summary('replace'), merge: summary('merge', { skipped }) },
     },
     global: { stubs: { AppDialog: { template: '<div><slot /><slot name="footer" /></div>' } } },

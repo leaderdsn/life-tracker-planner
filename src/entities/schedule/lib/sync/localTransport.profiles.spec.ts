@@ -20,12 +20,12 @@ describe('LocalTransport profiles and completions', () => {
     const [a, b] = [await make('household-profiles-test-1'), await make('household-profiles-test-1')]
     const cb = vi.fn()
     b.onProfiles(cb)
-    await a.pushProfile('ruslan', { avatar: 'data:image/webp;base64,AAAA', alarmSound: 'bell' })
+    await a.pushProfile('misha', { avatar: 'data:image/webp;base64,AAAA', alarmSound: 'bell' })
     await vi.waitFor(() =>
-      expect(cb).toHaveBeenLastCalledWith({ ruslan: { avatar: 'data:image/webp;base64,AAAA', alarmSound: 'bell' } }),
+      expect(cb).toHaveBeenLastCalledWith({ misha: { avatar: 'data:image/webp;base64,AAAA', alarmSound: 'bell' } }),
     )
-    await a.pushProfile('ruslan', {})
-    await vi.waitFor(() => expect(cb).toHaveBeenLastCalledWith({ ruslan: {} }))
+    await a.pushProfile('misha', {})
+    await vi.waitFor(() => expect(cb).toHaveBeenLastCalledWith({ misha: {} }))
   })
 
   it('round-trips completions and their removal', async () => {
@@ -41,7 +41,7 @@ describe('LocalTransport profiles and completions', () => {
   it('gives a late joiner profiles and completions', async () => {
     const channel = 'household-late-marks-001'
     const a = await make(channel)
-    await a.pushProfile('ruslan', { alarmSound: 'beep' })
+    await a.pushProfile('misha', { alarmSound: 'beep' })
     await a.setCompletion(KEY, mark)
     const b = new LocalTransport()
     open.push(b)
@@ -50,7 +50,7 @@ describe('LocalTransport profiles and completions', () => {
     b.onProfiles(profiles)
     b.onCompletions(marks)
     await b.connect(channel)
-    await vi.waitFor(() => expect(profiles).toHaveBeenLastCalledWith({ ruslan: { alarmSound: 'beep' } }))
+    await vi.waitFor(() => expect(profiles).toHaveBeenLastCalledWith({ misha: { alarmSound: 'beep' } }))
     await vi.waitFor(() => expect(marks).toHaveBeenLastCalledWith({ [KEY]: mark }))
   })
 

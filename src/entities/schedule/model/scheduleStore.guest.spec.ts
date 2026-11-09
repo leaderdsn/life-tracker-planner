@@ -1,8 +1,9 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { createSeedSnapshot, DEVICE_STORAGE_KEY, GUEST_CACHE_KEY, STORAGE_KEY } from '../config'
+import { DEVICE_STORAGE_KEY, GUEST_CACHE_KEY, STORAGE_KEY } from '../config'
 
+import { createSampleSnapshot, seedLocalSchedule } from './sample.fixture'
 import { toShared } from '../lib'
 
 import { useDeviceStore } from './deviceStore'
@@ -12,7 +13,7 @@ import { useSyncStore } from './syncStore'
 import type { SharedSchedule } from './types'
 
 const shared = (): SharedSchedule => {
-  const snap = toShared(createSeedSnapshot())
+  const snap = toShared(createSampleSnapshot())
   return { ...snap, events: snap.events.slice(0, 2) }
 }
 
@@ -56,7 +57,7 @@ describe('guest schedule store', () => {
   })
 
   it('without a cache falls back to the admin local snapshot, read-only', async () => {
-    const snap = createSeedSnapshot()
+    const snap = createSampleSnapshot()
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...snap, events: snap.events.slice(0, 3) }))
     const store = guestStore()
     expect(store.events).toHaveLength(3)
@@ -67,13 +68,14 @@ describe('guest schedule store', () => {
 
   it('follows admin saves from another tab via storage events', () => {
     const store = guestStore()
-    const snap = createSeedSnapshot()
+    const snap = createSampleSnapshot()
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...snap, events: snap.events.slice(0, 4) }))
     window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }))
     expect(store.events).toHaveLength(4)
   })
 
   it('switches to local data when the device becomes admin', async () => {
+    seedLocalSchedule()
     const store = guestStore()
     useDeviceStore().setRole('admin')
     await vi.advanceTimersByTimeAsync(10)

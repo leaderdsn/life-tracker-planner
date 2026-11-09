@@ -32,7 +32,7 @@ function run(muted: boolean) {
   setActivePinia(createPinia())
   const store = useScheduleStore()
   store.events = []
-  store.addEvent({ participantIds: ['ruslan'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' })
+  store.addEvent({ participantIds: ['misha'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' })
   store.updateSettings({ notificationsEnabled: true, quietHours: null, sound: true })
   useReminderScheduler({ onToast: vi.fn() }).stop()
 }

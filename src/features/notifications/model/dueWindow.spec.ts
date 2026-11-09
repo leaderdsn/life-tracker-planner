@@ -13,8 +13,8 @@ describe('due window with a throttled tick', () => {
     setActivePinia(createPinia())
     const store = useScheduleStore()
     store.events = []
-    store.addEvent({ participantIds: ['ruslan'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' })
-    store.addEvent({ participantIds: ['ratmir'], day: 'mon', start: '15:00', title: 'Плавание', category: 'activity' })
+    store.addEvent({ participantIds: ['misha'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' })
+    store.addEvent({ participantIds: ['petya'], day: 'mon', start: '15:00', title: 'Плавание', category: 'activity' })
     store.updateSettings({ notificationsEnabled: true, quietHours: null, defaultRemindBefore: 10 })
   })
 

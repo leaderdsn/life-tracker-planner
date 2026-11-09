@@ -2,7 +2,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { nextTick } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { createSeedSnapshot, STORAGE_KEY, UNDO_TIMEOUT_MS } from '../config'
+import { STORAGE_KEY, UNDO_TIMEOUT_MS } from '../config'
+import { createSampleSnapshot } from './sample.fixture'
 import { buildGrid, ValidationError } from '../lib'
 
 import { useScheduleStore } from './scheduleStore'
@@ -12,7 +13,7 @@ import type { ScheduleEvent } from './types'
 type NewEvent = Omit<ScheduleEvent, 'id'>
 
 const newEvent = (patch: Partial<NewEvent> = {}): NewEvent => ({
-  participantIds: ['ruslan'],
+  participantIds: ['misha'],
   day: 'mon',
   start: '14:00',
   title: 'Тест',
@@ -20,7 +21,8 @@ const newEvent = (patch: Partial<NewEvent> = {}): NewEvent => ({
   ...patch,
 })
 
-function makeStore() {
+function makeStore(withData = true) {
+  if (withData && !localStorage.getItem(STORAGE_KEY)) localStorage.setItem(STORAGE_KEY, JSON.stringify(createSampleSnapshot()))
   setActivePinia(createPinia())
   return useScheduleStore()
 }
@@ -35,15 +37,15 @@ afterEach(() => {
 })
 
 describe('initial state', () => {
-  it('starts from the seed on first run', () => {
-    const store = makeStore()
-    expect(store.participants).toHaveLength(4)
-    expect(store.events).toHaveLength(createSeedSnapshot().events.length)
-    expect(store.sortedParticipants.map((p) => p.id)).toEqual(['ruslan', 'ratmir', 'vasilisa', 'me'])
+  it('starts empty on first run', () => {
+    const store = makeStore(false)
+    expect(store.participants).toEqual([])
+    expect(store.events).toEqual([])
+    expect(store.completions).toEqual([])
   })
 
-  it('loads a saved snapshot instead of the seed', () => {
-    const snap = createSeedSnapshot()
+  it('loads a saved snapshot', () => {
+    const snap = createSampleSnapshot()
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...snap, events: snap.events.slice(0, 3) }))
     expect(makeStore().events).toHaveLength(3)
   })
@@ -72,26 +74,26 @@ describe('participants', () => {
   describe('removeParticipant', () => {
     function setup() {
       const store = makeStore()
-      const solo = store.addEvent(newEvent({ participantIds: ['ratmir'], title: 'Соло' }))
-      const shared = store.addEvent(newEvent({ participantIds: ['ratmir', 'me'], title: 'Вместе' }))
+      const solo = store.addEvent(newEvent({ participantIds: ['petya'], title: 'Соло' }))
+      const shared = store.addEvent(newEvent({ participantIds: ['petya', 'me'], title: 'Вместе' }))
       store.toggleCompletion(solo.id, '2024-03-04')
       store.toggleCompletion(shared.id, '2024-03-04')
       const before = store.events.length
-      store.removeParticipant('ratmir')
+      store.removeParticipant('petya')
       return { store, solo, shared, before }
     }
 
     it('strips the participant from shared events', () => {
       const { store, shared } = setup()
       expect(store.events.find((e) => e.id === shared.id)?.participantIds).toEqual(['me'])
-      expect(store.participantById('ratmir')).toBeUndefined()
+      expect(store.participantById('petya')).toBeUndefined()
     })
 
     it('deletes orphaned events and their completions only', () => {
       const { store, solo, shared } = setup()
       expect(store.events.some((e) => e.id === solo.id)).toBe(false)
       expect(store.completions.map((c) => c.eventId)).toEqual([shared.id])
-      expect(store.events.some((e) => e.participantIds.includes('ratmir'))).toBe(false)
+      expect(store.events.some((e) => e.participantIds.includes('petya'))).toBe(false)
     })
 
     it('can be undone', () => {
@@ -99,7 +101,7 @@ describe('participants', () => {
       expect(store.canUndo).toBe(true)
       expect(store.undo()).toBe(true)
       expect(store.events).toHaveLength(before)
-      expect(store.participantById('ratmir')).toBeDefined()
+      expect(store.participantById('petya')).toBeDefined()
       expect(store.completions.some((c) => c.eventId === solo.id)).toBe(true)
     })
   })
@@ -198,11 +200,14 @@ describe('undo', () => {
     expect(store.undo()).toBe(false)
   })
 
-  it('covers reset and import', () => {
+  it('covers clear and import', () => {
     const store = makeStore()
     store.addParticipant({ name: 'Новый', color: '#fff' })
-    store.resetToSeed()
-    expect(store.participants).toHaveLength(4)
+    store.updateSettings({ sound: false })
+    store.clearSchedule()
+    expect(store.participants).toHaveLength(0)
+    expect(store.events).toHaveLength(0)
+    expect(store.settings.sound).toBe(false)
     expect(store.undo()).toBe(true)
     expect(store.participants).toHaveLength(5)
 
@@ -230,7 +235,7 @@ describe('settings and persistence', () => {
   })
 
   it('saves to storage after a 300 ms debounce', async () => {
-    const store = makeStore()
+    const store = makeStore(false)
     store.updateSettings({ defaultRemindBefore: 30 })
     await nextTick()
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull()

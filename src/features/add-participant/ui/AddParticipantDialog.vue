@@ -74,7 +74,7 @@ function finish() {
           id="participant-name"
           v-model="name"
           autocomplete="off"
-          placeholder="Например, Мирон"
+          placeholder="Например, Аня"
           :invalid="Boolean(nameError)"
           autofocus
           fluid

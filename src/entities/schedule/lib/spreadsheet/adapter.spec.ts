@@ -7,11 +7,11 @@ import type { Participant, ScheduleEvent } from '../../model/types'
 
 const participants: Participant[] = [
   { id: 'anya', name: 'Аня', color: '#FCE8B2', order: 0 },
-  { id: 'ruslan', name: 'Мирон', color: '#CFE2FF', order: 1 },
+  { id: 'misha', name: 'Миша', color: '#CFE2FF', order: 1 },
 ]
 const events: ScheduleEvent[] = [
-  { id: '1', participantIds: ['anya', 'ruslan'], day: 'mon', start: '08:30', end: '09:15', title: 'Вокал', place: 'Студия', category: 'study', remindBefore: 15, note: 'Ноты; "красные"' },
-  { id: '2', participantIds: ['ruslan'], date: '2026-03-08', start: '10:00', title: 'Концерт', category: 'activity', showInAll: false },
+  { id: '1', participantIds: ['anya', 'misha'], day: 'mon', start: '08:30', end: '09:15', title: 'Вокал', place: 'Студия', category: 'study', remindBefore: 15, note: 'Ноты; "красные"' },
+  { id: '2', participantIds: ['misha'], date: '2026-03-08', start: '10:00', title: 'Концерт', category: 'activity', showInAll: false },
 ]
 const expected = events.map((e) => {
   const copy: Partial<ScheduleEvent> = { ...e }
@@ -45,7 +45,7 @@ describe.each(['xlsx', 'xls'] as const)('%s', (format) => {
     expect(XLSX.read(await bytes(blob), { type: 'array' }).SheetNames).toEqual(['Расписание', 'Участники'])
 
     const data = await readSpreadsheet(await bytes(blob), `file.${format}`)
-    expect(data.participants).toEqual([['Имя', 'Цвет'], ['Аня', '#FCE8B2'], ['Мирон', '#CFE2FF']])
+    expect(data.participants).toEqual([['Имя', 'Цвет'], ['Аня', '#FCE8B2'], ['Миша', '#CFE2FF']])
     const parsed = rowsToEvents(data, participants)
     expect(parsed.errors).toEqual([])
     expect(parsed.events).toEqual(expected)

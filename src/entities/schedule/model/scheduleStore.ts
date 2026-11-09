@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue'
 import { env } from '@/shared/config'
 import { parseIsoDate } from '@/shared/lib'
 
-import { createSeedSnapshot, DEFAULT_SETTINGS, GUEST_CACHE_KEY, PUSH_DELAY_MS, SCHEMA_VERSION, STORAGE_KEY, UNDO_TIMEOUT_MS } from '../config'
+import { createEmptySnapshot, GUEST_CACHE_KEY, PUSH_DELAY_MS, SCHEMA_VERSION, STORAGE_KEY, UNDO_TIMEOUT_MS } from '../config'
 import {
   canEdit,
   canToggle,
@@ -70,14 +70,6 @@ function saveRemoteCache(cache: RemoteCache) {
   }
 }
 
-const emptySnapshot = (): ScheduleSnapshot => ({
-  version: SCHEMA_VERSION,
-  participants: [],
-  events: [],
-  completions: [],
-  settings: { ...DEFAULT_SETTINGS },
-})
-
 const fromShared = (shared: SharedSchedule): ScheduleSnapshot => ({ ...shared, completions: [] })
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value))
@@ -101,9 +93,9 @@ export const useScheduleStore = defineStore('schedule', () => {
       return { ...data, participants: mergeProfiles(data.participants, cached.profiles) }
     }
     const local = load()
-    return local ? { ...local, completions: [] } : emptySnapshot()
+    return local ? { ...local, completions: [] } : createEmptySnapshot()
   }
-  const initial = isRemote.value ? initialRemote() : (load() ?? createSeedSnapshot())
+  const initial = isRemote.value ? initialRemote() : (load() ?? createEmptySnapshot())
   const participants = ref<Participant[]>(initial.participants)
   const events = ref<ScheduleEvent[]>(initial.events)
   const completions = ref<Completion[]>(initial.completions)
@@ -276,7 +268,7 @@ export const useScheduleStore = defineStore('schedule', () => {
       restore(initialRemote())
       applyRemote()
     } else if (!device.householdId || !participants.value.length) {
-      restore(load() ?? createSeedSnapshot())
+      restore(load() ?? createEmptySnapshot())
     }
     adoptRemoteAsAdmin()
   })
@@ -501,10 +493,12 @@ export const useScheduleStore = defineStore('schedule', () => {
     commitCompletions(plan.result.completions)
   }
 
-  function resetToSeed() {
+  function clearSchedule() {
     assertEditable()
     rememberForUndo()
-    restore(createSeedSnapshot())
+    participants.value = []
+    events.value = []
+    commitCompletions([])
   }
 
   return {
@@ -543,6 +537,6 @@ export const useScheduleStore = defineStore('schedule', () => {
     exportJson,
     importJson,
     applyImport,
-    resetToSeed,
+    clearSchedule,
   }
 })

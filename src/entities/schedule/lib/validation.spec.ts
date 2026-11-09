@@ -15,14 +15,14 @@ const base: ScheduleEvent = {
 
 describe('normalizeEvent', () => {
   it('normalizes fields and drops empty optionals', () => {
-    const res = normalizeEvent({ ...base, end: '9:15', place: '  ', note: ' ', title: ' Вокал,ДДТ ' })
+    const res = normalizeEvent({ ...base, end: '9:15', place: '  ', note: ' ', title: ' Вокал,Школа ' })
     expect(res).toEqual({
       id: 'e1',
       participantIds: ['a'],
       day: 'mon',
       start: '08:30',
       end: '09:15',
-      title: 'Вокал, ДДТ',
+      title: 'Вокал, Школа',
       category: 'activity',
     })
     expect(Object.keys(res)).not.toContain('place')

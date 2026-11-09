@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEVICE_STORAGE_KEY } from '../config'
 import { hashPin } from '../lib'
 
+import { seedLocalSchedule } from './sample.fixture'
 import { useDeviceStore } from './deviceStore'
 import { useScheduleStore } from './scheduleStore'
 import { useSyncStore } from './syncStore'
@@ -13,6 +14,7 @@ let runs = 0
 
 beforeEach(() => {
   localStorage.clear()
+  seedLocalSchedule()
   setActivePinia(createPinia())
 })
 
@@ -47,8 +49,8 @@ describe('device store', () => {
 describe('device config migration', () => {
   it.each([
     ['v2 config without participantId', { role: 'guest', householdId: 'abc' }, ['guest', 'abc', null]],
-    ['participant config', { role: 'participant', householdId: 'abc', participantId: 'ruslan' }, ['participant', 'abc', 'ruslan']],
-    ['stray participantId on admin', { role: 'admin', householdId: null, participantId: 'ruslan' }, ['admin', null, null]],
+    ['participant config', { role: 'participant', householdId: 'abc', participantId: 'misha' }, ['participant', 'abc', 'misha']],
+    ['stray participantId on admin', { role: 'admin', householdId: null, participantId: 'misha' }, ['admin', null, null]],
     ['logged-out participant', { role: 'participant', householdId: 'abc' }, ['participant', 'abc', null]],
   ])('%s', (_name, stored, expected) => {
     localStorage.setItem(DEVICE_STORAGE_KEY, JSON.stringify(stored))
@@ -60,7 +62,7 @@ describe('device config migration', () => {
 describe('login without a household', () => {
   it('admin login is open while no PIN is set, and participants come from local data', async () => {
     const d = useDeviceStore()
-    expect(await d.loginParticipant('ratmir', '')).toBe(true)
+    expect(await d.loginParticipant('petya', '')).toBe(true)
     d.logout()
     expect(await d.loginAdmin('')).toBe(true)
   })
@@ -73,34 +75,34 @@ describe('login and logout', () => {
     const d = useDeviceStore()
     d.setHousehold(`household-login-test-${++runs}`)
     const schedule = useScheduleStore()
-    await schedule.setParticipantPin('ruslan', '1234')
+    await schedule.setParticipantPin('misha', '1234')
     // the stale remote copy would win until the debounced push lands
-    await vi.waitFor(() => expect(useSyncStore().remoteParticipants.find((p) => p.id === 'ruslan')?.pinHash).toBeTruthy(), { timeout: 3000 })
+    await vi.waitFor(() => expect(useSyncStore().remoteParticipants.find((p) => p.id === 'misha')?.pinHash).toBeTruthy(), { timeout: 3000 })
     return { d, schedule }
   }
 
   it('logs a participant in with the right PIN and remembers them', async () => {
     const { d } = await setup()
-    expect(await d.loginParticipant('ruslan', '0000')).toBe(false)
+    expect(await d.loginParticipant('misha', '0000')).toBe(false)
     expect(d.role).toBe('admin')
-    expect(await d.loginParticipant('ruslan', '1234')).toBe(true)
-    expect([d.role, d.participantId, d.needsLogin]).toEqual(['participant', 'ruslan', false])
+    expect(await d.loginParticipant('misha', '1234')).toBe(true)
+    expect([d.role, d.participantId, d.needsLogin]).toEqual(['participant', 'misha', false])
     await nextTick()
     setActivePinia(createPinia())
     const reloaded = useDeviceStore()
-    expect([reloaded.role, reloaded.participantId]).toEqual(['participant', 'ruslan'])
+    expect([reloaded.role, reloaded.participantId]).toEqual(['participant', 'misha'])
   })
 
   it('lets a participant without a PIN in and refuses unknown participants', async () => {
     const { d } = await setup()
-    expect(await d.loginParticipant('ratmir', '')).toBe(true)
+    expect(await d.loginParticipant('petya', '')).toBe(true)
     expect(await d.loginParticipant('nobody', '')).toBe(false)
-    expect(d.participantId).toBe('ratmir')
+    expect(d.participantId).toBe('petya')
   })
 
   it('logout returns to the login screen state', async () => {
     const { d } = await setup()
-    await d.loginParticipant('ratmir', '')
+    await d.loginParticipant('petya', '')
     d.logout()
     expect([d.role, d.participantId, d.needsLogin]).toEqual(['participant', null, true])
   })

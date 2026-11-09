@@ -17,8 +17,8 @@ vi.mock('@/entities/schedule', async (importOriginal) => ({
 
 const notification = vi.fn()
 const stops: (() => void)[] = []
-const vocal: Info = { title: 'Вокал', participantNames: ['Мирон'], startedAt: 1 }
-const swim: Info = { title: 'Плавание', participantNames: ['Тимур'], startedAt: 2 }
+const vocal: Info = { title: 'Вокал', participantNames: ['Миша'], startedAt: 1 }
+const swim: Info = { title: 'Плавание', participantNames: ['Петя'], startedAt: 2 }
 
 function setup(extra: object = {}) {
   localStorage.setItem(
@@ -57,7 +57,7 @@ describe('guest ringing notifications', () => {
     expect(notification).toHaveBeenCalledTimes(2)
     expect(notification).toHaveBeenCalledWith(
       'Расписание',
-      expect.objectContaining({ body: 'Звенит у гостя: Вокал (Мирон)', tag: 'ringing|a' }),
+      expect.objectContaining({ body: 'Звенит у гостя: Вокал (Миша)', tag: 'ringing|a' }),
     )
   })
 

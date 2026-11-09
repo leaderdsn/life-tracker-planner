@@ -5,7 +5,7 @@ import { rowsToEvents } from './rows'
 
 import type { Table } from './rows'
 
-const NAMES = ['Тимур', 'Мирон', 'Алиса']
+const NAMES = ['Петя', 'Миша', 'Катя']
 
 describe('findGridHeader', () => {
   it.each([
@@ -25,12 +25,12 @@ describe('findGridHeader', () => {
 
 describe('parseCell', () => {
   it.each([
-    ['ШАХМАТЫ (Ра,Ру) Студия, до 11.00', '08:00', 'Шахматы Студия', '11:00', ['Тимур', 'Мирон']],
+    ['ШАХМАТЫ (Пе,Ми) Студия, до 11.00', '08:00', 'Шахматы Студия', '11:00', ['Петя', 'Миша']],
     ['Алгебра (до 10:40)', '08:00', 'Алгебра', '10:40', []],
-    ['АНГЛИЙСКИЙ ДДТ\n(Мирон)до 11:25', '08:00', 'Английский ддт', '11:25', ['Мирон']],
-    ['КОЛОВРАТ (Ра,Ру),до10.30', '08:00', 'Танцы', '10:30', ['Тимур', 'Мирон']],
-    ['ХУДОЖКА(Ва) до 18/40', '08:00', 'Художка', '18:40', ['Алиса']],
-    ['ХУДОЖКА(Вас)\nДО 15.30', '08:00', 'Художка', '15:30', ['Алиса']],
+    ['АНГЛИЙСКИЙ ШКОЛА\n(Миша)до 11:25', '08:00', 'Английский школа', '11:25', ['Миша']],
+    ['ТАНЦЫ (Пе,Ми),до10.30', '08:00', 'Танцы', '10:30', ['Петя', 'Миша']],
+    ['ХУДОЖКА(Ка) до 18/40', '08:00', 'Художка', '18:40', ['Катя']],
+    ['ХУДОЖКА(Кат)\nДО 15.30', '08:00', 'Художка', '15:30', ['Катя']],
     ['Бассейн (тренер)', '08:00', 'Бассейн (тренер)', undefined, []],
   ])('%j', (raw, start, title, end, names) => {
     const cell = parseCell(raw, start, NAMES)
@@ -60,8 +60,8 @@ describe('parseSelfNote', () => {
 
 const summary: Table = [
   ['Время', 'ПН', 'пн', 'ВТ', 'вт', 'Время'],
-  ['8.30', 'ШАХМАТЫ (Ра,Ру) до 11.00', '←я в13.40', 'БАЯН (Тимур)', '←муж'],
-  ['', 'МОЯ РАБОТА', '', 'ХУДОЖКА(Ва)\nдо 15.50', ''],
+  ['8.30', 'ШАХМАТЫ (Пе,Ми) до 11.00', '←я в13.40', 'БАЯН (Петя)', '←муж'],
+  ['', 'МОЯ РАБОТА', '', 'ХУДОЖКА(Ка)\nдо 15.50', ''],
   [0.375, '', '←я', 'идут к родителям', ''],
 ]
 const personal = (): Table => [['Время', 'ПН', 'ВТ', 'СР', 'СР'], ['9.00 ', 'Алгебра (до 10:40)', '', '', 'Чтение'], ['', '', 'Музыка', '', '']]
@@ -69,12 +69,12 @@ const personal = (): Table => [['Время', 'ПН', 'ВТ', 'СР', 'СР'], [
 describe('rowsToEvents grid', () => {
   const sheets = [
     { name: 'общее по секциям', table: summary },
-    { name: 'Тимур', table: personal() },
-    { name: 'Мирон', table: personal() },
+    { name: 'Петя', table: personal() },
+    { name: 'Миша', table: personal() },
   ]
-  const result = rowsToEvents({ events: summary, sheets }, [{ id: 'va', name: 'Алиса', color: '#FFD6E0', order: 0 }])
+  const result = rowsToEvents({ events: summary, sheets }, [{ id: 'va', name: 'Катя', color: '#FFD6E0', order: 0 }])
   const byName = (name: string) => {
-    const id = [...result.participants, { id: 'va', name: 'Алиса' }].find((p) => p.name === name)?.id
+    const id = [...result.participants, { id: 'va', name: 'Катя' }].find((p) => p.name === name)?.id
     return result.events.filter((e) => e.participantIds.includes(id!))
   }
 
@@ -83,7 +83,7 @@ describe('rowsToEvents grid', () => {
   })
 
   it('imports personal sheets fully, with duplicate day columns and inherited time', () => {
-    const r = byName('Тимур').filter((e) => e.day === 'wed' || e.title === 'Алгебра' || e.title === 'Музыка')
+    const r = byName('Петя').filter((e) => e.day === 'wed' || e.title === 'Алгебра' || e.title === 'Музыка')
     expect(r.map((e) => [e.title, e.day, e.start, e.end])).toEqual([
       ['Алгебра', 'mon', '09:00', '10:40'],
       ['Чтение', 'wed', '09:00', undefined],
@@ -98,7 +98,7 @@ describe('rowsToEvents grid', () => {
   })
 
   it('keeps summary cells of participants without a personal sheet', () => {
-    const v = byName('Алиса')
+    const v = byName('Катя')
     expect(v.map((e) => [e.title, e.day, e.start, e.end])).toEqual([['Художка', 'tue', '08:30', '15:50']])
   })
 

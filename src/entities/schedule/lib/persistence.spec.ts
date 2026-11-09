@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { createSeedSnapshot, SCHEMA_VERSION, STORAGE_KEY } from '../config'
+import { SCHEMA_VERSION, STORAGE_KEY } from '../config'
+import { createSampleSnapshot } from '../model/sample.fixture'
 
 import { load, migrate, parseSnapshot, save } from './persistence'
 
@@ -42,11 +43,11 @@ describe('parseSnapshot', () => {
 })
 
 describe('migrate', () => {
-  it('keeps the seed snapshot intact', () => {
-    const seed = createSeedSnapshot()
-    const res = migrate(JSON.parse(JSON.stringify(seed)))
-    expect(res.events).toHaveLength(seed.events.length)
-    expect(res.participants).toEqual(seed.participants)
+  it('keeps the sample snapshot intact', () => {
+    const sample = createSampleSnapshot()
+    const res = migrate(JSON.parse(JSON.stringify(sample)))
+    expect(res.events).toHaveLength(sample.events.length)
+    expect(res.participants).toEqual(sample.participants)
   })
 })
 

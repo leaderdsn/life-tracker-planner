@@ -8,7 +8,7 @@ import type { Participant, ScheduleEvent } from '../../model/types'
 
 const people: Participant[] = [
   { id: 'anya', name: 'Аня', color: PASTEL_COLORS[0]!, order: 0 },
-  { id: 'ruslan', name: 'Мирон', color: PASTEL_COLORS[1]!, order: 1 },
+  { id: 'misha', name: 'Миша', color: PASTEL_COLORS[1]!, order: 1 },
 ]
 
 const HEADER = ['Участники', 'День', 'Дата', 'Начало', 'Окончание', 'Занятие', 'Место', 'Категория', 'Напоминание, мин', 'Во «Все»', 'Заметка']
@@ -17,8 +17,8 @@ const parse = (rows: unknown[][], existing = people) => rowsToEvents({ events: r
 
 describe('round trip', () => {
   const events: ScheduleEvent[] = [
-    { id: '1', participantIds: ['anya', 'ruslan'], day: 'mon', start: '08:30', end: '09:15', title: 'Вокал', place: 'Студия', category: 'study', remindBefore: 15, note: 'Взять ноты' },
-    { id: '2', participantIds: ['ruslan'], date: '2026-03-08', start: '10:00', title: 'Концерт', category: 'activity', showInAll: false },
+    { id: '1', participantIds: ['anya', 'misha'], day: 'mon', start: '08:30', end: '09:15', title: 'Вокал', place: 'Студия', category: 'study', remindBefore: 15, note: 'Взять ноты' },
+    { id: '2', participantIds: ['misha'], date: '2026-03-08', start: '10:00', title: 'Концерт', category: 'activity', showInAll: false },
     { id: '3', participantIds: ['anya'], day: 'sun', start: '19:00', title: 'Режим', category: 'routine', remindBefore: 0 },
   ]
 
@@ -39,7 +39,7 @@ describe('round trip', () => {
   it('uses short day labels and Russian dates', () => {
     const { events: rows } = eventsToRows(events, people)
     expect(rows[0]).toEqual(HEADER)
-    expect(rows[1]?.slice(0, 4)).toEqual(['Аня, Мирон', 'ПН', '', '08:30'])
+    expect(rows[1]?.slice(0, 4)).toEqual(['Аня, Миша', 'ПН', '', '08:30'])
     expect(rows[2]?.slice(1, 3)).toEqual(['ВС', '08.03.2026'])
     expect(rows[2]?.[9]).toBe('нет')
   })

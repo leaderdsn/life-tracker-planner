@@ -1,4 +1,4 @@
-import type { AlarmSound, EventCategory, Settings, Weekday } from '../model/types'
+import type { AlarmSound, EventCategory, ScheduleSnapshot, Settings, Weekday } from '../model/types'
 
 export const WEEKDAYS: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
@@ -126,3 +126,13 @@ export const DEFAULT_SETTINGS: Settings = {
 }
 
 export const UNDO_TIMEOUT_MS = 10_000
+
+export function createEmptySnapshot(): ScheduleSnapshot {
+  return {
+    version: SCHEMA_VERSION,
+    participants: [],
+    events: [],
+    completions: [],
+    settings: { ...DEFAULT_SETTINGS, quietHours: DEFAULT_SETTINGS.quietHours && { ...DEFAULT_SETTINGS.quietHours } },
+  }
+}

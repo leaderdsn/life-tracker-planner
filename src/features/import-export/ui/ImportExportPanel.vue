@@ -46,13 +46,7 @@ async function exportAs(format: 'json' | SpreadsheetFormat) {
   }
 }
 
-async function downloadTemplate() {
-  try {
-    saveBlob(await writeSpreadsheet({ events: [], participants: [] }, 'xlsx'), 'raspisanie-shablon.xlsx')
-  } catch (e) {
-    fail('Не удалось скачать шаблон', e, 'Попробуйте ещё раз.')
-  }
-}
+const templateUrl = `${import.meta.env.BASE_URL}templates/raspisanie-shablon.xlsx`
 
 const menuItems = [
   { label: 'JSON (полная копия)', icon: 'pi pi-file', command: () => exportAs('json') },
@@ -108,18 +102,18 @@ function applyImport(mode: ImportMode) {
   }
 }
 
-function askReset() {
+function askClear() {
   confirm.require({
-    header: 'Вернуть исходное расписание?',
-    message: 'Все ваши изменения и отметки будут заменены исходными данными. Сразу после этого можно отменить.',
-    icon: 'pi pi-refresh',
-    acceptLabel: 'Вернуть',
+    header: 'Очистить расписание?',
+    message: 'Все участники и занятия будут удалены. Действие можно отменить сразу после очистки.',
+    icon: 'pi pi-trash',
+    acceptLabel: 'Очистить',
     rejectLabel: 'Не надо',
     acceptProps: { severity: 'danger' },
     rejectProps: { severity: 'secondary', variant: 'text' },
     accept: () => {
-      store.resetToSeed()
-      undoToast.show('Исходное расписание восстановлено')
+      store.clearSchedule()
+      undoToast.show('Расписание очищено')
     },
   })
 }
@@ -146,12 +140,12 @@ function askReset() {
         :loading="busy === 'import'"
         @click="fileInput?.click()"
       />
-      <Button label="Исходное расписание" icon="pi pi-refresh" severity="secondary" variant="text" @click="askReset" />
+      <Button label="Очистить расписание" icon="pi pi-trash" severity="secondary" variant="text" @click="askClear" />
     </div>
     <p v-if="isAdmin" class="import-export__hint">
       Таблица (Excel или CSV): по строке на занятие. Столбцы: Участники, День, Дата, Начало, Окончание, Занятие, Место,
       Категория, Напоминание, Во «Все», Заметка.
-      <button type="button" class="import-export__link" @click="downloadTemplate">Скачать шаблон</button>
+      <a class="import-export__link" :href="templateUrl" download="raspisanie-shablon.xlsx">Скачать шаблон</a>
     </p>
     <p v-if="busy === 'import'" class="import-export__hint" role="status">Читаю таблицу…</p>
     <input ref="file" class="import-export__file" type="file" :accept="ACCEPT" tabindex="-1" @change="onFile">

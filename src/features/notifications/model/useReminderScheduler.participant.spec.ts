@@ -18,18 +18,18 @@ describe('reminders on a participant device', () => {
     vi.setSystemTime(new Date(2024, 2, 4, 14, 55))
     localStorage.setItem(
       DEVICE_STORAGE_KEY,
-      JSON.stringify({ role: 'participant', householdId: null, participantId: 'ratmir' }),
+      JSON.stringify({ role: 'participant', householdId: null, participantId: 'petya' }),
     )
     setActivePinia(createPinia())
     const store = useScheduleStore()
     store.participants = [
-      { id: 'ruslan', name: 'Мирон', color: '#fff', order: 0 },
-      { id: 'ratmir', name: 'Тимур', color: '#fff', order: 1, alarmSound: 'bell' },
+      { id: 'misha', name: 'Миша', color: '#fff', order: 0 },
+      { id: 'petya', name: 'Петя', color: '#fff', order: 1, alarmSound: 'bell' },
     ]
     store.settings = { ...store.settings, notificationsEnabled: true, quietHours: null, alarmSound: 'chime' }
     store.events = [
-      { id: 'e1', participantIds: ['ruslan'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' },
-      { id: 'e2', participantIds: ['ratmir'], day: 'mon', start: '15:00', title: 'Плавание', category: 'activity' },
+      { id: 'e1', participantIds: ['misha'], day: 'mon', start: '15:00', title: 'Вокал', category: 'activity' },
+      { id: 'e2', participantIds: ['petya'], day: 'mon', start: '15:00', title: 'Плавание', category: 'activity' },
     ]
     vi.mocked(playOnce).mockClear()
   })

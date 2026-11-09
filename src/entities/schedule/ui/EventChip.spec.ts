@@ -6,7 +6,7 @@ import EventChip from './EventChip.vue'
 import type { EffectiveCompletion } from '../lib'
 import type { EventStatus, Participant, ScheduleEvent } from '../model/types'
 
-const participant: Participant = { id: 'r', name: 'Мирон', color: '#bde0fe', order: 0 }
+const participant: Participant = { id: 'r', name: 'Миша', color: '#bde0fe', order: 0 }
 const event: ScheduleEvent = {
   id: 'e1',
   participantIds: ['r'],
@@ -28,7 +28,7 @@ function mountChip(
 describe('EventChip', () => {
   it('показывает инициал и название', () => {
     const wrapper = mountChip()
-    expect(wrapper.text()).toContain('Р')
+    expect(wrapper.text()).toContain('М')
     expect(wrapper.text()).toContain('Вокал')
   })
 

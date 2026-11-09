@@ -14,8 +14,8 @@ describe('useReminderScheduler', () => {
     vi.setSystemTime(new Date(2024, 2, 4, 14, 55))
     setActivePinia(createPinia())
     const store = useScheduleStore()
-    store.events = []
-    store.addEvent({ participantIds: ['ruslan'], day: 'mon', start: '15:00', title: 'Вокал', place: 'ДДТ', category: 'activity' })
+    store.addParticipant({ name: 'Миша', color: '#fff' })
+    store.addEvent({ participantIds: ['misha'], day: 'mon', start: '15:00', title: 'Вокал', place: 'Школа', category: 'activity' })
     store.updateSettings({ notificationsEnabled: true, quietHours: null })
   })
 
@@ -36,14 +36,14 @@ describe('useReminderScheduler', () => {
     vi.advanceTimersByTime(30_000)
     vi.advanceTimersByTime(30_000)
     expect(onToast).toHaveBeenCalledTimes(1)
-    expect(onToast).toHaveBeenLastCalledWith('Через 10 мин: Вокал (Мирон), ДДТ')
+    expect(onToast).toHaveBeenLastCalledWith('Через 10 мин: Вокал (Миша), Школа')
 
     vi.setSystemTime(new Date(2024, 2, 4, 15, 0))
     vi.advanceTimersByTime(30_000)
     vi.advanceTimersByTime(30_000)
     vi.advanceTimersByTime(30_000)
     expect(onToast).toHaveBeenCalledTimes(2)
-    expect(onToast).toHaveBeenLastCalledWith('Началось: Вокал (Мирон), ДДТ')
+    expect(onToast).toHaveBeenLastCalledWith('Началось: Вокал (Миша), Школа')
     scheduler.stop()
   })
 
@@ -51,7 +51,7 @@ describe('useReminderScheduler', () => {
     vi.setSystemTime(new Date(2024, 2, 4, 14, 52))
     const onToast = vi.fn()
     useReminderScheduler({ onToast }).stop()
-    expect(onToast).toHaveBeenCalledWith('Через 10 мин: Вокал (Мирон), ДДТ')
+    expect(onToast).toHaveBeenCalledWith('Через 10 мин: Вокал (Миша), Школа')
     expect(Object.keys(loadFired(Date.now()))).toHaveLength(1)
 
     useReminderScheduler({ onToast }).stop()

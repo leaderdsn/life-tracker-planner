@@ -58,6 +58,14 @@ function openCreate() {
         <LegendButton />
       </ViewToolbar>
 
+      <div v-if="isAdmin && !store.participants.length" class="schedule-page__empty">
+        <h2>Расписание пока пустое</h2>
+        <div class="schedule-page__empty-actions">
+          <Button label="Добавить участника" icon="pi pi-user-plus" @click="addOpen = true" />
+          <Button label="Загрузить из файла" icon="pi pi-upload" severity="secondary" @click="settingsOpen = true" />
+        </div>
+      </div>
+
       <div v-if="personal && isAdmin" class="schedule-page__personal">
         <Button label="Занятие" icon="pi pi-plus" size="small" @click="openCreate" />
         <Button label="Профиль" icon="pi pi-user" severity="secondary" size="small" @click="profileOpen = true" />

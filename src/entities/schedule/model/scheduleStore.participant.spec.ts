@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEVICE_STORAGE_KEY } from '../config'
 import { LocalTransport } from '../lib'
 
+import { seedLocalSchedule } from './sample.fixture'
 import { useDeviceStore } from './deviceStore'
 import { useScheduleStore } from './scheduleStore'
 import { useSyncStore } from './syncStore'
@@ -38,6 +39,7 @@ function participantStore(pid: string | null = 'a') {
 
 beforeEach(() => {
   localStorage.clear()
+  seedLocalSchedule()
 })
 
 describe('participant store restrictions', () => {
@@ -81,7 +83,7 @@ describe('participant store restrictions', () => {
       () => store.removeEvent('ea'),
       () => store.updateSettings({ sound: false }),
       () => store.importJson(store.exportJson()),
-      () => store.resetToSeed(),
+      () => store.clearSchedule(),
       () => store.setParticipantPin('a', '1234'),
     ]
     for (const attempt of attempts) expect(attempt).toThrow()
@@ -98,6 +100,7 @@ describe('participant store restrictions', () => {
 
   it('does not save participant data as the local schedule', async () => {
     vi.useFakeTimers()
+    localStorage.removeItem('life-tracker:v1')
     const store = participantStore('a')
     store.toggleCompletion('ea', DATE)
     await vi.advanceTimersByTimeAsync(5000)
@@ -111,10 +114,10 @@ describe('admin', () => {
     setActivePinia(createPinia())
     useDeviceStore().setHousehold(HOUSEHOLD)
     const store = useScheduleStore()
-    await store.setParticipantPin('ruslan', '1234')
-    expect(store.participantById('ruslan')?.pinHash).toMatch(/^[0-9a-f]{64}$/)
-    await store.setParticipantPin('ruslan', null)
-    expect(store.participantById('ruslan')?.pinHash).toBeNull()
+    await store.setParticipantPin('misha', '1234')
+    expect(store.participantById('misha')?.pinHash).toMatch(/^[0-9a-f]{64}$/)
+    await store.setParticipantPin('misha', null)
+    expect(store.participantById('misha')?.pinHash).toBeNull()
   })
 })
 
@@ -165,8 +168,8 @@ describe('profile and completion sync between devices', () => {
     other.onCompletions(marks)
     const ev = store.events[0] as ScheduleEvent
 
-    store.updateProfile('ruslan', { alarmSound: 'beep' })
-    await vi.waitFor(() => expect(profiles).toHaveBeenLastCalledWith({ ruslan: { alarmSound: 'beep' } }))
+    store.updateProfile('misha', { alarmSound: 'beep' })
+    await vi.waitFor(() => expect(profiles).toHaveBeenLastCalledWith({ misha: { alarmSound: 'beep' } }))
 
     store.toggleCompletion(ev.id, DATE)
     await vi.waitFor(() => expect(marks.mock.lastCall?.[0][`${ev.id}|${DATE}`]?.by).toBe('admin'))

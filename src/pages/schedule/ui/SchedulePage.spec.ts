@@ -30,6 +30,7 @@ async function mountAs(role: 'admin' | 'participant') {
   const pinia = createPinia()
   setActivePinia(pinia)
   const store = useScheduleStore()
+  if (!store.participants.length) store.addParticipant({ name: 'Миша', color: '#fff' })
   const device = useDeviceStore()
   const person = store.sortedParticipants[0]
   if (role === 'participant' && person) {
@@ -49,6 +50,17 @@ async function mountAs(role: 'admin' | 'participant') {
 }
 
 describe('SchedulePage by role', () => {
+  it('показывает пустое состояние администратору без участников', async () => {
+    localStorage.clear()
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:p(.*)*', component: { template: '<div />' } }] })
+    await router.push('/')
+    const wrapper = mount(SchedulePage, { global: { plugins: [pinia, router], stubs } })
+    expect(wrapper.text()).toContain('Расписание пока пустое')
+  })
+
+
   it('у участника нет ни кнопок правки, ни окон редактирования', async () => {
     const wrapper = await mountAs('participant')
     await wrapper.get('.open').trigger('click')

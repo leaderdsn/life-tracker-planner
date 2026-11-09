@@ -15,7 +15,7 @@ const ON = 'Включить звук на этом устройстве'
 function mountHeader(role: string) {
   localStorage.setItem(
     DEVICE_STORAGE_KEY,
-    JSON.stringify({ role, householdId: null, participantId: role === 'participant' ? 'ruslan' : null }),
+    JSON.stringify({ role, householdId: null, participantId: role === 'participant' ? 'misha' : null }),
   )
   setActivePinia(createPinia())
   return mount(AppHeader, { global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } } })

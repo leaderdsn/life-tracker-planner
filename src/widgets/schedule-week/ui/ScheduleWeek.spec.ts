@@ -13,7 +13,7 @@ function mountWeek(participantId: string) {
   const pinia = createPinia()
   setActivePinia(pinia)
   const store = useScheduleStore()
-  store.participants.splice(0, store.participants.length, { id: 'r', name: 'Мирон', color: '#bde0fe', order: 0 })
+  store.participants.splice(0, store.participants.length, { id: 'r', name: 'Миша', color: '#bde0fe', order: 0 })
   store.events.splice(
     0,
     store.events.length,
