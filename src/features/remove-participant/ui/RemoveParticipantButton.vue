@@ -48,7 +48,6 @@ function ask() {
     label="Удалить участника"
     icon="pi pi-trash"
     severity="secondary"
-    variant="text"
     size="small"
     @click="ask"
   />
