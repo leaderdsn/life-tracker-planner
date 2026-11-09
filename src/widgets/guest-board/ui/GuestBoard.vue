@@ -126,7 +126,7 @@ function dismiss(key: string) {
           <i class="pi pi-wifi" aria-hidden="true" />
           Нет связи, показываю последнее сохранённое
         </p>
-        <SyncBadge compact />
+        <span class="guest-board__sync"><SyncBadge compact /></span>
         <slot name="actions" />
       </div>
     </header>
