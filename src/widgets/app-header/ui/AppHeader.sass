@@ -4,9 +4,10 @@
   position: sticky
   top: 0
   z-index: 10
-  border-bottom: 1px solid color-mix(in srgb, var(--app-border) 80%, transparent)
-  background: color-mix(in srgb, var(--app-background) 78%, transparent)
-  backdrop-filter: saturate(1.6) blur(18px)
+  border-bottom: 0
+  background: rgb(0 0 0 / 16%)
+  color: var(--app-on-board)
+  backdrop-filter: blur(10px)
 
   &__inner
     +ds.container
@@ -51,6 +52,7 @@
 
   &__actions
     display: flex
+    color: var(--app-on-board)
     flex-shrink: 0
     align-items: center
     gap: ds.$space-2
@@ -58,6 +60,9 @@
     +ds.media(xl)
       grid-column: 3
       grid-row: 1
+
+    > :deep(:not(.p-selectbutton))
+      color: var(--app-on-board)
 
   &__tabs
     position: relative
@@ -87,8 +92,8 @@
     padding: 0 ds.$space-4 0 ds.$space-3
     border: 1px solid transparent
     border-radius: ds.$radius-full
-    background: transparent
-    color: var(--app-ink-muted)
+    background: var(--app-on-board-soft)
+    color: var(--app-on-board)
     font: inherit
     font-size: ds.$font-size-sm
     font-weight: 600
@@ -100,8 +105,8 @@
       padding-left: ds.$space-4
 
     &:hover
-      background: color-mix(in srgb, var(--app-ink) 6%, transparent)
-      color: var(--app-ink)
+      background: var(--app-on-board-hover)
+      color: var(--app-on-board)
 
     &:active
       transform: scale(0.97)
@@ -110,22 +115,22 @@
       +ds.focus-ring
 
     &.is-active
-      border-color: color-mix(in srgb, var(--app-accent) 28%, transparent)
-      background: var(--app-accent-soft)
-      color: var(--app-accent-strong)
+      border-color: #ffffff
+      background: #ffffff
+      color: #172b4d
       box-shadow: var(--app-shadow-1)
 
     &--add
       padding-inline: ds.$space-3
-      border: 1px dashed var(--app-border-strong)
-      color: var(--app-ink-muted)
+      border: 1px dashed rgb(255 255 255 / 70%)
+      color: var(--app-on-board)
 
       +ds.media(md)
         padding-inline: ds.$space-4 ds.$space-4
 
       &:hover
-        border-color: var(--app-accent)
-        color: var(--app-accent-strong)
+        border-color: #ffffff
+        color: var(--app-on-board)
 
   &__add-label
     +ds.visually-hidden

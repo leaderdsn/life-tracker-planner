@@ -3,10 +3,9 @@
 .schedule-week
   overflow: auto
   max-height: 75dvh
-  border: 1px solid var(--app-border)
-  border-radius: ds.$radius-xl
-  background: var(--app-surface)
-  box-shadow: var(--app-shadow-2)
+  border: 0
+  border-radius: 12px
+  background: transparent
 
   &:focus-visible
     +ds.focus-ring
@@ -60,7 +59,7 @@
     width: 100%
     min-width: calc(4.5rem + var(--cols) * 150px)
     border-collapse: separate
-    border-spacing: 0
+    border-spacing: 8px 0
     table-layout: fixed
 
   &__sr
@@ -72,21 +71,21 @@
     left: 0
     z-index: 2
     width: 4.5rem
-    background: var(--app-surface)
+    background: transparent
 
   &__head
     position: sticky
     top: 0
     z-index: 3
     padding: ds.$space-2 ds.$space-1
-    border-bottom: 1px solid var(--app-border)
-    background: color-mix(in srgb, var(--app-surface) 88%, transparent)
-    backdrop-filter: blur(10px)
+    border-radius: 12px 12px 0 0
+    background: var(--app-list)
 
   &__corner
     top: 0
     z-index: 4
-    border-bottom: 1px solid var(--app-border)
+    border-radius: 0
+    background: transparent
 
   &__day
     display: flex
@@ -99,7 +98,7 @@
     border: 0
     border-radius: ds.$radius-md
     background: transparent
-    color: var(--app-ink-muted)
+    color: var(--app-list-muted)
     font: inherit
     font-size: ds.$font-size-xs
     font-weight: 700
@@ -109,7 +108,7 @@
     transition: background ds.$transition-fast
 
     &:hover
-      background: var(--app-surface-muted)
+      background: color-mix(in srgb, var(--app-list-ink) 8%, transparent)
 
     &:focus-visible
       +ds.focus-ring
@@ -121,7 +120,7 @@
     height: 2rem
     padding-inline: ds.$space-2
     border-radius: ds.$radius-full
-    color: var(--app-ink)
+    color: var(--app-list-ink)
     font-size: ds.$font-size-md
     font-weight: 700
     letter-spacing: 0
@@ -137,8 +136,8 @@
 
   &__time
     padding: ds.$space-2 ds.$space-3 ds.$space-2 ds.$space-2
-    border-top: 1px solid var(--app-border)
-    color: var(--app-ink-muted)
+    border-top: 1px solid transparent
+    color: var(--app-on-board)
     font-size: ds.$font-size-xs
     font-weight: 600
     font-variant-numeric: tabular-nums
@@ -148,22 +147,15 @@
   &__cell
     position: relative
     padding: ds.$space-1
-    border-top: 1px solid color-mix(in srgb, var(--app-border) 70%, transparent)
-    border-left: 1px solid color-mix(in srgb, var(--app-border) 70%, transparent)
+    border: 0
+    background: var(--app-list)
     vertical-align: top
 
     &.is-today
-      background: var(--app-today)
+      background: color-mix(in srgb, var(--app-list) 88%, var(--app-accent))
 
-  &__time
-    border-top-color: color-mix(in srgb, var(--app-border) 70%, transparent)
-
-  // Subtle alternating hour bands
-  tbody tr:nth-child(even) &__cell
-    background-image: linear-gradient(var(--app-band), var(--app-band))
-
-  tbody tr:nth-child(even) &__time
-    background-image: linear-gradient(var(--app-band), var(--app-band))
+  tbody tr:last-child &__cell
+    border-radius: 0 0 12px 12px
 
   &__chips
     display: flex

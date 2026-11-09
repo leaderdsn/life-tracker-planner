@@ -55,6 +55,19 @@
     --app-shadow-3: 0 2px 4px rgb(38 35 59 / 6%), 0 12px 32px rgb(38 35 59 / 12%), 0 28px 56px -16px rgb(38 35 59 / 18%)
     --app-shadow: var(--app-shadow-2)
     --app-glow: 0 0 0 4px rgb(102 87 204 / 22%)
+    // Board: gradient backdrop, gray lists, white cards
+    --app-board: linear-gradient(135deg, #7b2ff7 0%, #4f4fe0 50%, #1f6feb 100%)
+    --app-on-board: #ffffff
+    --app-on-board-soft: rgb(255 255 255 / 18%)
+    --app-on-board-hover: rgb(255 255 255 / 28%)
+    --app-list: #f1f2f4
+    --app-list-ink: #172b4d
+    --app-list-muted: #44546f
+    --app-card: #ffffff
+    --app-card-ink: #172b4d
+    --app-card-muted: #5e6c84
+    --app-card-shadow: 0 1px 1px rgb(9 30 66 / 25%), 0 0 1px rgb(9 30 66 / 31%)
+    --app-card-shadow-hover: 0 2px 4px rgb(9 30 66 / 30%), 0 0 1px rgb(9 30 66 / 40%)
 
   :root.app-dark
     // Deep plum-navy with lifted layers
@@ -84,6 +97,17 @@
     --app-shadow-2: 0 2px 4px rgb(0 0 0 / 24%), 0 8px 20px rgb(0 0 0 / 28%)
     --app-shadow-3: 0 4px 8px rgb(0 0 0 / 30%), 0 20px 44px rgb(0 0 0 / 46%)
     --app-glow: 0 0 0 4px rgb(179 169 240 / 28%)
+    --app-board: linear-gradient(135deg, #3b1a78 0%, #2a2a8f 50%, #123c85 100%)
+    --app-on-board-soft: rgb(255 255 255 / 14%)
+    --app-on-board-hover: rgb(255 255 255 / 24%)
+    --app-list: #22272b
+    --app-list-ink: #b6c2cf
+    --app-list-muted: #9fadbc
+    --app-card: #2c333a
+    --app-card-ink: #c7d1db
+    --app-card-muted: #9fadbc
+    --app-card-shadow: 0 1px 1px rgb(3 4 4 / 56%), 0 0 1px rgb(3 4 4 / 50%)
+    --app-card-shadow-hover: 0 2px 4px rgb(3 4 4 / 60%), 0 0 1px rgb(255 255 255 / 20%)
 
   html
     color-scheme: light
@@ -93,7 +117,7 @@
 
   body
     min-height: 100dvh
-    background: var(--app-background)
+    background: var(--app-board) fixed
     color: var(--app-ink)
     font-family: ds.$font-family
     font-size: ds.$font-size-md
@@ -220,9 +244,9 @@
     display: inline-flex
     gap: 2px
     padding: 3px
-    border: 1px solid var(--app-border)
+    border: 1px solid transparent
     border-radius: ds.$radius-full
-    background: var(--app-surface-muted)
+    background: var(--app-on-board-soft)
 
   .p-selectbutton .p-togglebutton
     position: relative
@@ -231,7 +255,7 @@
     border: 0
     border-radius: ds.$radius-full
     background: transparent
-    color: var(--app-ink-muted)
+    color: var(--app-on-board)
     box-shadow: none
     font-weight: 600
     transition: color ds.$transition-fast, background ds.$transition-fast
@@ -240,16 +264,16 @@
       display: none
 
     &:not(.p-disabled):not(.p-togglebutton-checked):hover
-      background: color-mix(in srgb, var(--app-ink) 6%, transparent)
-      color: var(--app-ink)
+      background: var(--app-on-board-hover)
+      color: var(--app-on-board)
 
     &.p-togglebutton-checked
-      background: var(--app-surface-raised)
-      color: var(--app-ink)
+      background: #ffffff
+      color: #172b4d
       box-shadow: var(--app-shadow-2)
 
     &:focus-visible
-      outline: 2px solid var(--app-accent)
+      outline: 2px solid #ffffff
       outline-offset: 2px
 
   .p-selectbutton .p-togglebutton-content
