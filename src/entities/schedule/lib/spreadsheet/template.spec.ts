@@ -14,13 +14,24 @@ const buffer = () => {
 }
 
 describe('xlsx template', () => {
-  it('is recognized and imports as empty', async () => {
+  it('is recognized and imports its sample rows', async () => {
     const data = await readSpreadsheet(buffer(), 'raspisanie-shablon.xlsx')
     expect(data.events[0]).toEqual(COLUMN_ORDER.map((c) => EVENT_HEADERS[c]))
     const parsed = rowsToEvents(data)
     expect(parsed.errors).toEqual([])
-    expect(parsed.events).toEqual([])
-    expect(parsed.rows).toBe(0)
+    expect(parsed.rows).toBe(7)
+    expect(parsed.events).toHaveLength(7)
+    expect(parsed.participants.map((p) => [p.name, p.color])).toEqual([['Аня', '#FCE8B2'], ['Миша', '#CFE2FF']])
+    const [anya, misha] = parsed.participants.map((p) => p.id)
+    const byTitle = (t: string) => parsed.events.find((e) => e.title === t)!
+    expect(byTitle('Танцы')).toMatchObject({ day: 'mon', start: '17:00', end: '18:00', remindBefore: 15, participantIds: [anya] })
+    expect(byTitle('Английский')).toMatchObject({ day: 'sat', start: '10:00', category: 'study', participantIds: [anya, misha] })
+    expect(byTitle('Английский').end).toBeUndefined()
+    expect(byTitle('Бассейн')).toMatchObject({ day: 'wed', start: '16:30', end: '17:15' })
+    expect(byTitle('Шахматы')).toMatchObject({ showInAll: false })
+    expect(byTitle('Показательное выступление')).toMatchObject({ date: '2026-12-20', start: '12:00', end: '13:30' })
+    expect(byTitle('Показательное выступление').day).toBeUndefined()
+    expect(parsed.events.every((e) => !e.needsReview)).toBe(true)
   })
 
   it('imports a filled copy without errors', async () => {
@@ -29,7 +40,7 @@ describe('xlsx template', () => {
     const filled = {
       ...data,
       events: [
-        ...data.events,
+        data.events[0]!,
         ['Аня, Миша', 'ПН', '', '8:30', '9.15', 'Вокал', 'Студия', 'Учёба', 5, 'да', ''],
         ['Миша', '', '08.03.2026', '10:00', '', 'Концерт', '', 'Занятие', '', 'нет', 'Взять форму'],
       ],
